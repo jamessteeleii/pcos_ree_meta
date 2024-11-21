@@ -36,7 +36,7 @@ Useful console functions:
 
 ## Software and packages used
 
-The [`grateful`](https://pakillo.github.io/grateful/index.html) package was used to create citations to all software and packages used in the analysis. The `grateful` report can be viewed by downloading the `pre_print/grateful-report.pdf` file.
+The [`grateful`](https://pakillo.github.io/grateful/index.html) package was used to create citations to all software and packages used in the analysis. The `grateful` report can be viewed by downloading the `grateful-report.pdf` file.
 
 ## License
 

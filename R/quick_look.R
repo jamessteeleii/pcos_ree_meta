@@ -1,5 +1,6 @@
 library(tidyverse)
 library(metafor)
+library(brms)
 
 dat <- tibble(
   study = c("Segal, 1990",
@@ -10,25 +11,34 @@ dat <- tibble(
             "Larsson, 2015",
             "Doh, 2016"),
   n_PCOS = c(10,14,31,91,61,72,14),
-  n_CON = c(11,14,29,48,44,30,10),
+  n_CONT = c(11,14,29,48,44,30,10),
   m_PCOS = c(1508,1624,1167,1446,1469,1411,1272),
-  m_CON = c(1558,1633,1046,1841,1453,1325,1240),
+  m_CONT = c(1558,1633,1046,1841,1453,1325,1240),
   s_PCOS = c(168,137,371,725,227,229,167),
-  s_CON = c(186,215,296,305,249,193,216)
+  s_CONT = c(186,215,296,305,249,193,216)
 )
 
 dat <- escalc(measure = "MD",
               m1i = m_PCOS,
-              m2i = m_CON,
+              m2i = m_CONT,
               sd1i = s_PCOS,
-              sd2i = s_CON,
+              sd2i = s_CONT,
               n1i = n_PCOS,
-              n2i = n_CON,
+              n2i = n_CONT,
               data = dat)
 
-paired_model <- rma(yi, vi, data = dat)
+# fit brms model
 
-forest(paired_model, slab = study)
+paired_model <- brm(yi | se(sqrt(vi)) ~ 1 + (1 | study),
+                    data = dat,
+                    chains = 4,
+                    cores = 4,
+                    seed = 1988,
+                    warmup = 2000,
+                    iter = 8000)
+
+plot(paired_model)
+pp_check(paired_model)
 
 
 # dat_var <- escalc(measure = "CVR",
@@ -48,7 +58,7 @@ dat2 <- dat |>
     2:7,
     cols_vary = "slowest",
     names_to = c(".value", "cond"),
-    names_pattern = "(..)(...)"
+    names_pattern = "(..)(....)"
   ) |>
   rename(
     n = "n_",
@@ -56,10 +66,6 @@ dat2 <- dat |>
     sd = "s_"
     ) |>
   mutate(
-    cond = case_when(
-      cond == "PCO" ~ "PCOS",
-      .default = cond
-    ),
     se = NA
   )
   
@@ -75,8 +81,8 @@ dat_arm <- bind_rows(
 ) |>
   mutate(
     sd = if_else(is.na(sd), se * sqrt(n), sd),
-    effect = 1:22
-  )
+    )|>
+  rowid_to_column("arm")
 
 dat_arm <- escalc(measure = "MN",
                mi = m,
@@ -84,19 +90,76 @@ dat_arm <- escalc(measure = "MN",
                ni = n,
                data = dat_arm)
 
+get_prior(yi | se(sqrt(vi)) ~ 0 + Intercept + cond + me(log(m_yi), sqrt(log(m_vi))) + (1 + cond | study) + (1 | arm),
+                 data = dat_arm)
 
-arm_model <- rma.mv(yi, vi, 
-                    mods = ~ cond, 
-                    random = list(~ cond | study, ~ 1 | effect),
-                    method="REML", test="t",
-                    data = dat_arm)
+# We take an estimate to set the prior for the CONT arms based on a meta-analysis of two large studies discussed here https://macrofactorapp.com/range-of-bmrs/
 
-rob_arm_model <- robust(arm_model, dat_arm$study)
+dat_prior <- tibble(
+  study = c("Mifflin, 1990", "Pavlidou, 2022"),
+  n = c(247,549),
+  m = c(1349, 1533),
+  sd = c(214, 308)
+)
 
-arm_model_preds <- cbind(dat_arm, pred = predict(rob_arm_model)$pred,
-                       ci.lb =  predict(rob_arm_model)$ci.lb,
-                       ci.ub =  predict(rob_arm_model)$ci.ub) %>%
-  mutate(wi = 1/sqrt(vi),
-         size = 0.5 + 3.0 * (wi - min(wi))/(max(wi) - min(wi))) 
+dat_prior_variance_effects <- escalc(measure = "SDLN",
+                                 mi = m,
+                                 sdi = sd,
+                                 ni = n,
+                                 data = dat_prior)
 
-ranef(rob_arm_model)
+# We fit a model to estimate with default weakly regularising priors
+estimate_prior_variance_effects <- brm(yi | se(sqrt(vi)) ~ 1 + (1 | study),
+                                   data = dat_prior_variance_effects,
+                                   chains = 4,
+                                   cores = 4,
+                                   seed = 1988,
+                                   warmup = 2000,
+                                   control = list(adapt_delta = 0.99),
+                                   iter = 8000)
+
+estimate_prior_variance_effects <- broom.mixed::tidy(estimate_prior_variance_effects)
+
+# The we set the priors taking the estimates from the models of 
+prior_arm_mean_effects <-
+  c(
+    # The prior on the intercept i.e., CONT arms is set from the estimate of the two studies means mentioned above
+    set_prior(paste("student_t(3,", estimate_prior_variance_effects$estimate[1],",", estimate_prior_variance_effects$std.error[1],")"),
+              class = "b", coef = "Intercept"),
+    # The prior on the random effects for intercept i.e., CONT arms is set from the estimate of the two studies variance mentioned above
+    set_prior(paste("student_t(3,", estimate_prior_variance_effects$estimate[2],",", estimate_prior_variance_effects$std.error[2],")"),
+              class = "sd", coef = "Intercept", group = "study"),
+    
+    # The fixed effect coef for log(mean) is typically ~1 due to mean-variance relationship being commonplace in other measures 
+    # But we set it to be centred there though with a wide scale to indicate uncertainty in this outcome specifically
+    set_prior("student_t(3, 0, 2.5)", class = "b", coef = "melogm_yisqrtlogm_vi"),
+    
+    # The fixed effect coef reflecting the difference between CONT and PCOS is set based on a wide range of possible values
+    # Given the rough relationship of ~1 for log(mean) on log(sd) in other data we again set it to reflect the range of diffs on the log scale
+    # This uses the min and max values of ranges reported in the two studies i.e., 2492 - 908 = 1584
+    # We then set a student t prior that permits values approximately up to this value with the majority of it's mass centred around zero
+    set_prior("student_t(3, 0, 5.3)", class = "b", coef = "condPCOS"),
+    
+    # The mean of the log(mean) measurement error has to be positive (as means are positive), as does the sd, so we set these to wide half t distributions
+    set_prior(paste("student_t(3,", log(estimate_prior_mean_effects$estimate[1]),",", log(estimate_prior_mean_effects$std.error[1]),")"),
+              class = "meanme", coef = "melogm_yi"),
+    set_prior("student_t(3, 0, 5)", class = "sdme", coef = "melogm_yi")
+    
+    )
+
+arm_model <- brm(yi | se(sqrt(vi)) ~ 0 + Intercept + cond + me(log(m_yi), sqrt(log(m_vi))) + (1 + cond | study) + (1 | arm),
+                 data = dat_arm,
+                 prior = prior_arm_mean_effects,
+                 # sample_prior = "only",
+                 chains = 4,
+                 cores = 4,
+                 seed = 1988,
+                 warmup = 2000,
+                 save_pars = save_pars(all = TRUE, latent = TRUE),
+                 iter = 8000)
+
+plot(arm_model)
+pp_check(arm_model, type = "dens_overlay_grouped", group = "cond", ndraws = 100)
+pp_check(arm_model, type = "intervals", x = "m_yi", ndraws = 100)
+
+pp_check(arm_model, ndraws = 100)
