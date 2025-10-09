@@ -5,64 +5,242 @@
 
 # Load packages required to define the pipeline:
 library(targets)
-library(tarchetypes)
-# Load other packages as needed.
+# library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
-  # Packages that your targets need for their tasks.
-  packages = c("tidyverse", 
-               "metafor",
-               "rstan",
-               "brms",
-               "tidybayes") 
-  # format = "qs", # Optionally set the default storage format. qs is fast.
-  #
-  # Pipelines that take a long time to run may benefit from
-  # optional distributed computing. To use this capability
-  # in tar_make(), supply a {crew} controller
-  # as discussed at https://books.ropensci.org/targets/crew.html.
-  # Choose a controller that suits your needs. For example, the following
-  # sets a controller that scales up to a maximum of two workers
-  # which run as local R processes. Each worker launches when there is work
-  # to do and exits if 60 seconds pass with no tasks to run.
-  #
-  #   controller = crew::crew_controller_local(workers = 2, seconds_idle = 60)
-  #
-  # Alternatively, if you want workers to run on a high-performance computing
-  # cluster, select a controller from the {crew.cluster} package.
-  # For the cloud, see plugin packages like {crew.aws.batch}.
-  # The following example is a controller for Sun Grid Engine (SGE).
-  # 
-  #   controller = crew.cluster::crew_controller_sge(
-  #     # Number of workers that the pipeline can scale up to:
-  #     workers = 10,
-  #     # It is recommended to set an idle time so workers can shut themselves
-  #     # down if they are not running tasks.
-  #     seconds_idle = 120,
-  #     # Many clusters install R as an environment module, and you can load it
-  #     # with the script_lines argument. To select a specific verison of R,
-  #     # you may need to include a version string, e.g. "module load R/4.3.2".
-  #     # Check with your system administrator if you are unsure.
-  #     script_lines = "module load R"
-  #   )
-  #
-  # Set other options as needed.
+  packages = c(
+    "tidyverse",
+    "here",
+    "metafor",
+    "brms",
+    "marginaleffects",
+    "tidybayes",
+    "patchwork"
+  ),
+  memory = "transient",
+  format = "qs",
+  garbage_collection = TRUE,
+  storage = "worker",
+  retrieval = "worker"
 )
 
-# Run the R scripts in the R/ folder with your custom functions:
-tar_source("R/functions")
+
+tar_source("R/functions/.")
 # tar_source("R/other_functions.R") # Source other scripts as needed.
 
 # Replace the target list below with your own:
 list(
+  
+  #### Miscellaneous ----
+  
   tar_target(
-    name = data,
-    command = tibble(x = rnorm(100), y = rnorm(100))
-    # format = "qs" # Efficient storage for general data objects.
+    setup_for_rstan,
+    rstan_setup()
   ),
+  
+  #### Setting priors for arm-based models ----
+  
   tar_target(
-    name = model,
-    command = coefficients(lm(y ~ x, data = data))
+    prior_arm_mean_effects,
+    set_prior_arm_mean_effects(),
+  ),
+  
+  tar_target(
+    prior_arm_variance_effects,
+    set_prior_arm_variance_effects(),
+  ),
+  
+  
+  #### Example data and functions for pre-reg pipeline ----
+  
+  # Create and prepare example data for pairwise contrast and arm based models
+  tar_target(
+    example_pairwise_data,
+    create_pairwise_data_example()
+  ),
+  
+  tar_target(
+    example_pairwise_data_effects,
+    calculate_pairwise_effects_example(example_pairwise_data)
+  ),
+  
+  tar_target(
+    example_arm_data,
+    create_arm_data_example(example_pairwise_data)
+  ),
+  
+  tar_target(
+    example_arm_data_effects,
+    calculate_arm_effects_example(example_arm_data)
+  ),
+  
+  # Fitting example models
+  
+  tar_target(
+    example_arm_mean_effects_model,
+    fit_arm_mean_effects_model_example(
+      example_arm_data_effects,
+      prior_arm_mean_effects
+    )
+  ),
+  
+  tar_target(
+    example_arm_variance_effects_model,
+    fit_arm_variance_effects_model_example(
+      example_arm_data_effects,
+      prior_arm_variance_effects
+    )
+  ),
+  
+  tar_target(
+    example_pairwise_mean_effects_model,
+    fit_pairwise_mean_model(
+      example_pairwise_data_effects
+    )
+  ),
+  
+  tar_target(
+    example_pairwise_variance_effects_model,
+    fit_pairwise_variance_model(
+      example_pairwise_data_effects
+    )
+  ),
+  
+  #### Main data and analysis ----
+  
+  # Read and prepare data for arm-based analysis
+  tar_target(
+    main_arm_data_file,
+    here("data", "studies_data.csv"),
+    format = "file"
+  ),
+  
+  tar_target(
+    main_arm_data,
+    prepare_data(main_arm_data_file)
+  ),
+  
+  tar_target(
+    main_arm_data_effects,
+    calculate_arm_effects(main_arm_data)
+  ),
+  
+  # Fitting main analysis models
+  
+  tar_target(
+    main_arm_mean_effects_model,
+    fit_arm_mean_effects_model(
+      main_arm_data_effects,
+      prior_arm_mean_effects
+    )
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_model,
+    fit_arm_variance_effects_model(
+      main_arm_data_effects,
+      prior_arm_variance_effects
+    )
+  ),
+  
+  # Get predictions and contrasts from main models
+  
+  tar_target(
+    main_arm_mean_effects_preds_condition,
+    get_mean_preds_condition(main_arm_mean_effects_model)
+  ),
+  
+  tar_target(
+    main_arm_mean_effects_preds_study_condition,
+    get_mean_preds_study_condition(main_arm_mean_effects_model, 
+                                   main_arm_data_effects)
+  ),
+  
+  tar_target(
+    main_arm_mean_effects_contrast_condition,
+    get_mean_contrast_condition(main_arm_mean_effects_model)
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_preds_condition,
+    get_variance_preds_condition(main_arm_variance_effects_model,
+                                 main_arm_data_effects)
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_preds_study_condition,
+    get_variance_preds_study_condition(main_arm_variance_effects_model,
+                                       main_arm_data_effects)
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_contrast_condition,
+    get_variance_contrast_condition(main_arm_variance_effects_model,
+                                    main_arm_data_effects)
+  ),
+  
+  # Creat plots for main models
+  
+  tar_target(
+    meta_mean_pred_plot,
+    plot_meta_mean_pred(main_arm_mean_effects_preds_condition)
+  ),
+  
+  tar_target(
+    meta_study_mean_pred_plot,
+    plot_study_mean_pred(main_arm_mean_effects_preds_study_condition,
+                        main_arm_data_effects)
+  ),
+  
+  tar_target(
+    meta_mean_contrast_plot,
+    plot_mean_contrast(main_arm_mean_effects_contrast_condition)
+  ),
+  
+  tar_target(
+    combined_mean_plot,
+    combine_mean_plots(meta_mean_pred_plot,
+                       meta_study_mean_pred_plot,
+                       meta_mean_contrast_plot)
+  ),
+  
+  tar_target(
+    meta_variance_pred_plot,
+    plot_meta_variance_pred(main_arm_variance_effects_preds_condition)
+  ),
+  
+  tar_target(
+    meta_study_variance_pred_plot,
+    plot_study_variance_pred(main_arm_variance_effects_preds_study_condition,
+                         main_arm_data_effects)
+  ),
+  
+  tar_target(
+    meta_variance_contrast_plot,
+    plot_variance_contrast(main_arm_variance_effects_contrast_condition)
+  ),
+  
+  tar_target(
+    combined_variance_plot,
+    combine_variance_plots(meta_variance_pred_plot,
+                           meta_study_variance_pred_plot,
+                       meta_variance_contrast_plot)
   )
+  
 )
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

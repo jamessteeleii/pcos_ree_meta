@@ -1,0 +1,74 @@
+name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
+example_pairwise_data_mean_effects|stem|042f39b97ce86a51|702cc12e2f1b8b39|a4e3acc9c20f0d7b|37380086||t20367.6090852053s|s673b|673|qs|local|vector|||0.02||
+example_pairwise_data_variance_effects|stem|0c7c3becb20d21e3|793c6b42d30cf00f|cd7a9aa3149cda57|587334623||t20367.6090878708s|s718b|718|qs|local|vector|||0.01||
+example_arm_data_mean_effects|stem|f0118a0461fb7407|88f7d32fa618d4e6|bebba4f07dec150a|-2094845168||t20367.6090930229s|s1054b|1054|qs|local|vector|||0||
+example_arm_data_variance_effects|stem|f0118a0461fb7407|e5c65a59abacc72f|28ef68d8bd866564|277801050||t20367.6090952621s|s1054b|1054|qs|local|vector|||0.01||
+calculate_arm_mean_effects_example|function|31054d255a35c1e6
+fit_pairwise_model|function|87aecfa7db0fdb51
+calculate_arm_variance_effects_example|function|32e6b96a6eb77342
+calculate_pairwise_variance_effects_example|function|74cbb07858aaa5cd
+calculate_pairwise_mean_effects_example|function|75e8505dbcf7f4d0
+setup_for_rstan|stem|19b58ec2e5619632|066d3b705f07972a|8eebfc4bff7da17f|962277310||t20368.3395231152s|s114b|114|qs|local|vector|||0||
+main_arm_data_file|stem|30fffc59c32f0df5|f4eeca1d2cfac762|2c530c1562a7fbd1|1240941181|C:/Users/james/Dropbox/Steele Research Ltd/Stronger by Science/pcos_ree_meta/data/studies_data.csv|t20368.533057548s|s17054b|17054|file|local|vector|||4.39||
+main_arm_data|stem|dacd1bb1f25eacc9|c753638bc17c9cb4|37999d4923e0cf1a|-1529487838||t20368.5571693804s|s6005b|6005|qs|local|vector|||0.77||
+prior_arm_mean_effects|stem|ce76c5691e7cee3d|f09ecbb3ae4361c2|979a4129d15b9c13|1872607805||t20369.6993336196s|s400b|400|qs|local|vector|||115.11|There were 2 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. Examine the pairs() plot to diagnose sampling problems|
+example_pairwise_mean_effects_model|stem|384f0b08232fa95a|195c4f634022b784|89737b6a9c5b5901|-1028206338||t20369.7018624457s|s7447264b|7447264|qs|local|vector|||69.77||
+example_pairwise_variance_effects_model|stem|0edc87d36c4e6750|97ffddc5bd4e2488|4c8c88b53a923ef9|1067201545||t20369.7026666663s|s7562755b|7562755|qs|local|vector|||68.98||
+example_pairwise_data|stem|ea380c602a7cd4d7|bc0567ddeadb3ec8|e590485621d3211d|1063391927||t20370.4165219242s|s431b|431|qs|local|vector|||0.02||
+example_pairwise_data_effects|stem|3427f9735a8726bd|75d068c7fbf70dc5|55a0d8599e832474|1912491938||t20370.4165267723s|s848b|848|qs|local|vector|||0.02||
+example_arm_data|stem|9eeac87a26c022f4|ddb86063392f7df2|6f89da69fb62fbe7|-581836630||t20370.416531207s|s760b|760|qs|local|vector|||0.01||
+main_arm_data_effects|stem|17f6887b313b5812|e651018c6919f5a3|81cca82e056c1abb|1709693965||t20370.4165357831s|s7312b|7312|qs|local|vector|||0||
+example_arm_data_effects|stem|c7539f56cc02a26f|2bdad863f4c2f4f5|e90bb20273342cdc|-436638797||t20370.4165399022s|s1803b|1803|qs|local|vector|||0||
+main_arm_mean_effects_model|stem|cc2123f2fae91275|b7ff281e0bf3da99|eb84d2186a209858|223795810||t20370.4177397697s|s36226709b|36226709|qs|local|vector|||103.14|Rows containing NAs were excluded from the model.. There were 28 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. Examine the pairs() plot to diagnose sampling problems|
+example_arm_mean_effects_model|stem|74c592dc7b4aeaf6|05f4e91541467848|a8fe7faab45002b8|-1955871417||t20370.4308726192s|s28813331b|28813331|qs|local|vector|||90.25|There were 5 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. Examine the pairs() plot to diagnose sampling problems|
+get_contrast_condition|function|0767984512d3f122
+get_preds_study_condition|function|dc284e4b29e8466a
+get_preds_condition|function|60fe7ea3feba7df8
+prior_arm_variance_effects|stem|ab33904879169414|f0f79e8fdca9564b|cb2f616754c61511|-1948822451||t20370.4347222486s|s485b|485|qs|local|vector|||171.36|There were 14 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. There were 6 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems . There were 72 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. There were 4959 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
+main_arm_variance_effects_model|stem|115780112c90bb42|554209a5f597441e|9a1973f6fa9eae8d|5596351||t20370.4365360719s|s36751832b|36751832|qs|local|vector|||156.16|Rows containing NAs were excluded from the model.|
+example_arm_variance_effects_model|stem|fda70a807fa8b581|23d13c1b0b38856f|3338b8aaa051093b|-777053723||t20370.4379184718s|s30116177b|30116177|qs|local|vector|||118.83|There were 2 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
+main_arm_mean_effects_preds_study_condition|stem|001ed562e6815ef4|75542454a303d7d0|4a888acf0426d9a1|-160055687||t20370.4680514223s|s3827597b|3827597|qs|local|vector|||1.6||
+main_arm_mean_effects_preds_condition|stem|b0790d23d427c2f3|b273639013490c98|d7277378cb85840d|-861925111||t20370.4680664611s|s326118b|326118|qs|local|vector|||0.9||
+main_arm_mean_effects_contrast_condition|stem|f2e86fe28ebf6e08|eabc1d180afd7ca5|aaa9b40e35c082e3|1425318561||t20370.4680938877s|s181346b|181346|qs|local|vector|||1.96||
+meta_study_pred_plot|stem|ed4b5531371f32b4|c1db8bbed41156ed|30c92f707d187cf4|1357479934||t20370.5363306449s|s47095227b|47095227|qs|local|vector|||1.63||
+meta_mean_pred_plot|stem|878031fc1c1b9a14|f595343629b87dfb|2bac8700a3aed97f|-1481781989||t20370.5363380239s|s2696625b|2696625|qs|local|vector|||0.08||
+main_arm_variance_effects_preds_condition|stem|ba080a398384127b|2e6810e2a5fee387|564b86fda1bb7a71|807904319||t20370.5406549257s|s338255b|338255|qs|local|vector|||1.44||
+main_arm_variance_effects_preds_study_condition|stem|8641da95f0f1a869|8a69be6f92b3ca44|58a2fd77e00f8ea2|-631419577||t20370.5407000446s|s4070545b|4070545|qs|local|vector|||2.84||
+main_arm_variance_effects_contrast_condition|stem|a602159837fad24e|12a1d7817c3c9355|7cff938c1592a95b|922692912||t20370.5407296128s|s182191b|182191|qs|local|vector|||2.11||
+meta_variance_pred_plot|stem|a534ca1a258e59ce|fddb55a237ac3dd1|cc84e19d6c36c13c|-1835741778||t20370.5407374968s|s2751474b|2751474|qs|local|vector|||0.14||
+meta_study_mean_pred_plot|stem|eacadc64e204e881|c1db8bbed41156ed|a582655c628d8ed6|-1965587023||t20370.5409220864s|s47205714b|47205714|qs|local|vector|||1.29||
+meta_mean_contrast_plot|stem|615500bdf6f6b375|8deb48a386d2a7a5|dbda17d899de5260|-525063489||t20370.5409292273s|s2106494b|2106494|qs|local|vector|||0.07||
+combined_mean_plot|stem|696d3edf68c8f60f|b159474188d1b846|f4645221dab26d03|1000594083||t20370.5413668706s|s57141746b|57141746|qs|local|vector|||0.03||
+meta_variance_contrast_plot|stem|3d5fba8bb3d5fab4|7b3dd66db993c033|d07f0ccf4bd6d6fb|1166946518||t20370.5438661116s|s2112026b|2112026|qs|local|vector|||0.12|Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0. ℹ Please use `linewidth` instead.|
+combine_variance_plots|function|57beeca4525bbadc
+get_mean_contrast_condition|function|0767984512d3f122
+plot_variance_contrast|function|735c926aca20b7b5
+get_mean_preds_study_condition|function|9baaf5a5a14abc78
+fit_arm_variance_effects_model|function|98f3697096751774
+get_variance_preds_condition|function|aa37b16a9b5f0dd0
+fit_pairwise_mean_model|function|48afd91948fc0d13
+plot_study_variance_pred|function|497ca3e97fc751c0
+prepare_data|function|07e4df1bde268b26
+set_prior_arm_variance_effects|function|d557c3c659d5aa91
+create_arm_data_example|function|3e0d8b2502585c7d
+fit_pairwise_variance_model|function|5fbbf1993bacec49
+fit_arm_mean_effects_model|function|d0e5ee31f9128904
+fit_arm_variance_effects_model_example|function|6e72ebf76fc345c6
+get_variance_preds_study_condition|function|c7eb132949989e52
+combine_mean_plots|function|7fcde8db99c2b6fd
+get_variance_contrast_condition|function|4390d4fa19ebf304
+calculate_pairwise_effects_example|function|b9ae8938c6159e97
+plot_study_mean_pred|function|ca4b3c8097690d92
+calculate_pairwise_effects|function|b9ae8938c6159e97
+fit_arm_mean_effects_model_example|function|bd7e5c3d9ff97d7e
+set_prior_arm_mean_effects|function|fc10749989b21505
+create_pairwise_data_example|function|4b623d30dc4c091b
+rstan_setup|function|8edb2c294ef23d3b
+plot_meta_variance_pred|function|e4d6cc19367708cc
+calculate_arm_effects|function|4bab4507776ff854
+calculate_arm_effects_example|function|26f249511a98ec16
+get_mean_preds_condition|function|60fe7ea3feba7df8
+plot_meta_mean_pred|function|e4d6cc19367708cc
+plot_mean_contrast|function|d87f58da49ed8450
+meta_study_variance_pred_plot|stem|bda8966b9ca94246|942db10a1441386f|bfffb419460a679b|163595105||t20370.5510796125s|s50162175b|50162175|qs|local|vector|||1.34||
+combined_variance_plot|stem|bbf5da7371d4667e|7c11e42134db5ab9|a1847a1921ca7b7e|554914033||t20370.5512993203s|s61206926b|61206926|qs|local|vector|||0.06||
