@@ -144,3 +144,33 @@
     
     return(arm_model)
   }
+  
+  # Pairwise models
+  ## Note, we just utilise the weakly regularising default priors from brms for both pairwise models
+  fit_pairwise_mean_model_example <- function(data) {
+    
+    pairwise_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 1 + (1 | study),
+                          data = data,
+                          chains = 4,
+                          cores = 4,
+                          seed = 1988,
+                          warmup = 2000,
+                          control = list(adapt_delta = 0.99),
+                          iter = 8000)
+    
+    return(pairwise_model)
+  }
+  
+  fit_pairwise_variance_model_example <- function(data) {
+    
+    pairwise_model <- brm(yi_cvr | se(sqrt(vi_cvr)) ~ 1 + (1 | study),
+                          data = data,
+                          chains = 4,
+                          cores = 4,
+                          seed = 1988,
+                          warmup = 2000,
+                          control = list(adapt_delta = 0.99),
+                          iter = 8000)
+    
+    return(pairwise_model)
+  }

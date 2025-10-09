@@ -562,7 +562,7 @@ combine_variance_plots <- function(meta_pred_plot,
 ## Note, we just utilise the weakly regularising default priors from brms for both pairwise models
 fit_pairwise_mean_model <- function(data) {
   
-  pairwise_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 1 + (1 | study),
+  pairwise_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 1 + (1 | lab) + (1 | study),
                         data = data,
                         chains = 4,
                         cores = 4,
@@ -576,7 +576,7 @@ fit_pairwise_mean_model <- function(data) {
 
 fit_pairwise_variance_model <- function(data) {
   
-  pairwise_model <- brm(yi_cvr | se(sqrt(vi_cvr)) ~ 1 + (1 | study),
+  pairwise_model <- brm(yi_cvr | se(sqrt(vi_cvr)) ~ 1 + (1 | lab) + (1 | study),
                         data = data,
                         chains = 4,
                         cores = 4,

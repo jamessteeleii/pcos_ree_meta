@@ -95,14 +95,14 @@ list(
   
   tar_target(
     example_pairwise_mean_effects_model,
-    fit_pairwise_mean_model(
+    fit_pairwise_mean_model_example(
       example_pairwise_data_effects
     )
   ),
   
   tar_target(
     example_pairwise_variance_effects_model,
-    fit_pairwise_variance_model(
+    fit_pairwise_variance_model_example(
       example_pairwise_data_effects
     )
   ),
@@ -180,7 +180,7 @@ list(
                                     main_arm_data_effects)
   ),
   
-  # Creat plots for main models
+  # Create plots for main models
   
   tar_target(
     meta_mean_pred_plot,
@@ -226,7 +226,34 @@ list(
     combine_variance_plots(meta_variance_pred_plot,
                            meta_study_variance_pred_plot,
                        meta_variance_contrast_plot)
+  ),
+  
+  #### Pairwise sensitivity analysis ----
+  
+  tar_target(
+    pairwise_data,
+    prepare_pairwise_data(main_arm_data)
+  ),
+  
+  tar_target(
+    pairwise_data_effects,
+    calculate_pairwise_effects(pairwise_data)
+  ),
+  
+  tar_target(
+    pairwise_mean_effects_model,
+    fit_pairwise_mean_model(
+      pairwise_data_effects
+    )
+  ),
+  
+  tar_target(
+    pairwise_variance_effects_model,
+    fit_pairwise_variance_model(
+      pairwise_data_effects
+    )
   )
+  
   
 )
 

@@ -139,28 +139,47 @@ calculate_arm_effects <- function(data) {
   return(data)
 }
 
+# Pairwise data preparation for sensitivity analysis
+
+prepare_pairwise_data <- function(data) {
+  
+  wide_data <- data |> 
+    filter(timepoint == "baseline") |> # just take baseline
+    select(lab, study, authors, year, cond, n, mean, sd) |> 
+    pivot_wider(names_from = "cond", values_from = c("n","mean", "sd")) |>
+    
+    # just studies with PCOS and Control (no further subgroups)
+    filter(map_lgl(n_PCOS, ~ length(.x) == 1) &
+             map_lgl(n_Control, ~ length(.x) == 1)) |>
+    mutate(across(n_PCOS:sd_Control, as.numeric))
+  
+  return(wide_data)
+}
+
 
 calculate_pairwise_effects <- function(data) {
+  
   data <- escalc(measure = "MD",
-                m1i = m_PCOS,
-                m2i = m_CONT,
-                sd1i = s_PCOS,
-                sd2i = s_CONT,
-                n1i = n_PCOS,
-                n2i = n_CONT,
-                data = data,
-                var.names = c("yi_mean", "vi_mean"))
-
+                 m1i = mean_PCOS,
+                 m2i = mean_Control,
+                 sd1i = sd_PCOS,
+                 sd2i = sd_Control,
+                 n1i = n_PCOS,
+                 n2i = n_Control,
+                 data = data,
+                 var.names = c("yi_mean", "vi_mean"))
+  
   data <- escalc(measure = "CVR",
-                m1i = m_PCOS,
-                m2i = m_CONT,
-                sd1i = s_PCOS,
-                sd2i = s_CONT,
-                n1i = n_PCOS,
-                n2i = n_CONT,
-                data = data,
-                var.names = c("yi_cvr", "vi_cvr"))
-
+                 m1i = mean_PCOS,
+                 m2i = mean_Control,
+                 sd1i = sd_PCOS,
+                 sd2i = sd_Control,
+                 n1i = n_PCOS,
+                 n2i = n_Control,
+                 data = data,
+                 var.names = c("yi_cvr", "vi_cvr"))
+  
   return(data)
+  
 }
 
