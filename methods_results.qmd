@@ -10,7 +10,8 @@ execute:
   warning: false
 ---
 ```{r}
-library(kableExtra)
+library(tidyverse)
+library(flextable)
 library(tidybayes)
 
 targets::tar_config_set(store = here::here('_targets'))
@@ -66,76 +67,153 @@ We adopted an arm-based multiple condition comparison (i.e., network) type model
 #### Mean REE Model
 
 The main model for mean REE with $\textrm{cond}$ representing the condition (either control or PCOS) was as follows:
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt] -->
+
+<!-- \mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl] -->
+<!--        + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} -->
+<!--        + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} -->
+<!--        + \alpha_{0,\mathrm{arm}[k]} -->
+<!--        + \alpha_{0,\mathrm{effect}[l]} \\[10pt] -->
+
+<!-- \begin{pmatrix} -->
+<!-- \alpha_{0,\mathrm{lab}[i]} \\[4pt] -->
+<!-- \alpha_{1,\mathrm{lab}[i]} -->
+<!-- \end{pmatrix} -->
+<!-- &\sim  -->
+<!-- \mathcal{N}\!\left( -->
+<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
+<!-- \Sigma_{\mathrm{lab}} -->
+<!-- \right), -->
+<!-- \quad -->
+<!-- \Sigma_{\mathrm{lab}} = -->
+<!-- \begin{pmatrix} -->
+<!-- \sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt] -->
+<!-- \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}} -->
+<!-- \end{pmatrix}  -->
+
+<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
+
+<!-- \begin{pmatrix} -->
+<!-- \alpha_{0,\mathrm{study}[j]} \\[4pt] -->
+<!-- \alpha_{1,\mathrm{study}[j]} -->
+<!-- \end{pmatrix} -->
+<!-- &\sim  -->
+<!-- \mathcal{N}\!\left( -->
+<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
+<!-- \Sigma_{\mathrm{study}} -->
+<!-- \right), -->
+<!-- \quad -->
+<!-- \Sigma_{\mathrm{study}} = -->
+<!-- \begin{pmatrix} -->
+<!-- \sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt] -->
+<!-- \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}} -->
+<!-- \end{pmatrix}  -->
+<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
+
+<!-- \alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})  -->
+<!-- \text{, for arm k = 1,} \dots \text{,K} \\[12pt] -->
+<!-- \alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})  -->
+<!-- \text{, for effect l = 1,} \dots \text{,L} \\[12pt] -->
+
+<!-- \end{align*} -->
+<!-- $$ -->
+
 $$
-\begin{align*}
-\hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\hat{\theta}_{ijkl} \sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl})
+$$
 
-\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl]
-       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
-       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
-       + \alpha_{0,\mathrm{arm}[k]}
-       + \alpha_{0,\mathrm{effect}[l]} \\[10pt]
+$$
+\mu_{ijkl} = \beta_0 + \beta_1\,\text{cond}_{ijkl} 
++ \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} 
++ \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} 
++ \alpha_{0,\mathrm{arm}[k]} + \alpha_{0,\mathrm{effect}[l]}
+$$
 
+$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{0,\mathrm{lab}[i]} \\
 \alpha_{1,\mathrm{lab}[i]}
 \end{pmatrix}
-&\sim 
-\mathcal{N}\!\left(
-\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\sim 
+\mathcal{N}\Bigg(
+\begin{pmatrix} 0 \\ 0 \end{pmatrix},
 \Sigma_{\mathrm{lab}}
-\right),
+\Bigg), 
 \quad
 \Sigma_{\mathrm{lab}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
-\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
-\end{pmatrix} 
- 
-\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} \\
+\rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix},
+\text{ for lab } i = 1, \dots, I
+$$
 
+$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{0,\mathrm{study}[j]} \\
 \alpha_{1,\mathrm{study}[j]}
 \end{pmatrix}
-&\sim 
-\mathcal{N}\!\left(
-\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\sim 
+\mathcal{N}\Bigg(
+\begin{pmatrix} 0 \\ 0 \end{pmatrix},
 \Sigma_{\mathrm{study}}
-\right),
+\Bigg), 
 \quad
 \Sigma_{\mathrm{study}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
-\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
-\end{pmatrix} 
-\text{, for study j = 1,} \dots \text{,J} \\[12pt]
-
-\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}) 
-\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
-\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}) 
-\text{, for effect l = 1,} \dots \text{,L} \\[12pt]
-
-\end{align*}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} \\
+\rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix},
+\text{ for study } j = 1, \dots, J
 $$
+
+$$
+\alpha_{0,\mathrm{arm}[k]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}), 
+\text{ for arm } k = 1, \dots, K
+$$
+
+$$
+\alpha_{0,\mathrm{effect}[l]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}), 
+\text{ for effect } l = 1, \dots, L
+$$
+
 
 where $\hat{\theta}_{ijkl}$ is the $l\textrm{th}$ mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ mean REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PCOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices.
 
 The priors for this model were as follows:
 
-$$
-\begin{align*}
-\beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt]
-\beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt]
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt] -->
+<!-- \beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt] -->
 
-\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt]
+<!-- \sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt] -->
+<!-- \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,  -->
+<!-- \sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt] -->
+
+<!-- \mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt] -->
+<!-- \mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1) -->
+<!-- \end{align*} -->
+<!-- $$ -->
+
+$$
+\beta_0 \sim \text{Student-}t(3, 1441.81, 84.56) \\
+\beta_1 \sim \text{Student-}t(3, 0, 200)
+$$
+
+$$
+\sigma^2_{0,\mathrm{study}} \sim \text{Half-student-}t(3, 149.89, 82.91) \\
 \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, 
-\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt]
-
-\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
-\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
-\end{align*}
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}},\, \sigma^2_{0,\mathrm{effect}} \sim \text{Half-student-}t(3, 0, 112.4)
 $$
+
+$$
+\mathrm{corr}_{\mathrm{lab}} \sim \mathrm{LKJ}(1) \\
+\mathrm{corr}_{\mathrm{study}} \sim \mathrm{LKJ}(1)
+$$
+
 
 where the prior for $\beta_{0}$, which corresponded to the model intercept and mean REE in the control condition, was set based on meta-analysis of the mean REEs for women from two large studies of healthy people [@velasquezUseAmmoniaInhalants2011; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PCOS conditions was set based on a wide range of possible values considering the minimum and and maximum values of the ranges reported in the two studies noted (i.e., 2492 - 908 = 1584). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
 
@@ -143,82 +221,175 @@ where the prior for $\beta_{0}$, which corresponded to the model intercept and m
 
 The main model for the standard deviation of REE with $\textrm{cond}$ representing the condition (either control or PCOS) was as follows:
 
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt] -->
+
+<!-- \mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]}  -->
+<!--        + \beta_2\,\tilde{m}_{[ijkl]} -->
+<!--        + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} -->
+<!--        + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} -->
+<!--        + \alpha_{0,\mathrm{arm}[k]} -->
+<!--        + \alpha_{0,\mathrm{effect}[l]} \\[8pt] -->
+
+<!-- m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt] -->
+<!-- \tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt] -->
+
+<!-- \begin{pmatrix} -->
+<!-- \alpha_{0,\mathrm{lab}[i]} \\[4pt] -->
+<!-- \alpha_{1,\mathrm{lab}[i]} -->
+<!-- \end{pmatrix} -->
+<!-- &\sim  -->
+<!-- \mathcal{N}\!\left( -->
+<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
+<!-- \Sigma_{\mathrm{lab}} -->
+<!-- \right), -->
+<!-- \quad -->
+<!-- \Sigma_{\mathrm{lab}} = -->
+<!-- \begin{pmatrix} -->
+<!-- \sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt] -->
+<!-- \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}} -->
+<!-- \end{pmatrix}  -->
+
+<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
+
+<!-- \begin{pmatrix} -->
+<!-- \alpha_{0,\mathrm{study}[j]} \\[4pt] -->
+<!-- \alpha_{1,\mathrm{study}[j]} -->
+<!-- \end{pmatrix} -->
+<!-- &\sim  -->
+<!-- \mathcal{N}\!\left( -->
+<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
+<!-- \Sigma_{\mathrm{study}} -->
+<!-- \right), -->
+<!-- \quad -->
+<!-- \Sigma_{\mathrm{study}} = -->
+<!-- \begin{pmatrix} -->
+<!-- \sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt] -->
+<!-- \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}} -->
+<!-- \end{pmatrix}  -->
+<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
+
+<!-- \alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})  -->
+<!-- \text{, for arm k = 1,} \dots \text{,K} \\[12pt] -->
+<!-- \alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})  -->
+<!-- \text{, for effect l = 1,} \dots \text{,L} \\[12pt] -->
+<!-- \end{align*} -->
+<!-- $$ -->
+
 $$
-\begin{align*}
-\log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\log(\hat{\theta}_{ijkl}) \sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl})
+$$
 
-\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]} 
-       + \beta_2\,\tilde{m}_{[ijkl]}
-       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
-       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
-       + \alpha_{0,\mathrm{arm}[k]}
-       + \alpha_{0,\mathrm{effect}[l]} \\[8pt]
+$$
+\mu_{ijkl} = \beta_0 + \beta_1\,\text{cond}_{[ijkl]} 
++ \beta_2\,\tilde{m}_{[ijkl]}
++ \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} 
++ \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} 
++ \alpha_{0,\mathrm{arm}[k]} + \alpha_{0,\mathrm{effect}[l]}
+$$
 
-m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt]
-\tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt]
+$$
+m = \log(y_{i,\mathrm{mean,[ijkl]}})
+$$
 
+$$
+\tilde{m} \sim \mathcal{N}(m, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2)
+$$
+
+$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{0,\mathrm{lab}[i]} \\
 \alpha_{1,\mathrm{lab}[i]}
 \end{pmatrix}
-&\sim 
-\mathcal{N}\!\left(
-\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\sim 
+\mathcal{N}\Bigg(
+\begin{pmatrix} 0 \\ 0 \end{pmatrix},
 \Sigma_{\mathrm{lab}}
-\right),
+\Bigg),
 \quad
 \Sigma_{\mathrm{lab}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
-\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
-\end{pmatrix} 
- 
-\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} \\
+\rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix},
+\text{ for lab } i = 1, \dots, I
+$$
 
+$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{0,\mathrm{study}[j]} \\
 \alpha_{1,\mathrm{study}[j]}
 \end{pmatrix}
-&\sim 
-\mathcal{N}\!\left(
-\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\sim 
+\mathcal{N}\Bigg(
+\begin{pmatrix} 0 \\ 0 \end{pmatrix},
 \Sigma_{\mathrm{study}}
-\right),
+\Bigg),
 \quad
 \Sigma_{\mathrm{study}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
-\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
-\end{pmatrix} 
-\text{, for study j = 1,} \dots \text{,J} \\[12pt]
-
-\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}) 
-\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
-\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}) 
-\text{, for effect l = 1,} \dots \text{,L} \\[12pt]
-\end{align*}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} \\
+\rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix},
+\text{ for study } j = 1, \dots, J
 $$
+
+$$
+\alpha_{0,\mathrm{arm}[k]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}), 
+\text{ for arm } k = 1, \dots, K
+$$
+
+$$
+\alpha_{0,\mathrm{effect}[l]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}), 
+\text{ for effect } l = 1, \dots, L
+$$
+
 where $\log(\hat{\theta}_{ijkl})$ is the $l\textrm{th}$ natural logarithm of the standard deviation of REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ standard deviation of REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of standard deviation of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PCOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices. Finally, $\beta_{2}$ represents the fixed effect of the natural logarithm of the corresponding mean REE estimate $\tilde{m}$ which is modelled as estimated with measurement error i.e., $m$ represents the point estimate for the $l\textrm{th}$ natural logarithm of the mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2$ is the corresponding sampling error for that estimate.
 
 The priors for this model were as follows:
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt] -->
+<!-- \beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt] -->
+<!-- \beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt] -->
+
+<!-- \text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt] -->
+<!-- \text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt] -->
+
+<!-- \sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt] -->
+<!-- \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, -->
+<!-- \sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt] -->
+
+<!-- \mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt] -->
+<!-- \mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1) -->
+<!-- \end{align*} -->
+
+<!-- $$ -->
+
 $$
-\begin{align*}
-\beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt]
-\beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt]
-\beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt]
+\beta_0 \sim \text{Student-}t(3, 5.54, 0.80) \\
+\beta_1 \sim \text{Student-}t(3, 0, 5.3) \\
+\beta_2 \sim \text{Student-}t(3, 0, 2.5)
+$$
 
-\text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt]
-\text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt]
+$$
+\text{mean}(\tilde{m}) \sim \text{Half-student-}t(3, 7.28, 0.62) \\
+\text{sd}(\tilde{m}) \sim \text{Half-student-}t(3, 0, 5)
+$$
 
-\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt]
+$$
+\sigma^2_{0,\mathrm{study}} \sim \text{Half-student-}t(3, 1.08, 1.06) \\
 \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, 
-\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt]
-
-\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
-\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
-\end{align*}
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}},\, \sigma^2_{0,\mathrm{effect}} 
+\sim \text{Half-student-}t(3, 0, 2.5)
+$$
 
 $$
+\mathrm{corr}_{\mathrm{lab}} \sim \mathrm{LKJ}(1) \\
+\mathrm{corr}_{\mathrm{study}} \sim \mathrm{LKJ}(1)
+$$
+
 where the prior for $\beta_{0}$, which corresponded to the model intercept and standard deviation of REE in the control condition, was again set based on meta-analysis of the standard deviation of REEs for women from two large studies of healthy people [@velasquezUseAmmoniaInhalants2011; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PCOS conditions was set based on a wide range of possible values. Given that in many cases of variables in the field there is an approximate relationship of ~1 for the natural logarithm of the standard deviation conditioned upon the natural logarithm of the mean [@steeleMetaanalysisVariationSport2023a] we set this prior to reflect the range of differences on the on the log scale (i.e., $\log(1584)$). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The prior for the fixed effect $\beta_{2}$, reflecting the relationship between the natural logarithm of the mean REE with the natural logarithm of the standard deviation of REE, was set it to be weakly informative centred on zero with a wide scale to indicate uncertainty in this outcome specifically despite the typical relationship close to ~1. Priors for the measurement error of the natural logarithm of the mean REE estimate $\tilde{m}$ were again based upon meta-analysis of the aforementioned studies, though measurement error has to be positive, as does the corresponding standard deviation of this error, so we set these to conservative wide $\textrm{half-student-}t$ distributions. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
 
 #### Post-processing of models
@@ -229,21 +400,39 @@ For both models we examined trace plots along with $\hat{R}$ values to examine w
 
 By way of sensitivity analysis we also conducted pairwise contrast based models where we limited the included effects to those extracted from studies including only a directly comparable control and PCOS arm at baseline. These models were both as follows:
 
+<!-- $$ -->
+<!-- \begin{align*} -->
+<!-- \hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt] -->
+
+<!-- \mu_{ij} &= \beta_0 -->
+<!--        + \alpha_{0,\mathrm{lab}[i]} -->
+<!--        + \alpha_{0,\mathrm{study}[j]} \\[10pt] -->
+
+
+<!-- \alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}})  -->
+<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
+<!-- \alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}})  -->
+<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
+
+<!-- \end{align*} -->
+<!-- $$ -->
+
 $$
-\begin{align*}
-\hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt]
+\hat{\theta}_{ij} \sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij})
+$$
 
-\mu_{ij} &= \beta_0
-       + \alpha_{0,\mathrm{lab}[i]}
-       + \alpha_{0,\mathrm{study}[j]} \\[10pt]
+$$
+\mu_{ij} = \beta_0 + \alpha_{0,\mathrm{lab}[i]} + \alpha_{0,\mathrm{study}[j]}
+$$
 
+$$
+\alpha_{0,\mathrm{lab}[i]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}}), 
+\text{ for lab } i = 1, \dots, I
+$$
 
-\alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}}) 
-\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
-\alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}}) 
-\text{, for study j = 1,} \dots \text{,J} \\[12pt]
-
-\end{align*}
+$$
+\alpha_{0,\mathrm{study}[j]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}}), 
+\text{ for study } j = 1, \dots, J
 $$
 
 where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PCOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard devation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
@@ -269,51 +458,9 @@ no_participants <- main_arm_data_imputed_demographics_baseline |>
   )
 
 ```
-A total of `r length(unique(main_arm_data_imputed_demographics$study)` studies from `r length(unique(main_arm_data_imputed_demographics$lab)` labs including `r length(unique(main_arm_data_imputed_demographics$arm)` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-demographics.
+A total of `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` labs including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in Table 1.
 
-```{r}
-#| label: tbl-demographics 
-#| tbl-cap-location: "top"
-#| tbl-cap: Descriptive characteristics of arms and participants for included studies.
 
-main_arm_data_imputed_demographics_baseline |> 
-  mutate(across(where(is.numeric), round, 2)) |>
-  mutate(
-    Age = paste0(m_age, " (", sd_age, ")"),
-    `Body mass` = paste0(m_body_mass, " (", sd_body_mass, ")"),
-    Height = paste0(m_height, " (", sd_height, ")"),
-    BMI = paste0(m_bmi, " (", sd_bmi, ")"),
-    `Fat mass` = paste0(m_fat_mass, " (", sd_fat_mass, ")"),
-    `Fat free mass` = paste0(m_fat_free_mass, " (", sd_fat_free_mass, ")")
-  ) |>
-  select(authors, year, title, cond,
-         Age, 
-         `Body mass`,
-         Height,
-         BMI,
-         `Fat mass`,
-         `Fat free mass`,
-         race,
-         physical_activity_level,
-         country,
-         -c(m_age, sd_age, 
-         m_body_mass, sd_body_mass,
-         m_height, sd_height,
-         m_bmi, sd_bmi,
-         m_fat_mass, sd_fat_mass,
-         m_fat_free_mass, sd_fat_free_mass),
-         insulin_resistant_description,
-         m_body_mass_estim,
-         m_height_estim,
-         m_bmi_estim
-         )|>
-  arrange(year) |>
-  kable() |>
-  collapse_rows(columns = 1, valign = "top") |>
-  # footnote(general = c("ST = self-talk", "CON = non-intervention control")) |>
-  row_spec(0, bold = TRUE) |>
-  kable_classic(full_width = FALSE) 
-```
 
 ## Mean REE Model Results
 ```{r}
@@ -361,7 +508,7 @@ main_arm_variance_effects_contrast_condition <- main_arm_variance_effects_contra
 
 ```
 
-The main model for the between participant standard deviation of REE resulted in a posterior distribution for the contrast ratio between control and PCOS conditions with a variance point estimate of `r round(main_arm_variance_effects_contrast_condition$draw)` with a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition$.lower)` to `r round(main_arm_variance_effects_contrast_condition$.upper)` suggesting there is a 95% probability that the true ratio of standard deviations lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the standard deviations of the control condition and PCOS condition respectively were `r round(main_arm_variance_effects_preds_condition$draw[1])` [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[1])` to `r round(main_arm_variance_effects_preds_condition$.upper[1])` ] and `r round(main_arm_variance_effects_preds_condition$draw[2])` [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[2])` to `r round(main_arm_variance_effects_preds_condition$.upper[2])` ]. These results including the full visualisation of the posterior distribution, in addition to the conditional estimates by study, can be seen in @fig-variance-REE.
+The main model for the between participant standard deviation of REE resulted in a posterior distribution for the contrast ratio between control and PCOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition$draw,2)` with a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition$.lower,2)` to `r round(main_arm_variance_effects_contrast_condition$.upper,2)` suggesting there is a 95% probability that the true ratio of standard deviations lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the standard deviations of the control condition and PCOS condition respectively were `r round(main_arm_variance_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_variance_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[2])` kcal/day]. These results including the full visualisation of the posterior distribution, in addition to the conditional estimates by study, can be seen in @fig-variance-REE.
 
 ```{r}
 #| label: fig-variance-REE 
@@ -371,3 +518,10 @@ The main model for the between participant standard deviation of REE resulted in
 
 combined_variance_plot
 ```
+
+## Sensitivity Analysis with Pairwise Models
+```{r}
+targets::tar_load(c(pairwise_mean_effects_model, pairwise_variance_effects_model))
+
+```
+For mean REE the pairwise model resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(pairwise_mean_effects_model)[1])` kcal/day with a 95% quantile interval ranging from  `r round(brms::fixef(pairwise_mean_effects_model)[3])` kcal/day to `r round(brms::fixef(pairwise_mean_effects_model)[4])` kcal/day. This was similar for the standard deviation of REE with the pairwise model resulting in a contrast ratio between control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(pairwise_variance_effects_model)[1]),2)` with a 95% quantile interval ranging from  `r round(exp(brms::fixef(pairwise_variance_effects_model)[3]),2)` to `r round(exp(brms::fixef(pairwise_variance_effects_model)[4]),2)`.

@@ -20,6 +20,22 @@ main_arm_mean_effects_model|stem|05732a9454d5f340|b7ff281e0bf3da99|f8d162e7a8056
 main_arm_variance_effects_model|stem|1bce03eb949f991a|554209a5f597441e|e57ee863ec9052aa|5596351||t20375.6101427786s|s48446163b|48446163|qs|local|vector|||155.7|Rows containing NAs were excluded from the model.. There were 1 transitions after warmup that exceeded the maximum treedepth. Increase max_treedepth above 10. See https://mc-stan.org/misc/warnings.html#maximum-treedepth-exceeded. Examine the pairs() plot to diagnose sampling problems|
 pairwise_mean_effects_model|stem|6d24d29776d91741|e9973fd57b139123|7dfc7073722589b8|-1854642542||t20375.6109810233s|s10067218b|10067218|qs|local|vector|||71.81||
 pairwise_variance_effects_model|stem|edb2d13efb878127|327ae2400682d818|a793a6ba4fc60a09|-69961791||t20375.6118288147s|s10055586b|10055586|qs|local|vector|||72.67|There were 29 divergent transitions after warmup. See https://mc-stan.org/misc/warnings.html#divergent-transitions-after-warmup to find out why this is a problem and how to eliminate them.. Examine the pairs() plot to diagnose sampling problems|
+main_arm_mean_effects_preds_condition|stem|0d80d362ec118802|b273639013490c98|a18d18482b36bd50|-861925111||t20375.6125609079s|s328346b|328346|qs|local|vector|||1.22||
+main_arm_mean_effects_preds_study_condition|stem|967859174cebb220|75542454a303d7d0|3957446df7b5c0a7|-160055687||t20375.6126057686s|s3937943b|3937943|qs|local|vector|||2.85||
+main_arm_mean_effects_contrast_condition|stem|7695985ce9450c00|eabc1d180afd7ca5|73b41da75ae58dff|1425318561||t20375.6126347711s|s181505b|181505|qs|local|vector|||2.02||
+main_arm_variance_effects_preds_study_condition|stem|ecc6840568a13ad9|8a69be6f92b3ca44|885038e65cf6fefd|-631419577||t20375.6126677255s|s4095083b|4095083|qs|local|vector|||2.02||
+main_arm_variance_effects_preds_condition|stem|215da6c0c1139540|2e6810e2a5fee387|aeacbfd0bfe14592|807904319||t20375.6126867607s|s339393b|339393|qs|local|vector|||1.18||
+main_arm_variance_effects_contrast_condition|stem|c8a3e0fd9948081a|12a1d7817c3c9355|fb365ee5c793e74b|922692912||t20375.6127149219s|s182485b|182485|qs|local|vector|||1.98||
+meta_mean_pred_plot|stem|95bfb671bbcb775f|f595343629b87dfb|82c15ef3e9d43c02|-1481781989||t20375.6127201658s|s1872595b|1872595|qs|local|vector|||0.09||
+meta_study_mean_pred_plot|stem|c939ff06a4062ac2|c1db8bbed41156ed|3af2b66c6390d741|-1965587023||t20375.6128036699s|s44684686b|44684686|qs|local|vector|||1.39||
+meta_mean_contrast_plot|stem|74e1a66cbbc7cfb2|8deb48a386d2a7a5|9f57360dc53c4dcf|-525063489||t20375.6128090727s|s1263840b|1263840|qs|local|vector|||0.09|Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0. ℹ Please use `linewidth` instead.|
+meta_study_variance_pred_plot|stem|7bf6c6c06a2b7f12|942db10a1441386f|f3c60f11d02bd1b6|163595105||t20375.6128945091s|s46308801b|46308801|qs|local|vector|||1.41||
+meta_variance_pred_plot|stem|df738aac101131bc|fddb55a237ac3dd1|2ddb869da383217f|-1835741778||t20375.6128991818s|s1906682b|1906682|qs|local|vector|||0.06||
+meta_variance_contrast_plot|stem|05fb0bb6f9efb16e|7b3dd66db993c033|922fe10b00d4abfb|1166946518||t20375.6129039985s|s1234422b|1234422|qs|local|vector|||0.06||
+combined_mean_plot|stem|521a4791497ce44f|b159474188d1b846|c362f8f4c4699cfb|1000594083||t20375.6130933593s|s48016437b|48016437|qs|local|vector|||0.03||
+combined_variance_plot|stem|c11bf2f87284a18c|7c11e42134db5ab9|80faf6cefcff3a48|554914033||t20375.6132570339s|s49303131b|49303131|qs|local|vector|||0.02||
+combined_mean_plot_tiff|stem|3c846ed27214a3b2|9c9496b80d5a2f19|d978d7c02f308cd8|-638138283||t20375.613409323s|s104b|104|qs|local|vector|||3.7||
+combined_variance_plot_tiff|stem|6f7e43761fbf9c0c|b4ba8643babde49d|9d769976a3e1222b|1874826666||t20375.613547618s|s108b|108|qs|local|vector|||3.29|Removed 25 rows containing missing values or values outside the scale range (`stat_slabinterval()`).|
 combine_variance_plots|function|57beeca4525bbadc
 get_mean_contrast_condition|function|0767984512d3f122
 plot_variance_contrast|function|735c926aca20b7b5
@@ -41,6 +57,7 @@ combine_mean_plots|function|7fcde8db99c2b6fd
 get_variance_contrast_condition|function|4390d4fa19ebf304
 calculate_pairwise_effects_example|function|b9ae8938c6159e97
 plot_study_mean_pred|function|c2adabc4316d6bcb
+create_descriptives_table|function|a38c6bc09673c5db
 calculate_pairwise_effects|function|7a18d9cfd97a9f2d
 fit_arm_mean_effects_model_example|function|bd7e5c3d9ff97d7e
 set_prior_arm_mean_effects|function|fc10749989b21505
@@ -54,19 +71,4 @@ prepare_pairwise_data|function|b02c4a8c88964f09
 get_mean_preds_condition|function|60fe7ea3feba7df8
 plot_meta_mean_pred|function|8def69ed8b8adf66
 plot_mean_contrast|function|d87f58da49ed8450
-main_arm_mean_effects_preds_condition|stem|0d80d362ec118802|b273639013490c98|a18d18482b36bd50|-861925111||t20375.6125609079s|s328346b|328346|qs|local|vector|||1.22||
-main_arm_mean_effects_preds_study_condition|stem|967859174cebb220|75542454a303d7d0|3957446df7b5c0a7|-160055687||t20375.6126057686s|s3937943b|3937943|qs|local|vector|||2.85||
-main_arm_mean_effects_contrast_condition|stem|7695985ce9450c00|eabc1d180afd7ca5|73b41da75ae58dff|1425318561||t20375.6126347711s|s181505b|181505|qs|local|vector|||2.02||
-main_arm_variance_effects_preds_study_condition|stem|ecc6840568a13ad9|8a69be6f92b3ca44|885038e65cf6fefd|-631419577||t20375.6126677255s|s4095083b|4095083|qs|local|vector|||2.02||
-main_arm_variance_effects_preds_condition|stem|215da6c0c1139540|2e6810e2a5fee387|aeacbfd0bfe14592|807904319||t20375.6126867607s|s339393b|339393|qs|local|vector|||1.18||
-main_arm_variance_effects_contrast_condition|stem|c8a3e0fd9948081a|12a1d7817c3c9355|fb365ee5c793e74b|922692912||t20375.6127149219s|s182485b|182485|qs|local|vector|||1.98||
-meta_mean_pred_plot|stem|95bfb671bbcb775f|f595343629b87dfb|82c15ef3e9d43c02|-1481781989||t20375.6127201658s|s1872595b|1872595|qs|local|vector|||0.09||
-meta_study_mean_pred_plot|stem|c939ff06a4062ac2|c1db8bbed41156ed|3af2b66c6390d741|-1965587023||t20375.6128036699s|s44684686b|44684686|qs|local|vector|||1.39||
-meta_mean_contrast_plot|stem|74e1a66cbbc7cfb2|8deb48a386d2a7a5|9f57360dc53c4dcf|-525063489||t20375.6128090727s|s1263840b|1263840|qs|local|vector|||0.09|Using `size` aesthetic for lines was deprecated in ggplot2 3.4.0. ℹ Please use `linewidth` instead.|
-meta_study_variance_pred_plot|stem|7bf6c6c06a2b7f12|942db10a1441386f|f3c60f11d02bd1b6|163595105||t20375.6128945091s|s46308801b|46308801|qs|local|vector|||1.41||
-meta_variance_pred_plot|stem|df738aac101131bc|fddb55a237ac3dd1|2ddb869da383217f|-1835741778||t20375.6128991818s|s1906682b|1906682|qs|local|vector|||0.06||
-meta_variance_contrast_plot|stem|05fb0bb6f9efb16e|7b3dd66db993c033|922fe10b00d4abfb|1166946518||t20375.6129039985s|s1234422b|1234422|qs|local|vector|||0.06||
-combined_mean_plot|stem|521a4791497ce44f|b159474188d1b846|c362f8f4c4699cfb|1000594083||t20375.6130933593s|s48016437b|48016437|qs|local|vector|||0.03||
-combined_variance_plot|stem|c11bf2f87284a18c|7c11e42134db5ab9|80faf6cefcff3a48|554914033||t20375.6132570339s|s49303131b|49303131|qs|local|vector|||0.02||
-combined_mean_plot_tiff|stem|3c846ed27214a3b2|9c9496b80d5a2f19|d978d7c02f308cd8|-638138283||t20375.613409323s|s104b|104|qs|local|vector|||3.7||
-combined_variance_plot_tiff|stem|6f7e43761fbf9c0c|b4ba8643babde49d|9d769976a3e1222b|1874826666||t20375.613547618s|s108b|108|qs|local|vector|||3.29|Removed 25 rows containing missing values or values outside the scale range (`stat_slabinterval()`).|
+descriptives_table_docx|stem|fbfd806cdfdbad3d|d19db8e2e4660fa1|859a9ff4e1ffa95b|1794173332||t20375.6762889616s|s162b|162|qs|local|vector|||1.16||

@@ -187,6 +187,88 @@ impute_demographic_estimates <- function(data) {
     
 }
 
+create_descriptives_table <- function(data) {
+  
+  table <- data |> 
+    filter(timepoint == "baseline") |>
+    mutate(across(where(is.numeric), \(x) round(x, 2))) |>
+    mutate(
+      Age = paste0(m_age, " (", sd_age, ")"),
+      `Body mass` = paste0(m_body_mass, " (", sd_body_mass, ")"),
+      Height = paste0(m_height, " (", sd_height, ")"),
+      BMI = paste0(m_bmi, " (", sd_bmi, ")"),
+      `Fat mass` = paste0(m_fat_mass, " (", sd_fat_mass, ")"),
+      `Fat free mass` = paste0(m_fat_free_mass, " (", sd_fat_free_mass, ")")
+    ) |>
+    select(authors, year, title, cond, n,
+           Age, 
+           `Body mass`,
+           Height,
+           BMI,
+           `Fat mass`,
+           `Fat free mass`,
+           race,
+           physical_activity_level,
+           country,
+           -c(m_age, sd_age, 
+              m_body_mass, sd_body_mass,
+              m_height, sd_height,
+              m_bmi, sd_bmi,
+              m_fat_mass, sd_fat_mass,
+              m_fat_free_mass, sd_fat_free_mass),
+           insulin_resistant_description,
+           m_body_mass_estim,
+           m_height_estim,
+           m_bmi_estim
+    )|>
+    rename(
+      Authors = "authors",
+      Year = "year",
+      `Article title` = "title",
+      `Country of study` = "country",
+      Condition = "cond",
+      `Sample size` = "n",
+      `Race/Ethnicity` = "race",
+      `Physical activity` = "physical_activity_level",
+      `Metabolic health` = "insulin_resistant_description"
+    ) |>
+    mutate(Year = as.numeric(Year)) |>
+    arrange(Year) |>
+    # kable() |>
+    # collapse_rows(columns = 1, valign = "top") |>
+    # # footnote(general = c("ST = self-talk", "CON = non-intervention control")) |>
+    # row_spec(0, bold = TRUE) |>
+    # kable_classic(full_width = FALSE) 
+    flextable() |>
+    bold(part = "header") |>
+    merge_v(j = "Authors") |>
+    colformat_num(j = "Year", big.mark = "", digits = 0) |>
+    autofit() |>
+    fontsize(size = 8) |>
+    width(j = NULL, width = 0.5)  # 0.5 inches per column
+    
+  
+  # Create a new Word document
+  doc <- read_docx()
+  
+  # Add a title
+  doc <- doc |>
+    body_add_par("Table: Descriptive characteristics of arms and participants for included studies", style = "heading 1") |>
+    body_add_par("", style = "Normal")  # optional spacer
+  
+  # Add the table
+  doc <- doc |>
+    body_add_flextable(table)
+  
+  # End section in landscape
+  doc <- doc |>
+    body_end_section_landscape()
+  
+  # Save to file
+  print(doc, target = "descriptives_table_landscape.docx")
+  
+}
+
 # Pairwise data preparation for sensitivity analysis
 
 prepare_pairwise_data <- function(data) {

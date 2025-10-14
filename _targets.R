@@ -16,7 +16,9 @@ tar_option_set(
     "brms",
     "marginaleffects",
     "tidybayes",
-    "patchwork"
+    "patchwork",
+    "flextable",
+    "officer"
   ),
   memory = "transient",
   format = "qs",
@@ -129,6 +131,11 @@ list(
   tar_target(
     main_arm_data_imputed_demographics,
     impute_demographic_estimates(main_arm_data)
+  ),
+  
+  tar_target(
+    descriptives_table_docx,
+    create_descriptives_table(main_arm_data_imputed_demographics)
   ),
   
   # Fitting main analysis models
