@@ -62,7 +62,7 @@ set_prior_arm_mean_effects <- function() {
 
 fit_arm_mean_effects_model <- function(data, prior) {
   
-  arm_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + (1 + cond | lab) + (1 + cond | study) + (1 | arm),
+  arm_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect),
                    data = data,
                    prior = prior,
                    chains = 4,
@@ -167,7 +167,7 @@ set_prior_arm_variance_effects <- function() {
 
 fit_arm_variance_effects_model <- function(data, prior) {
   
-  arm_model <- brm(yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond + me(log_yi_mean, se_log_yi_mean) + (1 + cond | lab) + (1 + cond | study) + (1 | arm),
+  arm_model <- brm(yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond + me(log_yi_mean, se_log_yi_mean) + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect),
                    data = data,
                    prior = prior,
                    chains = 4,
@@ -279,7 +279,7 @@ plot_meta_mean_pred <- function(preds) {
                        is.numeric, round, 2),
       aes(
         label = glue::glue("{round(draw)} [{round(.lower)}, {round(.upper)}]"),
-        x = draw, y = 0.1
+        x = draw, y = 0.2
       ),
       size = 3
     ) +
@@ -328,10 +328,10 @@ plot_study_mean_pred <- function(preds, data) {
                        is.numeric, round, 2),
       aes(
         label = glue::glue("{cond}: {round(draw)} [{round(.lower)}, {round(.upper)}]"),
-        x = 2250, y =reorder(study_label, draw), group = cond
+        x = Inf, y =reorder(study_label, draw), group = cond
       ),
       size = 2, position = position_dodge(width = 0.75),
-      hjust = "inward"
+      hjust = 1.1
     ) +
     # Add individual study data
     geom_point(
@@ -343,6 +343,7 @@ plot_study_mean_pred <- function(preds, data) {
       alpha = 0.75,
       position = position_jitterdodge(dodge.width = 1, jitter.height = 0.05) 
     ) +
+    scale_x_continuous(limits = c(750,2250)) +
     labs(
       x = "Resting Energy Expenditure (kcal)",
       title = "Conditional Estimates for Condition by Study"
@@ -426,7 +427,7 @@ plot_meta_variance_pred <- function(preds) {
                        is.numeric, round, 2),
       aes(
         label = glue::glue("{round(draw)} [{round(.lower)}, {round(.upper)}]"),
-        x = draw, y = 0.1
+        x = draw, y = 0.2
       ),
       size = 3
     ) +
@@ -475,10 +476,10 @@ plot_study_variance_pred <- function(preds, data) {
                        is.numeric, round, 2),
       aes(
         label = glue::glue("{cond}: {round(draw)} [{round(.lower)}, {round(.upper)}]"),
-        x = 800, y =reorder(study_label, draw), group = cond
+        x = Inf, y =reorder(study_label, draw), group = cond,
       ),
       size = 2, position = position_dodge(width = 0.75),
-      hjust = "inward"
+      hjust = 1.1
     ) +
     # Add individual study data
     geom_point(
@@ -490,6 +491,7 @@ plot_study_variance_pred <- function(preds, data) {
       alpha = 0.75,
       position = position_jitterdodge(dodge.width = 1, jitter.height = 0.05) 
     ) +
+    scale_x_continuous(limits = c(0,750)) +
     labs(
       x = "Resting Energy Expenditure (kcal)",
       title = "Conditional Estimates for Condition by Study"

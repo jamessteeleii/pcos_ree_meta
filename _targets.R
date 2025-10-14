@@ -126,6 +126,11 @@ list(
     calculate_arm_effects(main_arm_data)
   ),
   
+  tar_target(
+    main_arm_data_imputed_demographics,
+    impute_demographic_estimates(main_arm_data)
+  ),
+  
   # Fitting main analysis models
   
   tar_target(
@@ -206,6 +211,14 @@ list(
   ),
   
   tar_target(
+    combined_mean_plot_tiff,
+    ggsave("plots/combine_mean_plot.tiff",
+           plot = combined_mean_plot,
+           dpi = 300, device = "tiff",
+           w = 10, h = 5)
+  ),
+  
+  tar_target(
     meta_variance_pred_plot,
     plot_meta_variance_pred(main_arm_variance_effects_preds_condition)
   ),
@@ -226,6 +239,14 @@ list(
     combine_variance_plots(meta_variance_pred_plot,
                            meta_study_variance_pred_plot,
                        meta_variance_contrast_plot)
+  ),
+  
+  tar_target(
+    combined_variance_plot_tiff,
+    ggsave("plots/combine_variance_plot.tiff",
+           plot = combined_variance_plot,
+           dpi = 300, device = "tiff",
+           w = 10, h = 5)
   ),
   
   #### Pairwise sensitivity analysis ----

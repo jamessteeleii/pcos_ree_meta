@@ -109,7 +109,8 @@ prepare_data <- function(file) {
         .default = sd_ffm_adjusted
       )
     ) |>
-    ungroup()
+    ungroup() |>
+    rowid_to_column("effect")
   
   return(data)
 }
@@ -139,6 +140,53 @@ calculate_arm_effects <- function(data) {
   return(data)
 }
 
+impute_demographic_estimates <- function(data) {
+  data <- data |>
+    
+    # convert height to cm for reporting
+    mutate(m_height = case_when(
+      m_height < 100 ~ m_height*100
+      ),
+      sd_height = case_when(
+        m_height < 100 ~ sd_height*100
+      )
+    ) |>
+    
+    # impute estimates of missing weight/height/bmi and note where estimate
+    mutate(
+      m_body_mass_estim = case_when(
+        is.na(m_body_mass) & !is.na(m_height) & !is.na(m_bmi) ~ "y",
+        .default = "n"
+      ),
+      m_height_estim = case_when(
+        is.na(m_height) & !is.na(m_body_mass) & !is.na(m_bmi) ~ "y",
+        .default = "n"
+      ),
+      m_bmi_estim = case_when(
+        is.na(m_bmi) & !is.na(m_body_mass) & !is.na(m_height) ~ "y",
+        .default = "n"
+      ),
+    ) |>
+    
+    mutate(
+      m_body_mass = case_when(
+        is.na(m_body_mass) & !is.na(m_height) & !is.na(m_bmi) ~ m_bmi * (m_height/100)^2,
+        .default = m_body_mass
+      ),
+      m_height = case_when(
+        is.na(m_height) & !is.na(m_body_mass) & !is.na(m_bmi) ~ (sqrt(m_body_mass/m_bmi))*100,
+        .default = m_height
+      ),
+      m_bmi = case_when(
+        is.na(m_bmi) & !is.na(m_body_mass) & !is.na(m_height) ~ m_body_mass/(m_height/100)^2,
+        .default = m_bmi
+      ),
+    )
+  
+  return(data)
+    
+}
+
 # Pairwise data preparation for sensitivity analysis
 
 prepare_pairwise_data <- function(data) {
@@ -155,7 +203,6 @@ prepare_pairwise_data <- function(data) {
   
   return(wide_data)
 }
-
 
 calculate_pairwise_effects <- function(data) {
   
