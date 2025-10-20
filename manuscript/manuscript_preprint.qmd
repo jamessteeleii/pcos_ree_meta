@@ -1,6 +1,41 @@
 ---
-title: "Methods and Results"
-format: docx
+title: |
+  Does resting energy expenditure differ between women with and without polycystic ovary syndrome (PCOS): a systematic review and meta-analysis
+format:
+  pdf: default
+  aft-pdf:
+    keep-tex: true
+author:
+  - name: James Steele
+    affiliations:
+      - ref: 1
+      - ref: 2
+      - ref: 3
+    orcid: 0000-0002-8003-0757
+    corresponding: true
+    email: james@steele-research.com
+  - name: James Fisher
+    affiliations:
+      - ref: 3
+      - ref: 4
+    orcid: 0000-0002-6013-8402
+    email: james.fisher.phd@outlook.com
+  - name: Tim Dettmann
+    affiliations:
+      - ref: 1
+    email: tim.dettmann@gmail.com
+affiliations:
+      - id: 1
+        name: Kieser Australia, Melbourne, Australia
+      - id: 2
+        name: Steele Research Limited, Eastleigh, UK
+      - id: 3
+        name: Department of Sport and Health, Solent University, Southampton, UK
+      - id: 4
+        name: The Exercise Coach, Tennessee, USA
+abstract: |
+  To write
+pdf-engine: xelatex
 bibliography: 
   mylibrary.bib
 csl: apa.csl
