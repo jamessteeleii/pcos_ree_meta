@@ -6,35 +6,16 @@ format:
   aft-pdf:
     keep-tex: true
 author:
+  - name: Richard Kirwan
+  - name: Leigh Peele
+  - name: Greg Nuckols
+  - name: Georgia Kohlhoff
+  - name: Hannah Cabré
+  - name: Alyssa Olenick
   - name: James Steele
-    affiliations:
-      - ref: 1
-      - ref: 2
-      - ref: 3
-    orcid: 0000-0002-8003-0757
-    corresponding: true
-    email: james@steele-research.com
-  - name: James Fisher
-    affiliations:
-      - ref: 3
-      - ref: 4
-    orcid: 0000-0002-6013-8402
-    email: james.fisher.phd@outlook.com
-  - name: Tim Dettmann
-    affiliations:
-      - ref: 1
-    email: tim.dettmann@gmail.com
-affiliations:
-      - id: 1
-        name: Kieser Australia, Melbourne, Australia
-      - id: 2
-        name: Steele Research Limited, Eastleigh, UK
-      - id: 3
-        name: Department of Sport and Health, Solent University, Southampton, UK
-      - id: 4
-        name: The Exercise Coach, Tennessee, USA
 abstract: |
-  To write
+  Background: Polycystic ovary syndrome is the most common endocrine condition affecting women of reproductive age. Overweight and obesity in women with PCOS is commonly deemed a result of a lower basal metabolic rate (BMR), which has influenced lifestyle-based interventions in this group. Evidence supporting this reduced, however, is not consistent. Objectives: To systematically search and meta-analyse the existing literature to determine if resting energy expenditure differs between women with and without polycystic ovary syndrome (PCOS). Design: A systematic search was conducted using PubMed, Medline and Web of Science databases from January 1990 to January 2025. Studies that assessed resting energy expenditure in women with and without PCOS were included. Results: 18 studies were identified. Study populations ranged from X to X participants, with mean ages ranging from X to X years. Conclusions: TO ADD
+keywords: Polycystic ovary syndrome, PCOS, resting energy expenditure, REE, basal metabolic rate, BMR
 pdf-engine: xelatex
 bibliography: 
   mylibrary.bib
@@ -53,11 +34,20 @@ targets::tar_config_set(store = here::here('_targets'))
 
 ```
 
+# Introduction
+Polycystic ovary syndrome (PCOS) affects approximately 10% of women of reproductive age worldwide, making it the most common endocrine disorder affecting this population [@salariGlobalPrevalencePolycystic2024]. Due to a number of factors including hyperandrogenism and alterations in insulin resistance, PCOS is believed to contribute to an increased risk of diabetes, metabolic syndrome and cardiovascular disease [@glintborgCardiovascularDiseaseNationwide2018; @glintborgProspectiveRiskType2022; @perssonHigherRiskType2021; @glintborgProspectiveRiskType2024; @limMetabolicSyndromePolycystic2019], along with being a leading cause of anovulatory infertility in women [@johamPrevalenceInfertilityUse2015]. Furthermore, epidemiological data consistently demonstrates that women with PCOS are significantly more likely to suffer from overweight or obesity, compared to the general female population, with estimates ranging from 38% to 88% of PCOS patients falling into these BMI categories [@barberWhyAreWomen2022; @barberObesityPolycysticOvary2021].
+
+The elevated incidence of overweight and obesity in PCOS is likely multifactorial with proposed mechanisms including blunted postprandial appetite hormone responses leading to reduced satiety and increased food cravings [@hirschbergImpairedCholecystokininSecretion2004; @moranGhrelinMeasuresSatiety2004; @stefanakiFoodCravingsObesity2024] and a reduced basal metabolic rate (BMR) [@georgopoulosBasalMetabolicRate2009]. Indeed, the relevance of this reduced BMR, has become widely accepted amongst the scientific and medical community, with the original publication which reported this from Georgopoulos et al. [-@georgopoulosBasalMetabolicRate2009] having 109 citations according to Google Scholar metrics, as of writing (Add date and link!!!!). Furthermore, this publication has been widely disseminated amongst the lay community interested in PCOS, particularly in relation to lifestyle interventions, featuring in the top seven Google search results as of writing. However, despite the wide acceptance of this reported reduced BMR in PCOS, multiple other publications have found no such difference between women with and without PCOS [@graffSaturatedFatIntake2017; @larssonDietaryIntakeResting2016; @segalRestingMetabolicRate1990].
+
+The consequences of this wide acceptance of a reduced BMR in women with PCOS should not be underestimated, particularly in light of the aforementioned incidence of overweight and obesity in this population. It has been well documented that women with PCOS suffer with anxiety, depression and a lower quality of life (QOL) as a result of negative body image due to, amongst other reasons, body weight concerns [@himeleinDepressionBodyImage2006; @hofmannBodyImageMental2025; @gellerBodyImageIllness2025; @davitadzeBodyImageConcerns2023]. Consequently, women with PCOS have been observed to engage in more frequent weight-loss attempts than those without [@pesonenPolycysticOvarySyndrome2023]. Furthermore, intentional weight-loss is recognised as efficacious for improving the symptoms of PCOS [@aleneziImpactDietInducedWeight2024; @holteRestoredInsulinSensitivity1995] and, as such, is often recommended [@teedeRecommendations2023International2023]. However, while weight-loss is frequently pursued for body image and/or health-related reasons, women with PCOS may be discouraged from doing so due to the commonly held belief of lower BMR making weight loss attempts more difficult. 
+
+Therefore, to determine if there is indeed a difference in resting energy expenditure (REE) between women with and without PCOS, we completed a systematic review and meta-analysis of studies reporting REE in these populations. 
+
 # Methods
-This systematic review and meta-analysis was pre-registered on PROSPERO ([CRD42024601434](https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434)) initially on the $3^{rd}$ of December 2024. The primary aim of this review was to examine the descriptive question "Does resting energy expenditure (REE) differ between women with and without polycystic ovary syndrome (PCOS)?". 
+This systematic review and meta-analysis was pre-registered on PROSPERO ([CRD42024601434](https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434)) initially on the $3^{rd}$ of December 2024 and performed in accordance with the Preferred Reporting Items for Systematic Reviews and Meta-Analyses (PRISMA) statement guidelines [@liberatiPRISMAStatementReporting2009]. The primary aim of this review was to examine the descriptive question "Does resting energy expenditure (REE) differ between women with and without polycystic ovary syndrome (PCOS)?". 
 
 ## Search Strategy
-PubMed, Web of Science, and MEDLINE databases were searched using the following Boolean search string: (("Basal Metabolic Rate"[MeSH] OR "Energy Metabolism"[MeSH] OR "Resting Metabolic Rate" OR RMR OR "Resting Energy Expenditure" OR REE OR "Basal Metabolic Rate" OR BMR OR "resting energy" OR "basal energy expenditure") AND ("Polycystic Ovary Syndrome"[MeSH] OR "Polycystic Ovary Syndrome" OR PCOS OR "Polycystic Ovarian Disease" OR "Stein-Leventhal Syndrome")). Searches were limited to publications up until May 2025 when the search was completed, limited to English language articles, and Rayyan was used to manage the search and screening process.
+PubMed, Web of Science, and MEDLINE databases were searched using the following Boolean search string: (("Basal Metabolic Rate"[MeSH] OR "Energy Metabolism"[MeSH] OR "Resting Metabolic Rate" OR RMR OR "Resting Energy Expenditure" OR REE OR "Basal Metabolic Rate" OR BMR OR "resting energy" OR "basal energy expenditure") AND ("Polycystic Ovary Syndrome"[MeSH] OR "Polycystic Ovary Syndrome" OR PCOS OR "Polycystic Ovarian Disease" OR "Stein-Leventhal Syndrome")). Searches were limited to publications up until May 2025 when the search was completed, limited to English language articles, and Rayyan was used to manage the search and screening process. Two reviewers (RK and GK) independently screened all titles and abstracts against the predefined inclusion and exclusion criteria. Articles deemed potentially eligible by either reviewer were retrieved in full text. Full texts were then independently assessed by RK and LP to determine final eligibility. Any disagreements at either stage were resolved through discussion, and when consensus could not be reached, a third reviewer acted as an adjudicator.
 
 ## Eligibility Criteria
 The condition being studied was PCOS and we included observational cross-sectional design studies, in addition to studies of intervention where REE was reported for the population (and if included, the comparator) condition of interest. Following the PICO framework our eligibility criteria were as follows: 
@@ -86,9 +76,6 @@ Bibliometric data including authors, journal, and title of article were extracte
 
 The method of measuring REE was extracted and the units of measurement for which REE was reported. For each arm, and observation time point if multiple observations reported (e.g., before and after an intervention), depending on what was reported by the authors we extracted the means, medians, standard deviations, standard errors, lower and upper range values, and interquartile range for the unadjusted and/or body mass adjusted and/or fat free mass adjusted REE values. Where REE values adjusted for body mass and/or fat free mass were reported we used the reported body mass and/or fat free mass mean values for that arm to convert them to unadjusted REE values (i.e., multiplied them by body mass and/or fat free mass mean values). Where means and/or standard deviations were missing the latter were either calculated from standard errors and sample size, or all both were estimated from lower and upper range, interquartile range, median, and sample size depending on the information available using the methods of Wan et al. [-@wanEstimatingSampleMean2014]. All REE values were converted to kcal/day. 
 
-<!-- ## Risk of bias (quality) assessment -->
-<!-- The assessment will be performed at the study level with the Joanna Briggs Institute (JBI) Critical Appraisal Checklist for Analytical Cross Sectional Studies, which assesses the methodological quality of a study and determines the extent to which a study has addressed the possibility of bias in its design, conduct and analysis. -->
-
 ## Statistical Analysis
 
 Statistical analysis of the data extracted was be performed in R, (v 4.3.3; R Core Team, https://www.r-project.org/) and RStudio (v 2023.06.1; Posit, https://posit.co/). All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://github.com/jamessteeleii/pcos_ree_meta/blob/main/grateful-report.pdf>. The statistical analysis plan was linked in our pre-registration (PROSPERO: [CRD42024601434](https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434)) and available at the accompanying github repository. Any deviations from the pre-registration are noted below.
@@ -102,327 +89,162 @@ We adopted an arm-based multiple condition comparison (i.e., network) type model
 #### Mean REE Model
 
 The main model for mean REE with $\textrm{cond}$ representing the condition (either control or PCOS) was as follows:
-<!-- $$ -->
-<!-- \begin{align*} -->
-<!-- \hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt] -->
-
-<!-- \mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl] -->
-<!--        + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} -->
-<!--        + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} -->
-<!--        + \alpha_{0,\mathrm{arm}[k]} -->
-<!--        + \alpha_{0,\mathrm{effect}[l]} \\[10pt] -->
-
-<!-- \begin{pmatrix} -->
-<!-- \alpha_{0,\mathrm{lab}[i]} \\[4pt] -->
-<!-- \alpha_{1,\mathrm{lab}[i]} -->
-<!-- \end{pmatrix} -->
-<!-- &\sim  -->
-<!-- \mathcal{N}\!\left( -->
-<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
-<!-- \Sigma_{\mathrm{lab}} -->
-<!-- \right), -->
-<!-- \quad -->
-<!-- \Sigma_{\mathrm{lab}} = -->
-<!-- \begin{pmatrix} -->
-<!-- \sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt] -->
-<!-- \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}} -->
-<!-- \end{pmatrix}  -->
-
-<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
-
-<!-- \begin{pmatrix} -->
-<!-- \alpha_{0,\mathrm{study}[j]} \\[4pt] -->
-<!-- \alpha_{1,\mathrm{study}[j]} -->
-<!-- \end{pmatrix} -->
-<!-- &\sim  -->
-<!-- \mathcal{N}\!\left( -->
-<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
-<!-- \Sigma_{\mathrm{study}} -->
-<!-- \right), -->
-<!-- \quad -->
-<!-- \Sigma_{\mathrm{study}} = -->
-<!-- \begin{pmatrix} -->
-<!-- \sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt] -->
-<!-- \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}} -->
-<!-- \end{pmatrix}  -->
-<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
-
-<!-- \alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})  -->
-<!-- \text{, for arm k = 1,} \dots \text{,K} \\[12pt] -->
-<!-- \alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})  -->
-<!-- \text{, for effect l = 1,} \dots \text{,L} \\[12pt] -->
-
-<!-- \end{align*} -->
-<!-- $$ -->
-
 $$
-\hat{\theta}_{ijkl} \sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl})
-$$
+\small
+\begin{align*}
+\hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
 
-$$
-\mu_{ijkl} = \beta_0 + \beta_1\,\text{cond}_{ijkl} 
-+ \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} 
-+ \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} 
-+ \alpha_{0,\mathrm{arm}[k]} + \alpha_{0,\mathrm{effect}[l]}
-$$
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl]
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[10pt]
 
-$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{lab}[i]} \\
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
 \alpha_{1,\mathrm{lab}[i]}
 \end{pmatrix}
-\sim 
-\mathcal{N}\Bigg(
-\begin{pmatrix} 0 \\ 0 \end{pmatrix},
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
 \Sigma_{\mathrm{lab}}
-\Bigg), 
+\right),
 \quad
 \Sigma_{\mathrm{lab}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} \\
-\rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
-\end{pmatrix},
-\text{ for lab } i = 1, \dots, I
-$$
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
 
-$$
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+
 \begin{pmatrix}
-\alpha_{0,\mathrm{study}[j]} \\
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
 \alpha_{1,\mathrm{study}[j]}
 \end{pmatrix}
-\sim 
-\mathcal{N}\Bigg(
-\begin{pmatrix} 0 \\ 0 \end{pmatrix},
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
 \Sigma_{\mathrm{study}}
-\Bigg), 
+\right),
 \quad
 \Sigma_{\mathrm{study}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} \\
-\rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
-\end{pmatrix},
-\text{ for study } j = 1, \dots, J
-$$
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
 
-$$
-\alpha_{0,\mathrm{arm}[k]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}), 
-\text{ for arm } k = 1, \dots, K
-$$
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L} \\[12pt]
 
+\end{align*}
 $$
-\alpha_{0,\mathrm{effect}[l]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}), 
-\text{ for effect } l = 1, \dots, L
-$$
-
 
 where $\hat{\theta}_{ijkl}$ is the $l\textrm{th}$ mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ mean REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PCOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices.
 
 The priors for this model were as follows:
 
-<!-- $$ -->
-<!-- \begin{align*} -->
-<!-- \beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt] -->
-<!-- \beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt] -->
-
-<!-- \sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt] -->
-<!-- \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,  -->
-<!-- \sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt] -->
-
-<!-- \mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt] -->
-<!-- \mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1) -->
-<!-- \end{align*} -->
-<!-- $$ -->
-
 $$
-\beta_0 \sim \text{Student-}t(3, 1441.81, 84.56) \\
-\beta_1 \sim \text{Student-}t(3, 0, 200)
-$$
+\small
+\begin{align*}
+\beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt]
 
-$$
-\sigma^2_{0,\mathrm{study}} \sim \text{Half-student-}t(3, 149.89, 82.91) \\
-\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, 
-\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}},\, \sigma^2_{0,\mathrm{effect}} \sim \text{Half-student-}t(3, 0, 112.4)
-$$
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt]
 
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{align*}
 $$
-\mathrm{corr}_{\mathrm{lab}} \sim \mathrm{LKJ}(1) \\
-\mathrm{corr}_{\mathrm{study}} \sim \mathrm{LKJ}(1)
-$$
-
-
 where the prior for $\beta_{0}$, which corresponded to the model intercept and mean REE in the control condition, was set based on meta-analysis of the mean REEs for women from two large studies of healthy people [@velasquezUseAmmoniaInhalants2011; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PCOS conditions was set based on a wide range of possible values considering the minimum and and maximum values of the ranges reported in the two studies noted (i.e., 2492 - 908 = 1584). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
 
 #### Standard Deviation of REE Model
 
 The main model for the standard deviation of REE with $\textrm{cond}$ representing the condition (either control or PCOS) was as follows:
 
-<!-- $$ -->
-<!-- \begin{align*} -->
-<!-- \log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt] -->
-
-<!-- \mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]}  -->
-<!--        + \beta_2\,\tilde{m}_{[ijkl]} -->
-<!--        + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} -->
-<!--        + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} -->
-<!--        + \alpha_{0,\mathrm{arm}[k]} -->
-<!--        + \alpha_{0,\mathrm{effect}[l]} \\[8pt] -->
-
-<!-- m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt] -->
-<!-- \tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt] -->
-
-<!-- \begin{pmatrix} -->
-<!-- \alpha_{0,\mathrm{lab}[i]} \\[4pt] -->
-<!-- \alpha_{1,\mathrm{lab}[i]} -->
-<!-- \end{pmatrix} -->
-<!-- &\sim  -->
-<!-- \mathcal{N}\!\left( -->
-<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
-<!-- \Sigma_{\mathrm{lab}} -->
-<!-- \right), -->
-<!-- \quad -->
-<!-- \Sigma_{\mathrm{lab}} = -->
-<!-- \begin{pmatrix} -->
-<!-- \sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt] -->
-<!-- \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}} -->
-<!-- \end{pmatrix}  -->
-
-<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
-
-<!-- \begin{pmatrix} -->
-<!-- \alpha_{0,\mathrm{study}[j]} \\[4pt] -->
-<!-- \alpha_{1,\mathrm{study}[j]} -->
-<!-- \end{pmatrix} -->
-<!-- &\sim  -->
-<!-- \mathcal{N}\!\left( -->
-<!-- \begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix}, -->
-<!-- \Sigma_{\mathrm{study}} -->
-<!-- \right), -->
-<!-- \quad -->
-<!-- \Sigma_{\mathrm{study}} = -->
-<!-- \begin{pmatrix} -->
-<!-- \sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt] -->
-<!-- \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}} -->
-<!-- \end{pmatrix}  -->
-<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
-
-<!-- \alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})  -->
-<!-- \text{, for arm k = 1,} \dots \text{,K} \\[12pt] -->
-<!-- \alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})  -->
-<!-- \text{, for effect l = 1,} \dots \text{,L} \\[12pt] -->
-<!-- \end{align*} -->
-<!-- $$ -->
-
 $$
-\log(\hat{\theta}_{ijkl}) \sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl})
-$$
+\small
+\begin{align*}
+\log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
 
-$$
-\mu_{ijkl} = \beta_0 + \beta_1\,\text{cond}_{[ijkl]} 
-+ \beta_2\,\tilde{m}_{[ijkl]}
-+ \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond} 
-+ \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond} 
-+ \alpha_{0,\mathrm{arm}[k]} + \alpha_{0,\mathrm{effect}[l]}
-$$
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]}
+       + \beta_2\,\tilde{m}_{[ijkl]}
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[8pt]
 
-$$
-m = \log(y_{i,\mathrm{mean,[ijkl]}})
-$$
+m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt]
+\tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt]
 
-$$
-\tilde{m} \sim \mathcal{N}(m, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2)
-$$
-
-$$
 \begin{pmatrix}
-\alpha_{0,\mathrm{lab}[i]} \\
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
 \alpha_{1,\mathrm{lab}[i]}
 \end{pmatrix}
-\sim 
-\mathcal{N}\Bigg(
-\begin{pmatrix} 0 \\ 0 \end{pmatrix},
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
 \Sigma_{\mathrm{lab}}
-\Bigg),
+\right),
 \quad
 \Sigma_{\mathrm{lab}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} \\
-\rho_{\mathrm{lab}} \sigma_{0,\mathrm{lab}} \sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
-\end{pmatrix},
-\text{ for lab } i = 1, \dots, I
-$$
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
 
-$$
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+
 \begin{pmatrix}
-\alpha_{0,\mathrm{study}[j]} \\
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
 \alpha_{1,\mathrm{study}[j]}
 \end{pmatrix}
-\sim 
-\mathcal{N}\Bigg(
-\begin{pmatrix} 0 \\ 0 \end{pmatrix},
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
 \Sigma_{\mathrm{study}}
-\Bigg),
+\right),
 \quad
 \Sigma_{\mathrm{study}} =
 \begin{pmatrix}
-\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} \\
-\rho_{\mathrm{study}} \sigma_{0,\mathrm{study}} \sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
-\end{pmatrix},
-\text{ for study } j = 1, \dots, J
-$$
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
 
-$$
-\alpha_{0,\mathrm{arm}[k]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}}), 
-\text{ for arm } k = 1, \dots, K
-$$
-
-$$
-\alpha_{0,\mathrm{effect}[l]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}}), 
-\text{ for effect } l = 1, \dots, L
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L} \\[12pt]
+\end{align*}
 $$
 
 where $\log(\hat{\theta}_{ijkl})$ is the $l\textrm{th}$ natural logarithm of the standard deviation of REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ standard deviation of REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of standard deviation of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PCOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices. Finally, $\beta_{2}$ represents the fixed effect of the natural logarithm of the corresponding mean REE estimate $\tilde{m}$ which is modelled as estimated with measurement error i.e., $m$ represents the point estimate for the $l\textrm{th}$ natural logarithm of the mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2$ is the corresponding sampling error for that estimate.
 
 The priors for this model were as follows:
-<!-- $$ -->
-<!-- \begin{align*} -->
-<!-- \beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt] -->
-<!-- \beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt] -->
-<!-- \beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt] -->
-
-<!-- \text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt] -->
-<!-- \text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt] -->
-
-<!-- \sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt] -->
-<!-- \sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, -->
-<!-- \sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt] -->
-
-<!-- \mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt] -->
-<!-- \mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1) -->
-<!-- \end{align*} -->
-
-<!-- $$ -->
-
 $$
-\beta_0 \sim \text{Student-}t(3, 5.54, 0.80) \\
-\beta_1 \sim \text{Student-}t(3, 0, 5.3) \\
-\beta_2 \sim \text{Student-}t(3, 0, 2.5)
-$$
+\small
+\begin{align*}
+\beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt]
+\beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt]
 
-$$
-\text{mean}(\tilde{m}) \sim \text{Half-student-}t(3, 7.28, 0.62) \\
-\text{sd}(\tilde{m}) \sim \text{Half-student-}t(3, 0, 5)
-$$
+\text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt]
+\text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt]
 
-$$
-\sigma^2_{0,\mathrm{study}} \sim \text{Half-student-}t(3, 1.08, 1.06) \\
-\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\, 
-\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}},\, \sigma^2_{0,\mathrm{effect}} 
-\sim \text{Half-student-}t(3, 0, 2.5)
-$$
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt]
 
-$$
-\mathrm{corr}_{\mathrm{lab}} \sim \mathrm{LKJ}(1) \\
-\mathrm{corr}_{\mathrm{study}} \sim \mathrm{LKJ}(1)
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{align*}
+
 $$
 
 where the prior for $\beta_{0}$, which corresponded to the model intercept and standard deviation of REE in the control condition, was again set based on meta-analysis of the standard deviation of REEs for women from two large studies of healthy people [@velasquezUseAmmoniaInhalants2011; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PCOS conditions was set based on a wide range of possible values. Given that in many cases of variables in the field there is an approximate relationship of ~1 for the natural logarithm of the standard deviation conditioned upon the natural logarithm of the mean [@steeleMetaanalysisVariationSport2023a] we set this prior to reflect the range of differences on the on the log scale (i.e., $\log(1584)$). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The prior for the fixed effect $\beta_{2}$, reflecting the relationship between the natural logarithm of the mean REE with the natural logarithm of the standard deviation of REE, was set it to be weakly informative centred on zero with a wide scale to indicate uncertainty in this outcome specifically despite the typical relationship close to ~1. Priors for the measurement error of the natural logarithm of the mean REE estimate $\tilde{m}$ were again based upon meta-analysis of the aforementioned studies, though measurement error has to be positive, as does the corresponding standard deviation of this error, so we set these to conservative wide $\textrm{half-student-}t$ distributions. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
@@ -435,39 +257,22 @@ For both models we examined trace plots along with $\hat{R}$ values to examine w
 
 By way of sensitivity analysis we also conducted pairwise contrast based models where we limited the included effects to those extracted from studies including only a directly comparable control and PCOS arm at baseline. These models were both as follows:
 
-<!-- $$ -->
-<!-- \begin{align*} -->
-<!-- \hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt] -->
-
-<!-- \mu_{ij} &= \beta_0 -->
-<!--        + \alpha_{0,\mathrm{lab}[i]} -->
-<!--        + \alpha_{0,\mathrm{study}[j]} \\[10pt] -->
-
-
-<!-- \alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}})  -->
-<!-- \text{, for lab i = 1,} \dots \text{,I} \\[12pt] -->
-<!-- \alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}})  -->
-<!-- \text{, for study j = 1,} \dots \text{,J} \\[12pt] -->
-
-<!-- \end{align*} -->
-<!-- $$ -->
-
 $$
-\hat{\theta}_{ij} \sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij})
-$$
+\small
+\begin{align*}
+\hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt]
 
-$$
-\mu_{ij} = \beta_0 + \alpha_{0,\mathrm{lab}[i]} + \alpha_{0,\mathrm{study}[j]}
-$$
+\mu_{ij} &= \beta_0
+       + \alpha_{0,\mathrm{lab}[i]}
+       + \alpha_{0,\mathrm{study}[j]} \\[10pt]
 
-$$
-\alpha_{0,\mathrm{lab}[i]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}}), 
-\text{ for lab } i = 1, \dots, I
-$$
 
-$$
-\alpha_{0,\mathrm{study}[j]} \sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}}), 
-\text{ for study } j = 1, \dots, J
+\alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}})
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}})
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
+
+\end{align*}
 $$
 
 where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PCOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard devation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
