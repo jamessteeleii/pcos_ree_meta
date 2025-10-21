@@ -189,16 +189,58 @@ impute_demographic_estimates <- function(data) {
 
 create_descriptives_table <- function(data) {
   
-  table <- data |> 
+  table <- main_arm_data_imputed_demographics |> 
     filter(timepoint == "baseline") |>
     mutate(across(where(is.numeric), \(x) round(x, 2))) |>
     mutate(
-      Age = paste0(m_age, " (", sd_age, ")"),
-      `Body mass` = paste0(m_body_mass, " (", sd_body_mass, ")"),
-      Height = paste0(m_height, " (", sd_height, ")"),
-      BMI = paste0(m_bmi, " (", sd_bmi, ")"),
-      `Fat mass` = paste0(m_fat_mass, " (", sd_fat_mass, ")"),
-      `Fat free mass` = paste0(m_fat_free_mass, " (", sd_fat_free_mass, ")")
+      authors = paste0(authors, " (", year, ")"),
+      Age = if_else(
+        is.na(m_age) & is.na(sd_age),
+        "",
+        paste0(m_age, " (", sd_age, ")")
+      ),
+      `Body mass` = if_else(
+        is.na(m_body_mass) & is.na(sd_body_mass),
+        "",
+        paste0(
+          if_else(!is.na(m_body_mass), as.character(m_body_mass), ""),
+          if_else(m_body_mass_estim == "y", "\u002A", ""),
+          if_else(!is.na(sd_body_mass), paste0(" (", sd_body_mass, ")"), "")
+        )
+      ),
+      Height = if_else(
+        is.na(m_height) & is.na(sd_height),
+        "",
+        paste0(
+          if_else(!is.na(m_height), as.character(m_height), ""),
+          if_else(m_height_estim == "y", "\u002A", ""),
+          if_else(!is.na(sd_height), paste0(" (", sd_height, ")"), "")
+        )
+      ),
+      BMI = if_else(
+        is.na(m_bmi) & is.na(sd_bmi),
+        "",
+        paste0(
+          if_else(!is.na(m_bmi), as.character(m_bmi), ""),
+          if_else(m_bmi_estim == "y", "\u002A", ""),
+          if_else(!is.na(sd_bmi), paste0(" (", sd_bmi, ")"), "")
+        )
+      ),
+      `Fat mass` = if_else(
+        is.na(m_fat_mass) & is.na(sd_fat_mass),
+        "",
+        paste0(m_fat_mass, " (", sd_fat_mass, ")")
+      ),
+      `Fat free mass` = if_else(
+        is.na(m_fat_free_mass) & is.na(sd_fat_free_mass),
+        "",
+        paste0(m_fat_free_mass, " (", sd_fat_free_mass, ")")
+      ),
+      method = case_when(
+        method == "indirect_calorimetry" ~ "Indirect Calorimetry",
+        method == "doubly_labelled_water" ~ "Doubly Labelled Water",
+        .default = method
+      )
     ) |>
     select(authors, year, title, cond, n,
            Age, 
@@ -217,37 +259,86 @@ create_descriptives_table <- function(data) {
               m_fat_mass, sd_fat_mass,
               m_fat_free_mass, sd_fat_free_mass),
            insulin_resistant_description,
-           m_body_mass_estim,
-           m_height_estim,
-           m_bmi_estim
+           method
     )|>
     rename(
       Authors = "authors",
-      Year = "year",
       `Article title` = "title",
       `Country of study` = "country",
       Condition = "cond",
       `Sample size` = "n",
       `Race/Ethnicity` = "race",
       `Physical activity` = "physical_activity_level",
-      `Metabolic health` = "insulin_resistant_description"
+      `Metabolic health` = "insulin_resistant_description",
+      `Measurement Method` = "method"
     ) |>
-    mutate(Year = as.numeric(Year)) |>
-    arrange(Year) |>
-    # kable() |>
-    # collapse_rows(columns = 1, valign = "top") |>
-    # # footnote(general = c("ST = self-talk", "CON = non-intervention control")) |>
-    # row_spec(0, bold = TRUE) |>
-    # kable_classic(full_width = FALSE) 
+    mutate(year = as.numeric(year)) |>
+    arrange(year) |>
+    select(-year) |>
+    group_by(Authors) |>
+    mutate(
+      is_last_row = row_number() == n()
+    ) |>
+    ungroup()
+  
+  table |>
     flextable() |>
+    hline(
+      j = setdiff(colnames(table), c("Authors", "Article title")),  # exclude the study col
+      border = officer::fp_border(color = "grey80", width = 0.4)
+    ) |>
+    hline(
+      i = ~ is_last_row == TRUE,      # only where is_last_row == TRUE
+      border = officer::fp_border(color = "black")
+    ) |>
     bold(part = "header") |>
-    merge_v(j = "Authors") |>
-    colformat_num(j = "Year", big.mark = "", digits = 0) |>
     autofit() |>
     fontsize(size = 8) |>
-    width(j = NULL, width = 0.5)  # 0.5 inches per column
-    
+    align(
+      j = c(
+        "Condition",
+        "Sample size",
+        "Age",
+        "Body mass",
+        "Height",
+        "BMI",
+        "Fat mass",
+        "Fat free mass",
+        "Race/Ethnicity",
+        "Country of study",
+        "Measurement Method"
+      ),
+      align = "center",
+      part = "all"
+    ) |>
+    width(j = NULL, width = 0.5) |>
+    delete_columns(j = "is_last_row") |>
+    merge_v(j = c("Authors", "Article title")) |>
+    footnote(
+      i = 1,
+      j = c(
+        "Authors", # just to add abbreviations to footnote with not symbol
+        "Age",
+        "Body mass",
+        "Height",
+        "BMI",
+        "Fat mass",
+        "Fat free mass"
+      ),
+      value = as_paragraph(
+        c(
+          "PCOS = polycystic ovary syndrome; BMI = body mass index; OGTT = oral glucose tolerance test; HOMA-IR = homeostatic model assessment of insulin resistance",
+          "Values are Mean (SD) unless otherwise specified",
+          "Indicates that this mean was estimated from the corresponding means for body mass/height/BMI"
+        )
+      ),
+      ref_symbols = c(" ", "†", "†*", "†*", "†*", "†", "†"),   # no superscript
+      part = "header"        
+    )
   
+}
+
+convert_descriptives_table_to_docx <- function(table) {
   # Create a new Word document
   doc <- read_docx()
   
@@ -266,7 +357,6 @@ create_descriptives_table <- function(data) {
   
   # Save to file
   print(doc, target = "descriptives_table_landscape.docx")
-  
 }
 
 # Pairwise data preparation for sensitivity analysis
