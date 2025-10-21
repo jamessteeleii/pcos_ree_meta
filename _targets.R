@@ -134,6 +134,11 @@ list(
   ),
   
   tar_target(
+    descriptives_table,
+    create_descriptives_table(main_arm_data_imputed_demographics)
+  ),
+  
+  tar_target(
     descriptives_table_docx,
     create_descriptives_table(main_arm_data_imputed_demographics)
   ),
