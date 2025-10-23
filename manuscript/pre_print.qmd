@@ -1,7 +1,8 @@
 ---
 title: |
   Does resting energy expenditure differ between women with and without polycystic ovary syndrome (PCOS): a systematic review and meta-analysis
-date: 'format(Sys.time(), "%b %d, %Y")'
+date: last-modified
+date-format: long
 format:
   pdf:
     include-in-header:
