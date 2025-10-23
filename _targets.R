@@ -285,6 +285,83 @@ list(
     fit_pairwise_variance_model(
       pairwise_data_effects
     )
+  ),
+  
+  #### Sensitivity analysis with only baseline data ----
+  
+  # Fitting baseline arm analysis models
+  
+  tar_target(
+    baseline_arm_mean_effects_model,
+    fit_arm_mean_effects_model(
+      main_arm_data_effects |>
+        filter(timepoint == "baseline"), # just take baseline
+      prior_arm_mean_effects
+    )
+  ),
+  
+  tar_target(
+    baseline_arm_variance_effects_model,
+    fit_arm_variance_effects_model(
+      main_arm_data_effects |>
+        filter(timepoint == "baseline"), # just take baseline
+      prior_arm_variance_effects
+    )
+  ),
+  
+  # Get contrasts from baseline arm models
+  
+  
+  tar_target(
+    baseline_arm_mean_effects_contrast_condition,
+    get_mean_contrast_condition(baseline_arm_mean_effects_model)
+  ),
+  
+  tar_target(
+    baseline_arm_variance_effects_contrast_condition,
+    get_variance_contrast_condition(baseline_arm_variance_effects_model,
+                                    main_arm_data_effects |>
+                                      filter(timepoint == "baseline") # just take baseline
+    )
+  ),
+  
+  #### Sensitivity analysis removing Greek lab studies ----
+  
+  
+  # Fitting baseline arm analysis models
+  
+  tar_target(
+    no_greek_arm_mean_effects_model,
+    fit_arm_mean_effects_model(
+      main_arm_data_effects |>
+        filter(lab != 8), # remove Greek studies
+      prior_arm_mean_effects
+    )
+  ),
+  
+  tar_target(
+    no_greek_arm_variance_effects_model,
+    fit_arm_variance_effects_model(
+      main_arm_data_effects |>
+        filter(lab != 8), # remove Greek studies
+      prior_arm_variance_effects
+    )
+  ),
+  
+  # Get contrasts from no_greek arm models
+  
+  
+  tar_target(
+    no_greek_arm_mean_effects_contrast_condition,
+    get_mean_contrast_condition(no_greek_arm_mean_effects_model)
+  ),
+  
+  tar_target(
+    no_greek_arm_variance_effects_contrast_condition,
+    get_variance_contrast_condition(no_greek_arm_variance_effects_model,
+                                    main_arm_data_effects |>
+                                      filter(lab != 8) # remove Greek studies
+    )
   )
   
   
