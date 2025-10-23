@@ -18,8 +18,63 @@ prepare_data <- function(file) {
     )
   ) |>
     
+    # add sample size for demographics where this is the same as for REE
+    mutate(
+      n_age = case_when(
+        is.na(n_age) ~ n,
+        .default = n_age
+      ),
+      n_body_mass = case_when(
+        is.na(n_body_mass) ~ n,
+        .default = n_body_mass
+      ),
+      n_fat_mass = case_when(
+        is.na(n_fat_mass) ~ n,
+        .default = n_fat_mass
+      ),
+      n_fat_free_mass = case_when(
+        is.na(n_fat_free_mass) ~ n,
+        .default = n_fat_free_mass
+      ),
+      n_height = case_when(
+        is.na(n_height) ~ n,
+        .default = n_height
+      ),
+      n_bmi = case_when(
+        is.na(n_bmi) ~ n,
+        .default = n_bmi
+      )
+    ) |>
+    
     # convert standard errors to standard deviations
     mutate(
+      # demographics
+      sd_age = case_when(
+        is.na(sd_age) == TRUE ~ se_age * sqrt(n_age),
+        .default = sd_age
+      ),
+      sd_body_mass = case_when(
+        is.na(sd_body_mass) == TRUE ~ se_body_mass * sqrt(n_body_mass),
+        .default = sd_body_mass
+      ),
+      sd_fat_mass = case_when(
+        is.na(sd_fat_mass) == TRUE ~ se_fat_mass * sqrt(n_fat_mass),
+        .default = sd_fat_mass
+      ),
+      sd_fat_free_mass = case_when(
+        is.na(sd_fat_free_mass) == TRUE ~ se_fat_free_mass * sqrt(n_fat_free_mass),
+        .default = sd_fat_free_mass
+      ),
+      sd_height = case_when(
+        is.na(sd_height) == TRUE ~ se_height * sqrt(n_height),
+        .default = sd_height
+      ),
+      sd_bmi = case_when(
+        is.na(sd_bmi) == TRUE ~ se_bmi * sqrt(n_bmi),
+        .default = sd_bmi
+      ),
+      
+      # REE variables
       sd = case_when(
         is.na(sd) == TRUE ~ se * sqrt(n),
         .default = sd
@@ -34,25 +89,194 @@ prepare_data <- function(file) {
       )
     ) |>
     
-    # estimate means and standard deviations from range, iqr, median, and sample size 
-    # (see DOI: 10.1186/1471-2288-14-135)
     rowwise() |>
+    
+    # For demographic variables estimate means and standard deviations from range, iqr, median, and sample size 
+    # (see DOI: 10.1186/1471-2288-14-135)
+    
+    # age
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_age) & !is.na(upper_range_age) & is.na(iqr_age) ~ 1,  # Scenario 1
+        is.na(lower_range_age) & is.na(upper_range_age) & !is.na(iqr_age)  ~ 2,  # Scenario 2
+        !is.na(lower_range_age) & !is.na(upper_range_age) & !is.na(iqr_age) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_age = case_when(
+        is.na(m_age) & scenario == 1 ~ (lower_range_age + 2 * median_age + upper_range_age) / 4,
+        is.na(m_age) & scenario == 2 ~ median_age,  # Wan: if only IQR given, m ≈ median
+        is.na(m_age) & scenario == 3 ~ (lower_range_age + 2 * median_age + upper_range_age) / 4,  # same as scenario 1 for m
+        .default = m_age
+      ),
+      
+      # SD estimates
+      sd_age = case_when(
+        is.na(sd_age) & scenario == 1 & n_age >= 25 ~ (upper_range_age - lower_range_age) / 4,
+        is.na(sd_age) & scenario == 1 & n_age < 25  ~ (upper_range_age - lower_range_age) / (2 * qnorm((n - 0.375) / (n_age + 0.25))),
+        is.na(sd_age) & scenario == 2 ~ iqr_age / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_age) & scenario == 3 & n_age >= 25 ~ sqrt(((upper_range_age - lower_range_age)^2 / 16) + (iqr_age^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_age) & scenario == 3 & n_age < 25  ~ sqrt(((upper_range_age - lower_range_age)^2 / (4 * qnorm((n_age - 0.375) / (n_age + 0.25)))^2) +
+                                                     (iqr_age^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_age
+      )
+    ) |>
+    
+    # body_mass
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_body_mass) & !is.na(upper_range_body_mass) & is.na(iqr_body_mass) ~ 1,  # Scenario 1
+        is.na(lower_range_body_mass) & is.na(upper_range_body_mass) & !is.na(iqr_body_mass)  ~ 2,  # Scenario 2
+        !is.na(lower_range_body_mass) & !is.na(upper_range_body_mass) & !is.na(iqr_body_mass) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_body_mass = case_when(
+        is.na(m_body_mass) & scenario == 1 ~ (lower_range_body_mass + 2 * median_body_mass + upper_range_body_mass) / 4,
+        is.na(m_body_mass) & scenario == 2 ~ median_body_mass,  # Wan: if only IQR given, m ≈ median
+        is.na(m_body_mass) & scenario == 3 ~ (lower_range_body_mass + 2 * median_body_mass + upper_range_body_mass) / 4,  # same as scenario 1 for m
+        .default = m_body_mass
+      ),
+      
+      # SD estimates
+      sd_body_mass = case_when(
+        is.na(sd_body_mass) & scenario == 1 & n_body_mass >= 25 ~ (upper_range_body_mass - lower_range_body_mass) / 4,
+        is.na(sd_body_mass) & scenario == 1 & n_body_mass < 25  ~ (upper_range_body_mass - lower_range_body_mass) / (2 * qnorm((n - 0.375) / (n_body_mass + 0.25))),
+        is.na(sd_body_mass) & scenario == 2 ~ iqr_body_mass / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_body_mass) & scenario == 3 & n_body_mass >= 25 ~ sqrt(((upper_range_body_mass - lower_range_body_mass)^2 / 16) + (iqr_body_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_body_mass) & scenario == 3 & n_body_mass < 25  ~ sqrt(((upper_range_body_mass - lower_range_body_mass)^2 / (4 * qnorm((n_body_mass - 0.375) / (n_body_mass + 0.25)))^2) +
+                                                             (iqr_body_mass^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_body_mass
+      )
+    ) |>
+    
+    # fat_mass
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_fat_mass) & !is.na(upper_range_fat_mass) & is.na(iqr_fat_mass) ~ 1,  # Scenario 1
+        is.na(lower_range_fat_mass) & is.na(upper_range_fat_mass) & !is.na(iqr_fat_mass)  ~ 2,  # Scenario 2
+        !is.na(lower_range_fat_mass) & !is.na(upper_range_fat_mass) & !is.na(iqr_fat_mass) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_fat_mass = case_when(
+        is.na(m_fat_mass) & scenario == 1 ~ (lower_range_fat_mass + 2 * median_fat_mass + upper_range_fat_mass) / 4,
+        is.na(m_fat_mass) & scenario == 2 ~ median_fat_mass,  # Wan: if only IQR given, m ≈ median
+        is.na(m_fat_mass) & scenario == 3 ~ (lower_range_fat_mass + 2 * median_fat_mass + upper_range_fat_mass) / 4,  # same as scenario 1 for m
+        .default = m_fat_mass
+      ),
+      
+      # SD estimates
+      sd_fat_mass = case_when(
+        is.na(sd_fat_mass) & scenario == 1 & n_fat_mass >= 25 ~ (upper_range_fat_mass - lower_range_fat_mass) / 4,
+        is.na(sd_fat_mass) & scenario == 1 & n_fat_mass < 25  ~ (upper_range_fat_mass - lower_range_fat_mass) / (2 * qnorm((n - 0.375) / (n_fat_mass + 0.25))),
+        is.na(sd_fat_mass) & scenario == 2 ~ iqr_fat_mass / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_fat_mass) & scenario == 3 & n_fat_mass >= 25 ~ sqrt(((upper_range_fat_mass - lower_range_fat_mass)^2 / 16) + (iqr_fat_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_fat_mass) & scenario == 3 & n_fat_mass < 25  ~ sqrt(((upper_range_fat_mass - lower_range_fat_mass)^2 / (4 * qnorm((n_fat_mass - 0.375) / (n_fat_mass + 0.25)))^2) +
+                                                             (iqr_fat_mass^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_fat_mass
+      )
+    ) |>
+    
+    # fat_free_mass
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_fat_free_mass) & !is.na(upper_range_fat_free_mass) & is.na(iqr_fat_free_mass) ~ 1,  # Scenario 1
+        is.na(lower_range_fat_free_mass) & is.na(upper_range_fat_free_mass) & !is.na(iqr_fat_free_mass)  ~ 2,  # Scenario 2
+        !is.na(lower_range_fat_free_mass) & !is.na(upper_range_fat_free_mass) & !is.na(iqr_fat_free_mass) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_fat_free_mass = case_when(
+        is.na(m_fat_free_mass) & scenario == 1 ~ (lower_range_fat_free_mass + 2 * median_fat_free_mass + upper_range_fat_free_mass) / 4,
+        is.na(m_fat_free_mass) & scenario == 2 ~ median_fat_free_mass,  # Wan: if only IQR given, m ≈ median
+        is.na(m_fat_free_mass) & scenario == 3 ~ (lower_range_fat_free_mass + 2 * median_fat_free_mass + upper_range_fat_free_mass) / 4,  # same as scenario 1 for m
+        .default = m_fat_free_mass
+      ),
+      
+      # SD estimates
+      sd_fat_free_mass = case_when(
+        is.na(sd_fat_free_mass) & scenario == 1 & n_fat_free_mass >= 25 ~ (upper_range_fat_free_mass - lower_range_fat_free_mass) / 4,
+        is.na(sd_fat_free_mass) & scenario == 1 & n_fat_free_mass < 25  ~ (upper_range_fat_free_mass - lower_range_fat_free_mass) / (2 * qnorm((n - 0.375) / (n_fat_free_mass + 0.25))),
+        is.na(sd_fat_free_mass) & scenario == 2 ~ iqr_fat_free_mass / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_fat_free_mass) & scenario == 3 & n_fat_free_mass >= 25 ~ sqrt(((upper_range_fat_free_mass - lower_range_fat_free_mass)^2 / 16) + (iqr_fat_free_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_fat_free_mass) & scenario == 3 & n_fat_free_mass < 25  ~ sqrt(((upper_range_fat_free_mass - lower_range_fat_free_mass)^2 / (4 * qnorm((n_fat_free_mass - 0.375) / (n_fat_free_mass + 0.25)))^2) +
+                                                             (iqr_fat_free_mass^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_fat_free_mass
+      )
+    ) |>
+    
+    # height
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_height) & !is.na(upper_range_height) & is.na(iqr_height) ~ 1,  # Scenario 1
+        is.na(lower_range_height) & is.na(upper_range_height) & !is.na(iqr_height)  ~ 2,  # Scenario 2
+        !is.na(lower_range_height) & !is.na(upper_range_height) & !is.na(iqr_height) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_height = case_when(
+        is.na(m_height) & scenario == 1 ~ (lower_range_height + 2 * median_height + upper_range_height) / 4,
+        is.na(m_height) & scenario == 2 ~ median_height,  # Wan: if only IQR given, m ≈ median
+        is.na(m_height) & scenario == 3 ~ (lower_range_height + 2 * median_height + upper_range_height) / 4,  # same as scenario 1 for m
+        .default = m_height
+      ),
+      
+      # SD estimates
+      sd_height = case_when(
+        is.na(sd_height) & scenario == 1 & n_height >= 25 ~ (upper_range_height - lower_range_height) / 4,
+        is.na(sd_height) & scenario == 1 & n_height < 25  ~ (upper_range_height - lower_range_height) / (2 * qnorm((n - 0.375) / (n_height + 0.25))),
+        is.na(sd_height) & scenario == 2 ~ iqr_height / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_height) & scenario == 3 & n_height >= 25 ~ sqrt(((upper_range_height - lower_range_height)^2 / 16) + (iqr_height^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_height) & scenario == 3 & n_height < 25  ~ sqrt(((upper_range_height - lower_range_height)^2 / (4 * qnorm((n_height - 0.375) / (n_height + 0.25)))^2) +
+                                                             (iqr_height^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_height
+      )
+    ) |>
+    
+    # bmi
+    mutate(
+      scenario = case_when(
+        !is.na(lower_range_bmi) & !is.na(upper_range_bmi) & is.na(iqr_bmi) ~ 1,  # Scenario 1
+        is.na(lower_range_bmi) & is.na(upper_range_bmi) & !is.na(iqr_bmi)  ~ 2,  # Scenario 2
+        !is.na(lower_range_bmi) & !is.na(upper_range_bmi) & !is.na(iqr_bmi) ~ 3, # Scenario 3
+        TRUE ~ NA_real_
+      ),
+      
+      # m estimates
+      m_bmi = case_when(
+        is.na(m_bmi) & scenario == 1 ~ (lower_range_bmi + 2 * median_bmi + upper_range_bmi) / 4,
+        is.na(m_bmi) & scenario == 2 ~ median_bmi,  # Wan: if only IQR given, m ≈ median
+        is.na(m_bmi) & scenario == 3 ~ (lower_range_bmi + 2 * median_bmi + upper_range_bmi) / 4,  # same as scenario 1 for m
+        .default = m_bmi
+      ),
+      
+      # SD estimates
+      sd_bmi = case_when(
+        is.na(sd_bmi) & scenario == 1 & n_bmi >= 25 ~ (upper_range_bmi - lower_range_bmi) / 4,
+        is.na(sd_bmi) & scenario == 1 & n_bmi < 25  ~ (upper_range_bmi - lower_range_bmi) / (2 * qnorm((n - 0.375) / (n_bmi + 0.25))),
+        is.na(sd_bmi) & scenario == 2 ~ iqr_bmi / (2 * qnorm(0.75)),  # IQR / 1.349
+        is.na(sd_bmi) & scenario == 3 & n_bmi >= 25 ~ sqrt(((upper_range_bmi - lower_range_bmi)^2 / 16) + (iqr_bmi^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_bmi) & scenario == 3 & n_bmi < 25  ~ sqrt(((upper_range_bmi - lower_range_bmi)^2 / (4 * qnorm((n_bmi - 0.375) / (n_bmi + 0.25)))^2) +
+                                                             (iqr_bmi^2 / (4 * qnorm(0.75)^2))),
+        .default = sd_bmi
+      )
+    ) |>
+    
+    # For REE variables estimate means and standard deviations from range, iqr, median, and sample size 
+    # (see DOI: 10.1186/1471-2288-14-135)
+    
     mutate(
       scenario = case_when(
         # unadjusted REEs
         !is.na(lower_range) & !is.na(upper_range) & is.na(iqr) ~ 1,  # Scenario 1
         is.na(lower_range) & is.na(upper_range) & !is.na(iqr)  ~ 2,  # Scenario 2
         !is.na(lower_range) & !is.na(upper_range) & !is.na(iqr) ~ 3, # Scenario 3
-        
-        # bm adjusted REEs
-        !is.na(lower_range_bm_adjusted) & !is.na(upper_range_bm_adjusted) & is.na(iqr_bm_adjusted) ~ 1,  # Scenario 1
-        is.na(lower_range_bm_adjusted) & is.na(upper_range_bm_adjusted) & !is.na(iqr_bm_adjusted)  ~ 2,  # Scenario 2
-        !is.na(lower_range_bm_adjusted) & !is.na(upper_range_bm_adjusted) & !is.na(iqr_bm_adjusted) ~ 3, # Scenario 3
-        
-        # ffm adjusted REEs
-        !is.na(lower_range_ffm_adjusted) & !is.na(upper_range_ffm_adjusted) & is.na(iqr_ffm_adjusted) ~ 1,  # Scenario 1
-        is.na(lower_range_ffm_adjusted) & is.na(upper_range_ffm_adjusted) & !is.na(iqr_ffm_adjusted)  ~ 2,  # Scenario 2
-        !is.na(lower_range_ffm_adjusted) & !is.na(upper_range_ffm_adjusted) & !is.na(iqr_ffm_adjusted) ~ 3, # Scenario 3
         TRUE ~ NA_real_
       ),
       
@@ -64,20 +288,6 @@ prepare_data <- function(file) {
         .default = mean
       ),
       
-      mean_bm_adjusted = case_when(
-        is.na(mean_bm_adjusted) & scenario == 1 ~ (lower_range_bm_adjusted + 2 * median_bm_adjusted + upper_range_bm_adjusted) / 4,
-        is.na(mean_bm_adjusted) & scenario == 2 ~ median_bm_adjusted,  # Wan: if only IQR given, mean ≈ median
-        is.na(mean_bm_adjusted) & scenario == 3 ~ (lower_range_bm_adjusted + 2 * median_bm_adjusted + upper_range_bm_adjusted) / 4,  # same as scenario 1 for mean
-        .default = mean_bm_adjusted
-      ),
-      
-      mean_ffm_adjusted = case_when(
-        is.na(mean_ffm_adjusted) & scenario == 1 ~ (lower_range_ffm_adjusted + 2 * median_ffm_adjusted + upper_range_ffm_adjusted) / 4,
-        is.na(mean_ffm_adjusted) & scenario == 2 ~ median_ffm_adjusted,  # Wan: if only IQR given, mean ≈ median
-        is.na(mean_ffm_adjusted) & scenario == 3 ~ (lower_range_ffm_adjusted + 2 * median_ffm_adjusted + upper_range_ffm_adjusted) / 4,  # same as scenario 1 for mean
-        .default = mean_ffm_adjusted
-      ),
-      
       # SD estimates
       sd = case_when(
         is.na(sd) & scenario == 1 & n >= 25 ~ (upper_range - lower_range) / 4,
@@ -87,29 +297,80 @@ prepare_data <- function(file) {
         is.na(sd) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
                                                      (iqr^2 / (4 * qnorm(0.75)^2))),
         .default = sd
-      ),
-      
-      sd_bm_adjusted = case_when(
-        is.na(sd_bm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / 4,
-        is.na(sd_bm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
-        is.na(sd_bm_adjusted) & scenario == 2 ~ iqr_bm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
-        is.na(sd_bm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_bm_adjusted - lower_range_bm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_bm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_bm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
-                                                                 (iqr_bm_adjusted^2 / (4 * qnorm(0.75)^2))),
-        .default = sd_bm_adjusted
-      ),
-      
-      sd_ffm_adjusted = case_when(
-        is.na(sd_ffm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / 4,
-        is.na(sd_ffm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
-        is.na(sd_ffm_adjusted) & scenario == 2 ~ iqr_ffm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
-        is.na(sd_ffm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_ffm_adjusted - lower_range_ffm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_ffm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_ffm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
-                                                                  (iqr_ffm_adjusted^2 / (4 * qnorm(0.75)^2))),
-        .default = sd_ffm_adjusted
       )
     ) |>
+      
+      mutate(
+        scenario = case_when(
+          # bm adjusted REEs
+          !is.na(lower_range_bm_adjusted) & !is.na(upper_range_bm_adjusted) & is.na(iqr_bm_adjusted) ~ 1,  # Scenario 1
+          is.na(lower_range_bm_adjusted) & is.na(upper_range_bm_adjusted) & !is.na(iqr_bm_adjusted)  ~ 2,  # Scenario 2
+          !is.na(lower_range_bm_adjusted) & !is.na(upper_range_bm_adjusted) & !is.na(iqr_bm_adjusted) ~ 3, # Scenario 3
+          TRUE ~ NA_real_
+        ),
+        
+        # Mean estimates
+        mean_bm_adjusted = case_when(
+          is.na(mean_bm_adjusted) & scenario == 1 ~ (lower_range_bm_adjusted + 2 * median_bm_adjusted + upper_range_bm_adjusted) / 4,
+          is.na(mean_bm_adjusted) & scenario == 2 ~ median_bm_adjusted,  # Wan: if only IQR given, mean ≈ median
+          is.na(mean_bm_adjusted) & scenario == 3 ~ (lower_range_bm_adjusted + 2 * median_bm_adjusted + upper_range_bm_adjusted) / 4,  # same as scenario 1 for mean
+          .default = mean_bm_adjusted
+        ),
+        
+        # SD estimates
+        sd_bm_adjusted = case_when(
+          is.na(sd_bm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / 4,
+          is.na(sd_bm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
+          is.na(sd_bm_adjusted) & scenario == 2 ~ iqr_bm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
+          is.na(sd_bm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_bm_adjusted - lower_range_bm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_bm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_bm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
+                                                                   (iqr_bm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          .default = sd_bm_adjusted
+        )
+      ) |>
+      
+      mutate(
+        scenario = case_when(
+          # ffm adjusted REEs
+          !is.na(lower_range_ffm_adjusted) & !is.na(upper_range_ffm_adjusted) & is.na(iqr_ffm_adjusted) ~ 1,  # Scenario 1
+          is.na(lower_range_ffm_adjusted) & is.na(upper_range_ffm_adjusted) & !is.na(iqr_ffm_adjusted)  ~ 2,  # Scenario 2
+          !is.na(lower_range_ffm_adjusted) & !is.na(upper_range_ffm_adjusted) & !is.na(iqr_ffm_adjusted) ~ 3, # Scenario 3
+          TRUE ~ NA_real_
+        ),
+        
+        # Mean estimates
+        mean_ffm_adjusted = case_when(
+          is.na(mean_ffm_adjusted) & scenario == 1 ~ (lower_range_ffm_adjusted + 2 * median_ffm_adjusted + upper_range_ffm_adjusted) / 4,
+          is.na(mean_ffm_adjusted) & scenario == 2 ~ median_ffm_adjusted,  # Wan: if only IQR given, mean ≈ median
+          is.na(mean_ffm_adjusted) & scenario == 3 ~ (lower_range_ffm_adjusted + 2 * median_ffm_adjusted + upper_range_ffm_adjusted) / 4,  # same as scenario 1 for mean
+          .default = mean_ffm_adjusted
+        ),
+        
+        # SD estimates
+        sd_ffm_adjusted = case_when(
+          is.na(sd_ffm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / 4,
+          is.na(sd_ffm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
+          is.na(sd_ffm_adjusted) & scenario == 2 ~ iqr_ffm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
+          is.na(sd_ffm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_ffm_adjusted - lower_range_ffm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_ffm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_ffm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
+                                                                    (iqr_ffm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          .default = sd_ffm_adjusted
+        )
+      ) |>
     ungroup() |>
+    
+    # impute body mass adjusted values e.g., Pohlmeier et al.
+    mutate(
+      mean = case_when(
+        is.na(mean) ~ mean_bm_adjusted,
+        .default = mean
+      ),
+      sd = case_when(
+        is.na(sd) ~ sd_bm_adjusted,
+        .default = sd
+      )
+    ) |>
+    
     rowid_to_column("effect")
   
   return(data)
