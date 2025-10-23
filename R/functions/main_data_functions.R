@@ -450,7 +450,7 @@ impute_bmi_estimates <- function(data) {
 
 create_descriptives_table <- function(data) {
   
-  table <- main_arm_data_imputed_demographics |> 
+  table <- data |> 
     filter(timepoint == "baseline") |>
     mutate(across(where(is.numeric), \(x) round(x, 2))) |>
     mutate(
@@ -501,9 +501,10 @@ create_descriptives_table <- function(data) {
         method == "indirect_calorimetry" ~ "Indirect Calorimetry",
         method == "doubly_labelled_water" ~ "Doubly Labelled Water",
         .default = method
-      )
+      ),
+      method = paste0(method, ": ", device)
     ) |>
-    select(authors, year, title, cond, n,
+    select(authors, year, title, cond, diagnostic_criteria, n,
            Age, 
            `Body mass`,
            Height,
@@ -520,13 +521,14 @@ create_descriptives_table <- function(data) {
               m_fat_mass, sd_fat_mass,
               m_fat_free_mass, sd_fat_free_mass),
            insulin_resistant_description,
-           method
+           method,
     )|>
     rename(
       Authors = "authors",
       `Article title` = "title",
       `Country of study` = "country",
       Condition = "cond",
+      `Diagnostic criteria` = diagnostic_criteria,
       `Sample size` = "n",
       `Race/Ethnicity` = "race",
       `Physical activity` = "physical_activity_level",
@@ -589,7 +591,7 @@ create_descriptives_table <- function(data) {
       value = as_paragraph(
         c(
           "PCOS = polycystic ovary syndrome; BMI = body mass index; OGTT = oral glucose tolerance test; HOMA-IR = homeostatic model assessment of insulin resistance",
-          "Values are Mean (SD) unless otherwise specified",
+          "Values are Mean (SD) unless otherwise specified; note, some have been calculated/estimated from corresponding standard error, range, iqr, median, and sample size (see data and code)",
           "Indicates that this mean was estimated from the corresponding means for body mass/height/BMI"
         )
       ),
