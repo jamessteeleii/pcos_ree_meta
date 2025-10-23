@@ -314,17 +314,20 @@ $$
 \end{aligned}
 $$
 
-where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PCOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard devation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
+where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PCOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard deviation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
 
 #### Additional sensitivity analyses
 As noted in the section above, *"Studies with possible reporting errors"*, we opted to conduct analysis with and without the inclusion of four studies with possible reporting errors we could not resolve [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009]. Thus the main models described above were run with and without these studies, the main results are presented without them and the sensitivity results with them are reported separately below. 
 
-As a further sensitivity analysis, given the inclusion of some studies with interventions in women with PCOS reporting REE at multiple timepoints [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014] but the lack of control women without PCOS, we opted to also conduct sensitivity analysis excluding these and only examining cross-sectional studies. As such, the main models described above were run with and without these studies. 
+As a further sensitivity analysis, given the inclusion of some studies with interventions in women with PCOS reporting REE at multiple timepoints such as mid- and post-intervention [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014] but lacking of control women without PCOS, we opted to also conduct sensitivity analysis excluding these and only examining their baseline results in addition to the cross-sectional studies. As such, the main models described above were run without the follow-up (i.e., mid- or post-intervention timepoints) from these studies and only using the baseline results in addition to other cross-sectional studies.
 
 # Results
 ## Systematic Review
 ```{r}
-targets::tar_load(main_arm_data_imputed_demographics)
+targets::tar_load(c(
+  descriptives_table,
+  main_arm_data_imputed_demographics
+))
 
 main_arm_data_imputed_demographics_baseline <- main_arm_data_imputed_demographics |> 
   filter(timepoint == "baseline")
@@ -343,7 +346,7 @@ no_participants <- main_arm_data_imputed_demographics_baseline |>
   )
 
 ```
-A total of `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` labs including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review.
+A total of `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` labs including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review. Note, these numbers exclude the four studies previously noted with possible reporting issues that were unresolved (they are however summarised in @tbl-review).
 
 \newpage
 
@@ -353,7 +356,7 @@ A total of `r length(unique(main_arm_data_imputed_demographics$study))` studies 
 #| label: tbl-review 
 #| tbl-cap: Descriptive characteristics of arms and participants for included studies
 
-main_arm_data_imputed_demographics
+descriptives_table
 ```
 
 \elandscape
@@ -415,11 +418,32 @@ The main model for the between participant standard deviation of REE resulted in
 combined_variance_plot
 ```
 
-## Sensitivity Analysis with Pairwise Models
+## Sensitivity Analyses
+### Pairwise Models
 ```{r}
 targets::tar_load(c(pairwise_mean_effects_model, pairwise_variance_effects_model))
 
 ```
 For mean REE the pairwise model resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(pairwise_mean_effects_model)[1])` kcal/day with a 95% quantile interval ranging from  `r round(brms::fixef(pairwise_mean_effects_model)[3])` kcal/day to `r round(brms::fixef(pairwise_mean_effects_model)[4])` kcal/day. This was similar for the standard deviation of REE with the pairwise model resulting in a contrast ratio between control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(pairwise_variance_effects_model)[1]),2)` with a 95% quantile interval ranging from  `r round(exp(brms::fixef(pairwise_variance_effects_model)[3]),2)` to `r round(exp(brms::fixef(pairwise_variance_effects_model)[4]),2)`.
+
+### Models including studies with possible reporting issues
+```{r}
+targets::tar_load(c(main_plus_greek_arm_mean_effects_model, main_plus_greek_arm_variance_effects_model))
+
+```
+For mean REE the model including the studies noted with possible reporting issues that were not resolved [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009] still resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,1])` kcal/day with a 95% quantile interval ranging from  `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,3])` kcal/day to `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,4])` kcal/day. This was similar for the standard deviation of REE with the model including these studies resulting in a contrast ratio between control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,1]),2)` with a 95% quantile interval ranging from  `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,3]),2)` to `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,4]),2)`.
+
+### Basline REE Measurement Models
+```{r}
+targets::tar_load(c(baseline_arm_mean_effects_model, baseline_arm_variance_effects_model))
+
+```
+For mean REE the model which included only baseline REE measurements from studies involving interventions [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014], in addition to other cross-sectional studies, also resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(baseline_arm_mean_effects_model)[2,1])` kcal/day with a 95% quantile interval ranging from  `r round(brms::fixef(baseline_arm_mean_effects_model)[2,3])` kcal/day to `r round(brms::fixef(baseline_arm_mean_effects_model)[2,4])` kcal/day. This was the case also for the standard deviation of REE with this model resulting in a contrast ratio between control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,1]),2)` with a 95% quantile interval ranging from  `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,3]),2)` to `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,4]),2)`.
+
+# Discussion
+
+TO WRITE
+
+
 
 # References
