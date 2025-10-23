@@ -401,7 +401,7 @@ calculate_arm_effects <- function(data) {
   return(data)
 }
 
-impute_demographic_estimates <- function(data) {
+impute_bmi_estimates <- function(data) {
   data <- data |>
     
     # convert height to cm for reporting

@@ -130,7 +130,7 @@ list(
   
   tar_target(
     main_arm_data_imputed_demographics,
-    impute_demographic_estimates(main_arm_data)
+    impute_bmi_estimates(main_arm_data)
   ),
   
   tar_target(
