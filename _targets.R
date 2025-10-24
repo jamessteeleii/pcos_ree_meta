@@ -141,7 +141,12 @@ list(
   
   tar_target(
     descriptives_table_docx,
-    create_descriptives_table(main_arm_data_imputed_demographics)
+    convert_descriptives_table_to_docx(descriptives_table)
+  ),
+  
+  tar_target(
+    descriptives_table_image,
+    convert_descriptives_table_to_image(descriptives_table)
   ),
   
   # Fitting main analysis models

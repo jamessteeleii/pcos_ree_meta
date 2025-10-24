@@ -556,7 +556,9 @@ create_descriptives_table <- function(data) {
     ) |>
     bold(part = "header") |>
     autofit() |>
-    fontsize(size = 8) |>
+    fontsize(size = 8, part = "header") |>
+    fontsize(size = 8, part = "footer") |>
+    fontsize(size = 6, part = "body") |>
     align(
       j = c(
         "Condition",
@@ -574,7 +576,7 @@ create_descriptives_table <- function(data) {
       align = "center",
       part = "all"
     ) |>
-    width(j = NULL, width = 0.5) |>
+    # width(j = NULL, width = 1, unit = "cm") |>
     delete_columns(j = "is_last_row") |>
     merge_v(j = c("Authors", "Article title")) |>
     footnote(
@@ -597,7 +599,8 @@ create_descriptives_table <- function(data) {
       ),
       ref_symbols = c(" ", "†", "†*", "†*", "†*", "†", "†"),   # no superscript
       part = "header"        
-    )
+    ) |>
+    font(fontname = "Latin Modern Roman", part = "all")
   
 }
 
@@ -619,7 +622,13 @@ convert_descriptives_table_to_docx <- function(table) {
     body_end_section_landscape()
   
   # Save to file
-  print(doc, target = "descriptives_table_landscape.docx")
+  print(doc, target = "tables/descriptives_table.docx")
+}
+
+convert_descriptives_table_to_image <- function(table) {
+  
+  # Save as image
+  save_as_image(table, path = "tables/descriptives_table.svg", res=300)
 }
 
 # Pairwise data preparation for sensitivity analysis
