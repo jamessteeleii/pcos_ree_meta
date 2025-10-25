@@ -348,11 +348,29 @@ no_participants <- main_arm_data_imputed_demographics_baseline |>
   )
 
 ```
-Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review. Note, these numbers exclude the four studies previously noted with possible reporting issues that were unresolved (they are however summarised in @tbl-review).
 
-::: {.landscape}
+The PRISMA flow diagram can be seen Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review. Note, these numbers exclude the four studies previously noted with possible reporting issues that were unresolved (they are however summarised in @tbl-review where some of the possible reporting errors are seen in the standard deviations reported or calculated).
+
+```{r}
+
+summary_descriptives <- main_arm_data_imputed_demographics_baseline |>
+  group_by(cond) |>
+  summarise(
+    min_age = round(min(m_age, na.rm = TRUE)),
+    max_age = round(max(m_age, na.rm = TRUE)),
+    min_bmi = round(min(m_bmi, na.rm = TRUE),1),
+    max_bmi = round(max(m_bmi, na.rm = TRUE),1)
+  )
+
+  
+
+```
+
+All but one study [@broskeyAssessingEnergyRequirements2017], which used doubly labelled water, measured REE using indirect calorimetry. The specific devices reported by these studies are included in @tbl-review. We originally considered in our pre-registration that, given sufficient data, we would compare sub groups of women with PCOS who did and did not have accompanying insulin resistance. However, based on the metabolic health variables reported in studies with this information (see @tbl-review) and, where available, considering primary criteria of either homeostatic model assessment of insulin resistance (HOMA-IR) $\geq2.5$ or secondary criteria including fasting insulin $>12\mu \textrm{U/mL}$ or fasting glucose $\geq100\textrm{mg/dL}$, all groups of women with PCOS in the included studies would be considered to have insulin resistance. Mean age of women with PCOS in these studies ranged from `r summary_descriptives$min_age[2]` to `r summary_descriptives$max_age[2]` which was similar to the control women without PCOS ranging `r summary_descriptives$min_age[1]` to `r summary_descriptives$max_age[1]`. Across those studies where BMI was reported or it was possible to estimate the mean BMI of women with PCOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PCOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]`.
+
+
 ![Descriptive characteristics of arms and participants for included studies](descriptives_table.png){#tbl-review}
-:::
+
 
 ## Mean REE Model Results
 ```{r}

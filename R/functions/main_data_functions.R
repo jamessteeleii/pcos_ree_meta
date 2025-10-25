@@ -628,9 +628,9 @@ convert_descriptives_table_to_docx <- function(table) {
 convert_descriptives_table_to_image <- function(table) {
   
   # Save as image
-  save_as_image(table, path = "tables/descriptives_table.png", res=600)
+  save_as_image(table, path = "tables/descriptives_table.png", res=900)
   
-  save_as_image(table, path = "manuscript/descriptives_table.png", res=600)
+  save_as_image(table, path = "manuscript/descriptives_table.png", res=900)
 }
 
 # Pairwise data preparation for sensitivity analysis

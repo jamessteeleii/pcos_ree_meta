@@ -134,9 +134,26 @@ list(
     impute_bmi_estimates(main_arm_data)
   ),
   
+  # Make descriptives table with all studies including Greek ones
+  
+  tar_target(
+    main_plus_greek_arm_data,
+    prepare_data(main_arm_data_file)
+  ),
+  
+  tar_target(
+    main_plus_greek_arm_data_effects,
+    calculate_arm_effects(main_plus_greek_arm_data)
+  ),
+  
+  tar_target(
+    main_plus_greek_arm_data_imputed_demographics,
+    impute_bmi_estimates(main_plus_greek_arm_data)
+  ),
+  
   tar_target(
     descriptives_table,
-    create_descriptives_table(main_arm_data_imputed_demographics)
+    create_descriptives_table(main_plus_greek_arm_data_imputed_demographics)
   ),
   
   tar_target(
@@ -317,15 +334,6 @@ list(
   
   #### Sensitivity analysis including Greek lab studies ----
   
-  tar_target(
-    main_plus_greek_arm_data,
-    prepare_data(main_arm_data_file)
-  ),
-  
-  tar_target(
-    main_plus_greek_arm_data_effects,
-    calculate_arm_effects(main_plus_greek_arm_data)
-  ),
   
   # Fitting main arm analysis models including Greek studies
   
