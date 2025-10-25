@@ -555,7 +555,7 @@ create_descriptives_table <- function(data) {
       border = officer::fp_border(color = "black")
     ) |>
     bold(part = "header") |>
-    autofit() |>
+    # autofit() |>
     fontsize(size = 8, part = "header") |>
     fontsize(size = 8, part = "footer") |>
     fontsize(size = 6, part = "body") |>
@@ -576,7 +576,7 @@ create_descriptives_table <- function(data) {
       align = "center",
       part = "all"
     ) |>
-    # width(j = NULL, width = 1, unit = "cm") |>
+    width(j = NULL, width = 1.5, unit = "in") |>
     delete_columns(j = "is_last_row") |>
     merge_v(j = c("Authors", "Article title")) |>
     footnote(
@@ -628,7 +628,9 @@ convert_descriptives_table_to_docx <- function(table) {
 convert_descriptives_table_to_image <- function(table) {
   
   # Save as image
-  save_as_image(table, path = "tables/descriptives_table.svg", res=300)
+  save_as_image(table, path = "tables/descriptives_table.png", res=600)
+  
+  save_as_image(table, path = "manuscript/descriptives_table.png", res=600)
 }
 
 # Pairwise data preparation for sensitivity analysis
