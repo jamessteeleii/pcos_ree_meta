@@ -14,6 +14,11 @@ format:
         \usepackage{lscape}
         \newcommand{\blandscape}{\begin{landscape}}
         \newcommand{\elandscape}{\end{landscape}}
+geometry:
+  - left=1in
+  - right=1in
+  - top=1in
+  - bottom=1in
 author:
   - name: Richard Kirwan
     affiliations:
@@ -328,7 +333,8 @@ As a further sensitivity analysis, given the inclusion of some studies with inte
 ## Systematic Review
 ```{r}
 targets::tar_load(c(
-  main_arm_data_imputed_demographics
+  c(main_arm_data_imputed_demographics,
+    main_plus_greek_arm_data_imputed_demographics)
 ))
 
 main_arm_data_imputed_demographics_baseline <- main_arm_data_imputed_demographics |> 
@@ -349,7 +355,7 @@ no_participants <- main_arm_data_imputed_demographics_baseline |>
 
 ```
 
-The PRISMA flow diagram can be seen Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review. Note, these numbers exclude the four studies previously noted with possible reporting issues that were unresolved (they are however summarised in @tbl-review where some of the possible reporting errors are seen in the standard deviations reported or calculated).
+Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported in @tbl-review. Note, these numbers exclude the four studies previously noted with possible reporting issues that were unresolved. These studies  are however summarised in @tbl-review where some of the possible reporting errors are seen in the standard deviations reported or calculated e.g., the standard deviation calculated for body mass of women with PCOS in Saltamavros et al. [-@saltamavrosAlpha2Beta2007].
 
 ```{r}
 

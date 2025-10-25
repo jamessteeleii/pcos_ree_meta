@@ -155,15 +155,15 @@ list(
     descriptives_table,
     create_descriptives_table(main_plus_greek_arm_data_imputed_demographics)
   ),
-  
+
   tar_target(
-    descriptives_table_docx,
-    convert_descriptives_table_to_docx(descriptives_table)
+    descriptives_table_png,
+    convert_descriptives_table_to_png(descriptives_table)
   ),
   
   tar_target(
-    descriptives_table_image,
-    convert_descriptives_table_to_image(descriptives_table)
+    descriptives_table_svg,
+    convert_descriptives_table_to_svg(descriptives_table)
   ),
   
   # Fitting main analysis models

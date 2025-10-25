@@ -625,12 +625,19 @@ convert_descriptives_table_to_docx <- function(table) {
   print(doc, target = "tables/descriptives_table.docx")
 }
 
-convert_descriptives_table_to_image <- function(table) {
+convert_descriptives_table_to_png <- function(table) {
   
   # Save as image
-  save_as_image(table, path = "tables/descriptives_table.png", res=900)
+  save_as_image(table, path = "tables/descriptives_table.png", res=300)
   
-  save_as_image(table, path = "manuscript/descriptives_table.png", res=900)
+  save_as_image(table, path = "manuscript/descriptives_table.png", res=300)
+}
+
+convert_descriptives_table_to_svg <- function(table) {
+  
+  # Save as image
+  save_as_image(table, path = "tables/descriptives_table.svg", res=300)
+  
 }
 
 # Pairwise data preparation for sensitivity analysis
