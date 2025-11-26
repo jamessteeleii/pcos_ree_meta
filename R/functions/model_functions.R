@@ -589,3 +589,81 @@ fit_pairwise_variance_model <- function(data) {
   
   return(pairwise_model)
 }
+
+# Additional models
+fit_arm_mean_effects_model_moderator <- function(data, prior, moderator) {
+  
+  formula <- as.formula(paste0("yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + me(m_",moderator,",se_",moderator,") +", 
+                               "(1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect)"))
+  
+  arm_model <- brm(formula,
+                   data = data,
+                   prior = prior,
+                   chains = 4,
+                   cores = 4,
+                   seed = 1988,
+                   warmup = 2000,
+                   iter = 8000)
+}
+
+fit_arm_variance_effects_model_moderator <- function(data, prior, moderator) {
+  
+  formula <- as.formula(paste0("yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond + me(m_",moderator,",se_",moderator,") +", 
+  "me(log_yi_mean, se_log_yi_mean) + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect)"))
+  
+  arm_model <- brm(formula,
+                   data = data,
+                   prior = prior,
+                   chains = 4,
+                   cores = 4,
+                   seed = 1988,
+                   warmup = 2000,
+                   iter = 8000)
+}
+
+get_mean_contrast_condition_bmi <- function(model, data) {
+  
+  # use median BMI in controls
+  m_bmi <- data |>
+    filter(cond == "Control") |>
+    group_by(arm) |>
+    slice_head(n=1) |>
+    ungroup() |>
+    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
+  
+  # pooled preds per condition
+  preds <- avg_comparisons(
+    model,
+    newdata = datagrid(
+      m_bmi = m_bmi$m_bmi
+    ),
+    re_formula = NA,
+    variables = "cond"
+  ) 
+  
+  return(preds)
+}
+
+get_variance_contrast_condition_bmi <- function(model, data) {
+  
+  # use median BMI in controls
+  m_bmi <- data |>
+    filter(cond == "Control") |>
+    group_by(arm) |>
+    slice_head(n=1) |>
+    ungroup() |>
+    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
+  
+  # pooled preds per condition
+  preds <- avg_comparisons(
+    model,
+    newdata = datagrid(
+      yi_mean = median(data$yi_mean, na.rm=TRUE),
+      m_bmi = m_bmi$m_bmi
+    ),
+    re_formula = NA,
+    variables = "cond"
+  ) 
+  
+  return(preds)
+}

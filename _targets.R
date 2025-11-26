@@ -351,7 +351,48 @@ list(
       main_plus_greek_arm_data_effects,
       prior_arm_variance_effects
     )
+  ),
+  
+  #### Additional models including BMI
+  
+  # add imputed demographics for moderators
+  tar_target(
+    main_arm_data_effects_imputed_demographics,
+    impute_bmi_estimates(main_arm_data_effects) |>
+      mutate(se_bmi = sd_bmi/sqrt(n_bmi))
+  ),
+  
+  tar_target(
+    main_arm_mean_effects_model_bmi,
+    fit_arm_mean_effects_model_moderator(
+      main_arm_data_effects_imputed_demographics,
+      prior_arm_mean_effects,
+      "bmi"
+    )
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_model_bmi,
+    fit_arm_variance_effects_model_moderator(
+      main_arm_data_effects_imputed_demographics,
+      prior_arm_variance_effects,
+      "bmi"
+    )
+  ),
+  
+  tar_target(
+    main_arm_mean_effects_contrast_condition_bmi,
+    get_mean_contrast_condition_bmi(main_arm_mean_effects_model_bmi,
+                                    main_arm_data_effects_imputed_demographics)
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_contrast_condition_bmi,
+    get_variance_contrast_condition_bmi(main_arm_variance_effects_model_bmi,
+                                    main_arm_data_effects_imputed_demographics)
   )
+  
+  
 )
 
 
