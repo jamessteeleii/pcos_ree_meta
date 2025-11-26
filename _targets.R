@@ -353,15 +353,23 @@ list(
     )
   ),
   
-  #### Additional models including BMI
+  #### Additional models including BMI and fat free mass
   
-  # add imputed demographics for moderators
+  # Add imputed demographics for moderators
   tar_target(
     main_arm_data_effects_imputed_demographics,
     impute_bmi_estimates(main_arm_data_effects) |>
-      mutate(se_bmi = sd_bmi/sqrt(n_bmi))
+      mutate(se_bmi = sd_bmi/sqrt(n_bmi),
+             se_fat_free_mass = sd_fat_free_mass/sqrt(n_fat_free_mass))
   ),
   
+  # Get control medians for predictors
+  tar_target(
+    predictor_medians,
+    get_predictor_medians(main_arm_data_effects_imputed_demographics)
+  ),
+  
+  # BMI
   tar_target(
     main_arm_mean_effects_model_bmi,
     fit_arm_mean_effects_model_moderator(
@@ -382,16 +390,49 @@ list(
   
   tar_target(
     main_arm_mean_effects_contrast_condition_bmi,
-    get_mean_contrast_condition_bmi(main_arm_mean_effects_model_bmi,
-                                    main_arm_data_effects_imputed_demographics)
+    get_mean_contrast_condition_moderator(main_arm_mean_effects_model_bmi,
+                                          predictor_medians)
   ),
   
   tar_target(
     main_arm_variance_effects_contrast_condition_bmi,
-    get_variance_contrast_condition_bmi(main_arm_variance_effects_model_bmi,
-                                    main_arm_data_effects_imputed_demographics)
-  )
+    get_variance_contrast_condition_moderator(main_arm_variance_effects_model_bmi,
+                                              main_arm_data_effects_imputed_demographics,
+                                        predictor_medians)
+  ),
   
+  # Fat free mass
+  
+  tar_target(
+    main_arm_mean_effects_model_fat_free_mass,
+    fit_arm_mean_effects_model_moderator(
+      main_arm_data_effects_imputed_demographics,
+      prior_arm_mean_effects,
+      "fat_free_mass"
+    )
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_model_fat_free_mass,
+    fit_arm_variance_effects_model_moderator(
+      main_arm_data_effects_imputed_demographics,
+      prior_arm_variance_effects,
+      "fat_free_mass"
+    )
+  ),
+  
+  tar_target(
+    main_arm_mean_effects_contrast_condition_fat_free_mass,
+    get_mean_contrast_condition_moderator(main_arm_mean_effects_model_fat_free_mass,
+                                          predictor_medians)
+  ),
+  
+  tar_target(
+    main_arm_variance_effects_contrast_condition_fat_free_mass,
+    get_variance_contrast_condition_moderator(main_arm_variance_effects_model_fat_free_mass,
+                                              main_arm_data_effects_imputed_demographics,
+                                              predictor_medians)
+  )
   
 )
 

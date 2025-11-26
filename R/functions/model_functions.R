@@ -591,6 +591,32 @@ fit_pairwise_variance_model <- function(data) {
 }
 
 # Additional models
+get_predictor_medians <- function(data) {
+  # use median BMI in controls
+  m_bmi <- data |>
+    filter(cond == "Control") |>
+    group_by(arm) |>
+    slice_head(n=1) |>
+    ungroup() |>
+    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
+  
+  # use median BMI in controls
+  m_fat_free_mass <- data |>
+    filter(cond == "Control") |>
+    group_by(arm) |>
+    slice_head(n=1) |>
+    ungroup() |>
+    summarise(m_fat_free_mass = median(m_fat_free_mass, na.rm = TRUE))
+  
+  predictor_medians <- tibble(
+    m_bmi = m_bmi$m_bmi,
+    m_fat_free_mass = m_fat_free_mass$m_fat_free_mass
+  )
+  
+  return(predictor_medians)
+}
+  
+
 fit_arm_mean_effects_model_moderator <- function(data, prior, moderator) {
   
   formula <- as.formula(paste0("yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + me(m_",moderator,",se_",moderator,") +", 
@@ -621,21 +647,14 @@ fit_arm_variance_effects_model_moderator <- function(data, prior, moderator) {
                    iter = 8000)
 }
 
-get_mean_contrast_condition_bmi <- function(model, data) {
-  
-  # use median BMI in controls
-  m_bmi <- data |>
-    filter(cond == "Control") |>
-    group_by(arm) |>
-    slice_head(n=1) |>
-    ungroup() |>
-    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
+get_mean_contrast_condition_moderator <- function(model, predictor_medians) {
   
   # pooled preds per condition
   preds <- avg_comparisons(
     model,
     newdata = datagrid(
-      m_bmi = m_bmi$m_bmi
+      m_bmi = predictor_medians$m_bmi,
+      m_fat_free_mass = predictor_medians$m_fat_free_mass
     ),
     re_formula = NA,
     variables = "cond"
@@ -644,22 +663,15 @@ get_mean_contrast_condition_bmi <- function(model, data) {
   return(preds)
 }
 
-get_variance_contrast_condition_bmi <- function(model, data) {
-  
-  # use median BMI in controls
-  m_bmi <- data |>
-    filter(cond == "Control") |>
-    group_by(arm) |>
-    slice_head(n=1) |>
-    ungroup() |>
-    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
+get_variance_contrast_condition_moderator <- function(model, data, predictor_medians) {
   
   # pooled preds per condition
   preds <- avg_comparisons(
     model,
     newdata = datagrid(
       yi_mean = median(data$yi_mean, na.rm=TRUE),
-      m_bmi = m_bmi$m_bmi
+      m_bmi = predictor_medians$m_bmi,
+      m_fat_free_mass = predictor_medians$m_fat_free_mass
     ),
     re_formula = NA,
     variables = "cond"
