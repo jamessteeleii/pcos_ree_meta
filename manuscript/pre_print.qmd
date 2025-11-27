@@ -81,7 +81,7 @@ abstract: |
 keywords: Polycystic ovary syndrome, PCOS, resting energy expenditure, REE, basal metabolic rate, BMR
 bibliography: 
   mylibrary.bib
-csl: apa.csl
+csl: american-medical-association.csl
 execute: 
   echo: false
   message: false
@@ -482,6 +482,7 @@ The current study has multiple strengths stemming from its preregistered, compre
 In conclusion, the findings from this meta-analysis indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in REE were small, insignificant, or not physiologically relevant. Additionally, variability in REE between individuals was also similar. These results suggest that a lower baseline REE is not associated with the weight-related challenges often associated with PCOS. These findings challenge the popular narrative that women with PCOS have a lower REE and may help better inform dietary interventions and nutritional support for these individuals. Future research should include more standardized REE measurement and reporting protocols, greater data transparency, consistent control and reporting of body weight or body composition, the presentation of both absolute and relative REE, and more precise characterization of PCOS phenotypes. Overall, these findings support the conclusion that PCOS is not negatively associated with REE and may help practitioners and researchers focus on individually targeted and holistic lifestyle interventions rather than negatively framed interventions based on unsupported assumptions regarding REE.
 
 
-#
+# Data Availability
+All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>.
 
 # References
