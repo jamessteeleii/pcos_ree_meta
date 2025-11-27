@@ -10,6 +10,8 @@ format:
     mainfont: "Latin Modern Roman"
     include-in-header:
       text: |
+        \usepackage{lineno}\linenumbers
+        \usepackage{setspace}\doublespacing
         \usepackage[font=scriptsize]{caption}
         \usepackage{lscape}
         \newcommand{\blandscape}{\begin{landscape}}
@@ -75,7 +77,7 @@ affiliations:
   - id: 7
     name: School of Health and Biomedical Sciences, Royal Melbourne Institute of Technology, Melbourne, VIC, Australia
 abstract: |
-  Background: Polycystic ovary syndrome (PCOS) is the most common endocrine condition affecting women of reproductive age. Women who are living with PCOS are also more likely to experience overwweight and obesity and this is assumed to be a result of a lower resting energy expenditure (REE). The assumption that REE is lower in women living with PCOS has also influenced lifestyle-based interventions in this group. Evidence supporting this reduced REE compared to women without PCOS, however, is not consistent. Objectives: To systematically search and meta-analyse the existing literature to determine if resting energy expenditure differs between women with and without PCOS. Design: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Results: Seventeen independent studies were identified. Study populations ranged from X to X participants, with mean ages ranging from X to X years. Conclusions: TO ADD
+  Background: Polycystic ovary syndrome (PCOS) is the most common endocrine condition affecting women of reproductive age. Women who are living with PCOS are also more likely to fall into overweight or obese body mass index (BMI) categories and this is assumed to be a result of a lower resting energy expenditure (REE). The assumption that REE is lower in women living with PCOS may also influence lifestyle-based interventions in this group. Evidence supporting this reduced REE compared to women without PCOS, however, is not consistent. Objectives: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Design: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Results: Seventeen independent studies were identified. Study populations ranged from X to X participants, with mean ages ranging from X to X years. Conclusions: TO ADD
 keywords: Polycystic ovary syndrome, PCOS, resting energy expenditure, REE, basal metabolic rate, BMR
 bibliography: 
   mylibrary.bib
