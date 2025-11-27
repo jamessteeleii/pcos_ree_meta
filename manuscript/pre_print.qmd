@@ -1,6 +1,6 @@
 ---
 title: |
-  Does resting energy expenditure differ between women with and without polycystic ovary syndrome (PCOS): a systematic review and meta-analysis
+  Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis
 date: last-modified
 date-format: long
 format:
