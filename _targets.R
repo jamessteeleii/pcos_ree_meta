@@ -18,7 +18,8 @@ tar_option_set(
     "tidybayes",
     "patchwork",
     "flextable",
-    "officer"
+    "officer",
+    "webshot2"
   ),
   memory = "transient",
   format = "qs",
@@ -155,17 +156,12 @@ list(
     descriptives_table,
     create_descriptives_table(main_plus_greek_arm_data_imputed_demographics)
   ),
+  
+  tar_target(
+    descriptives_table_html,
+    convert_descriptives_table_to_html(descriptives_table)
+  ),
 
-  tar_target(
-    descriptives_table_png,
-    convert_descriptives_table_to_png(descriptives_table)
-  ),
-  
-  tar_target(
-    descriptives_table_svg,
-    convert_descriptives_table_to_svg(descriptives_table)
-  ),
-  
   # Fitting main analysis models
   
   tar_target(

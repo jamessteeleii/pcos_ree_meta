@@ -10,7 +10,10 @@ format:
     mainfont: "Latin Modern Roman"
     include-in-header:
       text: |
+        \usepackage{lineno}\linenumbers
+        \usepackage{setspace}\AtBeginDocument{\spacing{2}}
         \usepackage[font=scriptsize]{caption}
+        \usepackage{pdflscape}
 geometry:
   - left=1in
   - right=1in

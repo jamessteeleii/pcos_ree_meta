@@ -556,9 +556,9 @@ create_descriptives_table <- function(data) {
     ) |>
     bold(part = "header") |>
     # autofit() |>
-    fontsize(size = 8, part = "header") |>
-    fontsize(size = 8, part = "footer") |>
-    fontsize(size = 6, part = "body") |>
+    fontsize(size = 10, part = "header") |>
+    fontsize(size = 10, part = "footer") |>
+    fontsize(size = 8, part = "body") |>
     align(
       j = c(
         "Condition",
@@ -625,19 +625,17 @@ convert_descriptives_table_to_docx <- function(table) {
   print(doc, target = "tables/descriptives_table.docx")
 }
 
-convert_descriptives_table_to_png <- function(table) {
+convert_descriptives_table_to_html <- function(table) {
   
   # Save as image
-  save_as_image(table, path = "tables/descriptives_table.png", res=300)
+  save_as_html(table, path = "tables/descriptives_table.html",
+               title = "Descriptive characteristics of arms and participants for included studies")
   
-  save_as_image(table, path = "manuscript/descriptives_table.png", res=300)
 }
 
-convert_descriptives_table_to_svg <- function(table) {
-  
-  # Save as image
-  save_as_image(table, path = "tables/descriptives_table.svg", res=300)
-  
+convert_descriptives_table_to_pdf <- function(table_html) {
+  # Render to high-resolution PDF
+  webshot("tables/descriptives_table.html", "manuscript/descriptives_table.pdf", zoom = 2, vwidth = 2400)
 }
 
 # Pairwise data preparation for sensitivity analysis
