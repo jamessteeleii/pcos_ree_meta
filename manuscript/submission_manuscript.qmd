@@ -6,6 +6,9 @@ date-format: long
 format:
   pdf:
     # documentclass: article
+    keep-tex: true
+    template-partials: 
+     - title.tex
     pdf-engine: xelatex
     mainfont: "Latin Modern Roman"
     include-in-header:
@@ -14,6 +17,11 @@ format:
         \usepackage{setspace}\AtBeginDocument{\spacing{2}}
         \usepackage[font=scriptsize]{caption}
         \usepackage{pdflscape}
+        \usepackage[noblocks]{authblk}
+        \renewcommand*{\Authsep}{, }
+        \renewcommand*{\Authand}{, }
+        \renewcommand*{\Authands}{, }
+        \renewcommand\Affilfont{\small}
 geometry:
   - left=1in
   - right=1in
@@ -24,7 +32,6 @@ author:
     affiliations:
       - ref: 1
     orcid: 0000-0003-4645-0077
-    corresponding: true
     email: R.P.Kirwan@ljmu.ac.uk
   - name: Leigh Peele
     affiliations:
@@ -38,7 +45,6 @@ author:
   - name: Georgia Kohlhoff
     affiliations:
       - ref: 3
-    # orcid: 0000-0002-8003-0757
     email: g_kohlhoff@hotmail.co.uk
   - name: Hannah Cabré
     affiliations:
@@ -49,7 +55,6 @@ author:
     affiliations:
       - ref: 5
     orcid: 0000-0002-2217-8067
-    corresponding: true
     email: alyssaolenickphd@gmail.com
   - name: James Steele
     affiliations:

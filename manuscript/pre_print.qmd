@@ -6,11 +6,19 @@ date-format: long
 format:
   pdf:
     # documentclass: article
+    keep-tex: true
+    template-partials: 
+     - title.tex
     pdf-engine: xelatex
     mainfont: "Latin Modern Roman"
     include-in-header:
       text: |
         \usepackage[font=scriptsize]{caption}
+        \usepackage[noblocks]{authblk}
+        \renewcommand*{\Authsep}{, }
+        \renewcommand*{\Authand}{, }
+        \renewcommand*{\Authands}{, }
+        \renewcommand\Affilfont{\small}
 geometry:
   - left=1in
   - right=1in
@@ -18,41 +26,29 @@ geometry:
   - bottom=1in
 author:
   - name: Richard Kirwan
-    affiliations:
-      - ref: 1
+    affil-id: 1
     orcid: 0000-0003-4645-0077
-    corresponding: true
     email: R.P.Kirwan@ljmu.ac.uk
   - name: Leigh Peele
-    affiliations:
-      - ref: 2
+    affil-id: 2
     email: leigh@macrofactorapp.com
   - name: Greg Nuckols
-    affiliations:
-      - ref: 2
+    affil-id: 2
     orcid: 0009-0004-2679-7967
     email: greg@macrofactorapp.com
   - name: Georgia Kohlhoff
-    affiliations:
-      - ref: 3
-    # orcid: 0000-0002-8003-0757
+    affil-id: 3
     email: g_kohlhoff@hotmail.co.uk
   - name: Hannah Cabré
-    affiliations:
-      - ref: 4
+    affil-id: 4
     orcid: 0000-0002-3235-6867
     email: Hannah.Cabre@pbrc.edu
   - name: Alyssa Olenick
-    affiliations:
-      - ref: 5
+    affil-id: 5
     orcid: 0000-0002-2217-8067
-    corresponding: true
     email: alyssaolenickphd@gmail.com
   - name: James Steele
-    affiliations:
-      - ref: 6
-      - ref: 2
-      - ref: 7
+    affil-id: 6,2,7
     orcid: 0000-0002-8003-0757
     corresponding: true
     email: james@steele-research.com
@@ -73,6 +69,8 @@ affiliations:
     name: School of Health and Biomedical Sciences, Royal Melbourne Institute of Technology, Melbourne, VIC, Australia
 abstract: |
   Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
+thanks: |
+  Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré, H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis. medrχiv DOI: TO ADD. Address for correspondence: james@steele-research.com
 keywords: Polycystic ovary syndrome, PCOS, resting energy expenditure, REE, basal metabolic rate, BMR
 bibliography: 
   mylibrary.bib
