@@ -496,4 +496,7 @@ The content is solely the responsibility of the authors and does not necessarily
 # Data Availability
 All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>.
 
+# Contributions
+Gregory Nuckols and Leigh Peele conceived the idea for the project. All authors contributed to the design of the project and methods. Richie Kirwan and Leigh Peele conducted the systematic search and screening. James Steele performed the data extraction, conducted the statistical analyses, and produced the data visualisations. All authors contributed to drafting the initial manuscript. All authors contributed to editing the manuscript. All authors read and approved the final manuscript.
+
 # References
