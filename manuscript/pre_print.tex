@@ -145,6 +145,8 @@
 \renewcommand*{\Authand}{, }
 \renewcommand*{\Authands}{, }
 \renewcommand\Affilfont{\small}
+\usepackage{etoolbox}
+\AtEndEnvironment{abstract}{\noindent\textbf{Keywords:} \KeywordList \par}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -191,9 +193,9 @@
 \urlstyle{same}
 \hypersetup{
   pdftitle={Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis},
-  pdfauthor={Richard Kirwan; Leigh Peele; Greg Nuckols; Georgia Kohlhoff; Hannah Cabré; Alyssa Olenick; James Steele},
-  pdfkeywords={Polycystic ovary syndrome, PCOS, resting energy
-expenditure, REE, basal metabolic rate, BMR},
+  pdfauthor={Richard Kirwan; Leigh Peele; Gregory Nuckols; Georgia Kohlhoff; Hannah Cabré; Alyssa Olenick; James Steele},
+  pdfkeywords={Polycystic ovary syndrome, Energy Metabolism, Resting
+Metabolic Rate, Basal Metabolism},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
@@ -207,22 +209,22 @@ ovary syndrome: a systematic review and meta-analysis\thanks{Preprint,
 please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré,
 H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of
 women with and without polycystic ovary syndrome: a systematic review
-and meta-analysis. medrχiv DOI: TO ADD. Address for correspondence:
+and meta-analysis. medrxiv DOI: TO ADD. Address for correspondence:
 james@steele-research.com}}
 
 
 \author[1]{Richard Kirwan}
 \author[2]{Leigh Peele}
-\author[2]{Greg Nuckols}
+\author[2]{Gregory Nuckols}
 \author[3]{Georgia Kohlhoff}
 \author[4]{Hannah Cabré}
 \author[5]{Alyssa Olenick}
-\author[6,2,7]{James Steele}
+\author[2,6,7]{James Steele}
 
 \affil[1]{Research Institute for Sports and Exercise Sciences, Liverpool
-John Moores Universtiy, Liverpool, UK}
-\affil[2]{MacroFactor, Stronger by Science LLC, Raleigh, North Carolina,
-USA}
+John Moores University, Liverpool, UK}
+\affil[2]{MacroFactor, Stronger by Science Technologies LLC, Raleigh,
+North Carolina, USA}
 \affil[3]{Flourishing Health, Liverpool, UK}
 \affil[4]{Reproductive Endocrinology and Women's Health Research
 Program, Pennington Biomedical Research Center, Baton Rouge, Louisiana,
@@ -232,7 +234,11 @@ USA}
 \affil[7]{School of Health and Biomedical Sciences, Royal Melbourne
 Institute of Technology, Melbourne, VIC, Australia}
 
-\date{December 1, 2025}
+% Store the keywords (expanded by Pandoc here)
+\def\KeywordList{Polycystic ovary syndrome, Energy Metabolism, Resting
+Metabolic Rate, Basal Metabolism}
+
+\date{December 3, 2025}
 \begin{document}
 \maketitle
 \begin{abstract}
@@ -1001,11 +1007,11 @@ carried out in Greece. A total of 11 studies used the Rotterdam criteria
 PCOS\textsuperscript{16,17,34,53--60}. One study used the 1990 National
 Institutes of Health criteria\textsuperscript{61}, and two
 studies\textsuperscript{18,55} diagnosed PCOS via the presence of
-oligomenorrhea or amenorrheaammenorrhea alongside additional criteria
-including plasma androgen levels, hirsutism or polycystic ovaries on
-ultrasound scanning. All but one study\textsuperscript{61}, which used
-doubly labelled water, measured REE using indirect calorimetry. The
-specific devices reported by these studies are included in the online
+oligomenorrhea or amenorrhea alongside additional criteria including
+plasma androgen levels, hirsutism or polycystic ovaries on ultrasound
+scanning. All but one study\textsuperscript{61}, which used doubly
+labelled water, measured REE using indirect calorimetry. The specific
+devices reported by these studies are included in the online
 supplementary materials (see
 \href{https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html}{Descriptives
 Table}). We originally considered in our pre-registration that, given
@@ -1160,8 +1166,16 @@ differences in REE, PCOS is not systematically associated with lesser or
 greater individual variability.
 
 These findings challenge the widely held belief that PCOS is inherently
-associated with a slower metabolism (PMID: 32244780), predisposing women
-with PCOS to weight gain. This belief may mistakenly lead to
+associated with a slower metabolism\textsuperscript{@ 25}, predisposing
+women with PCOS to weight gain. This belief largely stems from a single
+but influential 2009 study from Georgopoulos et al.~that reported a
+significantly reduced BMR in women with PCOS\textsuperscript{13}, which
+has been widely cited and reinforced in both academic and clinical
+contexts. However, as we have noted, this study along with
+others\textsuperscript{35--37} have numerous reporting errors which led
+us to drop them from our present analysis (though sensitivity analysis
+including them did not alter our overall conclusions). The mistaken
+belief that REE is lower for those with PCOS may have mistakenly lead to
 recommendations centred on slightly more severe calorie restriction to
 achieve weight-loss goals, compared with recommendations for the general
 population, as primary management strategies for women with
@@ -1174,8 +1188,8 @@ and psychologically safe approaches to care\textsuperscript{25}.
 
 The current study suggests that REE may not a barrier to weight
 regulation in PCOS given small group-level differences between women
-with PCOS and those without (229 kcal/day {[}95\%QI:169 kcal/day to 303
-kcal/day{]} versus 238 kcal/day {[}95\%QI:178 kcal/day to 312
+with PCOS and those without (1472 kcal/day {[}95\%QI:1359 kcal/day to
+1587 kcal/day{]} versus 1442 kcal/day {[}95\%QI:1334 kcal/day to 1553
 kcal/day{]}, respectively). If anything, REE may be slightly higher in
 women with PCOS compared to healthy women without PCOS. BMI of women
 with PCOS ranged from 26.4 to 39.9 was typically greater than women
@@ -1197,7 +1211,7 @@ there seems to be little difference in REE between women with, and
 without, PCOS. Yet, a recent systematic review of mechanisms for
 metabolic dysfunction has reported excess androgen drives metabolic
 issues within adipose tissue and muscle tissue contributing to
-complications like obesity and insulin resistance (PMID: 32244780).
+complications like obesity and insulin resistance\textsuperscript{63}.
 Taken together, these findings highlight that factors beyond REE and
 typical correlates of this including BMI or fat-free mass, such as
 hormonal and tissue-specific metabolic effects, may play a more
@@ -1206,25 +1220,25 @@ significant role in weight regulation challenges in women with PCOS.
 As noted, women with PCOS are more likely to engage in weight-loss
 attempts\textsuperscript{19} and there could be concerns that this could
 inadvertently further foster the already well documented disordered
-eating in this population\textsuperscript{21,22,63,64}. The pathways
+eating in this population\textsuperscript{21,22,64,65}. The pathways
 linking PCOS and disordered eating are multifactorial. Biological
 mechanisms such as hyperandrogenism, hyperinsulinaemia, and altered
 ghrelin and leptin signalling can heighten hunger, carbohydrate
-cravings, and appetite variability\textsuperscript{65}. Frequent
+cravings, and appetite variability\textsuperscript{66}. Frequent
 hypoglycaemia and associated mood changes have also been observed, which
-can trigger compensatory eating or binge episodes\textsuperscript{65}.
+can trigger compensatory eating or binge episodes\textsuperscript{66}.
 These physiological processes interact with psychological and social
 stressors, including infertility concerns, conflicting nutrition advice,
 chronic dieting, and exposure to idealised body images on social media,
 which together compound vulnerability to disordered
-eating\textsuperscript{66}. Moreover, eating disorders themselves can
+eating\textsuperscript{67}. Moreover, eating disorders themselves can
 disrupt endocrine function, potentially worsening PCOS symptoms and
-creating a self-reinforcing cycle\textsuperscript{64,67}.
+creating a self-reinforcing cycle\textsuperscript{65,68}.
 
 Understanding the intertwined biological, psychological, and social
 influences suggests the importance of considering whether restrictive
 dietary advice is appropriate given it may exacerbate feelings of
-failure, hunger dysregulation, and shame\textsuperscript{68}. These
+failure, hunger dysregulation, and shame\textsuperscript{69}. These
 concerns, coupled with the lack of difference in REE between women with
 and without PCOS might suggest that energy restriction based dietary
 interventions for weight-loss may be unnecessary. But, there is also
@@ -1298,17 +1312,27 @@ unsupported assumptions regarding REE.
 \section{Financial Disclosures/Conflicts of
 Interest}\label{financial-disclosuresconflicts-of-interest}
 
-Hannah Cabré was supported by the National Institute of Diabetes and
-Digestive and Kidney Diseases of the National Institutes of Health under
-Award Number T32DK064584. James Steele provides research consultancy
-through his company Steele Research Limited, is contracted currently by
-MacroFactor and Kieser Australia through Steele Research Limited, and
-has also received travel expenses and honoraria for speaking from fit20
-International, Exercise School Portugal, and Discover Strength.
+Richard Kirwan provides nutrition consultancy through his company Be
+More Nutrition. Leigh Peele is employed by MacroFactor, a
+nutrition-tracking app. Gregory Nuckols is co-owner of MacroFactor.
+Georgia Kohlhoff provides nutrition consultancy through her company
+Flourishing Health. Hannah Cabré was supported by the National Institute
+of Diabetes and Digestive and Kidney Diseases of the National Institutes
+of Health under Award Number T32DK064584. Alyssa Olenick provides
+fitness coaching and scientific consulting under ALYSSA OLENICK LLC. She
+receives compensation from scientific consulting, speaking engagments,
+affiliated social media partnerships, and book publishing. James Steele
+provides research consultancy through his company Steele Research
+Limited, is contracted currently by MacroFactor and Kieser Australia
+through Steele Research Limited, and has also received travel expenses
+and honoraria for speaking from fit20 International, Exercise School
+Portugal, and Discover Strength.
 
 The content is solely the responsibility of the authors and does not
 necessarily represent the official views of the National Institutes of
-Health or any other funding agencies or institutions noted above.
+Health or any other funding agencies or institutions noted above. The
+authors declare no other conflicts of interest related to the submitted
+work.
 
 \section{Data Availability}\label{data-availability}
 
@@ -1787,15 +1811,23 @@ expenditure in women with polycystic ovary syndrome. \emph{Human
 Reproduction (Oxford, England)}. 2024;39(8):1794-1803.
 doi:\href{https://doi.org/10.1093/humrep/deae129}{10.1093/humrep/deae129}}
 
-\bibitem[\citeproctext]{ref-leeIncreasedRiskDisordered2017}
+\bibitem[\citeproctext]{ref-sanchez-garridoMetabolicDysfunctionPolycystic2020}
 \CSLLeftMargin{63. }%
+\CSLRightInline{Sanchez-Garrido MA, Tena-Sempere M. Metabolic
+dysfunction in polycystic ovary syndrome: {Pathogenic} role of androgen
+excess and potential therapeutic strategies. \emph{Molecular
+Metabolism}. 2020;35:100937.
+doi:\href{https://doi.org/10.1016/j.molmet.2020.01.001}{10.1016/j.molmet.2020.01.001}}
+
+\bibitem[\citeproctext]{ref-leeIncreasedRiskDisordered2017}
+\CSLLeftMargin{64. }%
 \CSLRightInline{Lee I, Cooney LG, Saini S, et al. Increased risk of
 disordered eating in~polycystic ovary syndrome. \emph{Fertility and
 Sterility}. 2017;107(3):796-802.
 doi:\href{https://doi.org/10.1016/j.fertnstert.2016.12.014}{10.1016/j.fertnstert.2016.12.014}}
 
 \bibitem[\citeproctext]{ref-bernadettPrevalenceEatingDisorders2016}
-\CSLLeftMargin{64. }%
+\CSLLeftMargin{65. }%
 \CSLRightInline{Bernadett M, Szemán-N A.
 \href{https://www.ncbi.nlm.nih.gov/pubmed/27244869}{{{[}Prevalence of
 eating disorders among women with polycystic ovary syndrome{]}}}.
@@ -1803,7 +1835,7 @@ eating disorders among women with polycystic ovary syndrome{]}}}.
 Folyoirata}. 2016;31(2):136-145.}
 
 \bibitem[\citeproctext]{ref-barryImpactEatingBehavior2011}
-\CSLLeftMargin{65. }%
+\CSLLeftMargin{66. }%
 \CSLRightInline{Barry JA, Bouloux P, Hardiman PJ. The impact of eating
 behavior on psychological symptoms typical of reactive hypoglycemia. {A}
 pilot study comparing women with polycystic ovary syndrome to controls.
@@ -1811,7 +1843,7 @@ pilot study comparing women with polycystic ovary syndrome to controls.
 doi:\href{https://doi.org/10.1016/j.appet.2011.03.003}{10.1016/j.appet.2011.03.003}}
 
 \bibitem[\citeproctext]{ref-steegers-theunissenPolycysticOvarySyndrome2020}
-\CSLLeftMargin{66. }%
+\CSLLeftMargin{67. }%
 \CSLRightInline{Steegers-Theunissen RPM, Wiegel RE, Jansen PW, Laven
 JSE, Sinclair KD. Polycystic {Ovary Syndrome}: {A Brain Disorder
 Characterized} by {Eating Problems Originating} during {Puberty} and
@@ -1820,7 +1852,7 @@ Characterized} by {Eating Problems Originating} during {Puberty} and
 doi:\href{https://doi.org/10.3390/ijms21218211}{10.3390/ijms21218211}}
 
 \bibitem[\citeproctext]{ref-cooneyIncreasedPrevalenceBinge2024}
-\CSLLeftMargin{67. }%
+\CSLLeftMargin{68. }%
 \CSLRightInline{Cooney LG, Gyorfi K, Sanneh A, et al. Increased
 {Prevalence} of {Binge Eating Disorder} and {Bulimia Nervosa} in {Women
 With Polycystic Ovary Syndrome}: {A Systematic Review} and
@@ -1829,7 +1861,7 @@ Metabolism}. 2024;109(12):3293-3305.
 doi:\href{https://doi.org/10.1210/clinem/dgae462}{10.1210/clinem/dgae462}}
 
 \bibitem[\citeproctext]{ref-pirottaDisorderedEatingBehaviours2019}
-\CSLLeftMargin{68. }%
+\CSLLeftMargin{69. }%
 \CSLRightInline{Pirotta S, Barillaro M, Brennan L, et al. Disordered
 {Eating Behaviours} and {Eating Disorders} in {Women} in {Australia}
 with and without {Polycystic Ovary Syndrome}: {A Cross-Sectional Study}.

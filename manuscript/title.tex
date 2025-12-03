@@ -16,4 +16,7 @@ $for(by-affiliation)$
 $endfor$
 $endif$
 
+% Store the keywords (expanded by Pandoc here)
+\def\KeywordList{$for(keywords)$$keywords$$sep$, $endfor$}
+
 \date{$date$}
