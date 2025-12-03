@@ -1,0 +1,1883 @@
+% Options for packages loaded elsewhere
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+]{article}
+\usepackage{xcolor}
+\usepackage[left=1in,right=1in,top=1in,bottom=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+  \setmainfont[]{Latin Modern Roman}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+% Make \paragraph and \subparagraph free-standing
+\makeatletter
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}{
+    \@ifstar
+      \xxxParagraphStar
+      \xxxParagraphNoStar
+  }
+  \newcommand{\xxxParagraphStar}[1]{\oldparagraph*{#1}\mbox{}}
+  \newcommand{\xxxParagraphNoStar}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}{
+    \@ifstar
+      \xxxSubParagraphStar
+      \xxxSubParagraphNoStar
+  }
+  \newcommand{\xxxSubParagraphStar}[1]{\oldsubparagraph*{#1}\mbox{}}
+  \newcommand{\xxxSubParagraphNoStar}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
+\makeatother
+
+
+\usepackage{longtable,booktabs,array}
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{% scales image to fit in text height/width
+  \sbox\pandoc@box{#1}%
+  \Gscale@div\@tempa{\textheight}{\dimexpr\ht\pandoc@box+\dp\pandoc@box\relax}%
+  \Gscale@div\@tempb{\linewidth}{\wd\pandoc@box}%
+  \ifdim\@tempb\p@<\@tempa\p@\let\@tempa\@tempb\fi% select the smaller of both
+  \ifdim\@tempa\p@<\p@\scalebox{\@tempa}{\usebox\pandoc@box}%
+  \else\usebox{\pandoc@box}%
+  \fi%
+}
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+
+
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
+
+
+
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+
+
+ 
+
+
+\usepackage{lineno}\linenumbers
+\usepackage{setspace}\AtBeginDocument{\spacing{2}}
+\usepackage[font=scriptsize]{caption}
+\usepackage{pdflscape}
+\usepackage[noblocks]{authblk}
+\renewcommand*{\Authsep}{, }
+\renewcommand*{\Authand}{, }
+\renewcommand*{\Authands}{, }
+\renewcommand\Affilfont{\small}
+\usepackage{etoolbox}
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\AtBeginDocument{%
+\ifdefined\contentsname
+  \renewcommand*\contentsname{Table of contents}
+\else
+  \newcommand\contentsname{Table of contents}
+\fi
+\ifdefined\listfigurename
+  \renewcommand*\listfigurename{List of Figures}
+\else
+  \newcommand\listfigurename{List of Figures}
+\fi
+\ifdefined\listtablename
+  \renewcommand*\listtablename{List of Tables}
+\else
+  \newcommand\listtablename{List of Tables}
+\fi
+\ifdefined\figurename
+  \renewcommand*\figurename{Figure}
+\else
+  \newcommand\figurename{Figure}
+\fi
+\ifdefined\tablename
+  \renewcommand*\tablename{Table}
+\else
+  \newcommand\tablename{Table}
+\fi
+}
+\@ifpackageloaded{float}{}{\usepackage{float}}
+\floatstyle{ruled}
+\@ifundefined{c@chapter}{\newfloat{codelisting}{h}{lop}}{\newfloat{codelisting}{h}{lop}[chapter]}
+\floatname{codelisting}{Listing}
+\newcommand*\listoflistings{\listof{codelisting}{List of Listings}}
+\makeatother
+\makeatletter
+\makeatother
+\makeatletter
+\@ifpackageloaded{caption}{}{\usepackage{caption}}
+\@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
+\makeatother
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis},
+  pdfauthor={Richard Kirwan; Leigh Peele; Gregory Nuckols; Georgia Kohlhoff; Hannah Cabré; Alyssa Olenick; James Steele},
+  colorlinks=true,
+  linkcolor={blue},
+  filecolor={Maroon},
+  citecolor={Blue},
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
+
+
+\title{Resting energy expenditure of women with and without polycystic
+ovary syndrome: a systematic review and
+meta-analysis\thanks{Corresponding author: James Steele
+(james@steele-research.com)}}
+
+
+\author[1]{Richard Kirwan}
+\author[2]{Leigh Peele}
+\author[2]{Gregory Nuckols}
+\author[3]{Georgia Kohlhoff}
+\author[4]{Hannah Cabré}
+\author[5]{Alyssa Olenick}
+\author[2,6,7]{James Steele}
+
+\affil[1]{Research Institute for Sports and Exercise Sciences, Liverpool
+John Moores University, Liverpool, UK}
+\affil[2]{MacroFactor, Stronger by Science Technologies LLC, Raleigh,
+North Carolina, USA}
+\affil[3]{Flourishing Health, Liverpool, UK}
+\affil[4]{Reproductive Endocrinology and Women's Health Research
+Program, Pennington Biomedical Research Center, Baton Rouge, Louisiana,
+USA}
+\affil[5]{Dr Alyssa Olenick LLC}
+\affil[6]{Steele Research Limited, Eastleigh, Hampshire, UK}
+\affil[7]{School of Health and Biomedical Sciences, Royal Melbourne
+Institute of Technology, Melbourne, VIC, Australia}
+
+% Store the keywords (expanded by Pandoc here)
+\def\KeywordList{}
+
+\date{December 3, 2025}
+\begin{document}
+\maketitle
+
+
+\newpage
+
+\subsection{Financial Disclosures/Conflicts of
+Interest}\label{financial-disclosuresconflicts-of-interest}
+
+Richard Kirwan provides nutrition consultancy through his company Be
+More Nutrition. Leigh Peele is employed by MacroFactor, a
+nutrition-tracking app. Gregory Nuckols is co-owner of MacroFactor.
+Georgia Kohlhoff provides nutrition consultancy through her company
+Flourishing Health. Hannah Cabré was supported by the National Institute
+of Diabetes and Digestive and Kidney Diseases of the National Institutes
+of Health under Award Number T32DK064584. Alyssa Olenick provides
+fitness coaching and scientific consulting under ALYSSA OLENICK LLC. She
+receives compensation from scientific consulting, speaking engagments,
+affiliated social media partnerships, and book publishing. James Steele
+provides research consultancy through his company Steele Research
+Limited, is contracted currently by MacroFactor and Kieser Australia
+through Steele Research Limited, and has also received travel expenses
+and honoraria for speaking from fit20 International, Exercise School
+Portugal, and Discover Strength.
+
+The content is solely the responsibility of the authors and does not
+necessarily represent the official views of the National Institutes of
+Health or any other funding agencies or institutions noted above. The
+authors declare no other conflicts of interest related to the submitted
+work.
+
+\newpage
+
+\subsection{Abstract}\label{abstract}
+
+Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age
+women, who often have higher BMI classification. This is assumed to stem
+from lower resting energy expenditure (REE), influencing lifestyle
+intervention guidelines. However, evidence for reduced REE in women with
+PCOS compared with those without is inconsistent. Objective: To
+systematically search and meta-analyse the existing literature to
+estimate and describe the difference in REE between women with and
+without PCOS. Data Sources: A systematic search was conducted using
+PubMed, Medline and Web of Science databases of published research from
+January 1990 to January 2025. Study Selection: Studies that measured REE
+in women living with PCOS, both with and without control arms of women
+without PCOS, were included. Data Extraction: Bibliometric, demographic,
+and REE data was extracted by one investigator and checked in
+triplicate. Data Synthesis: Thirteen studies were included in a Bayesian
+arm-based multiple condition comparison (i.e., network) type
+meta-analysis model with informative priors to compare both mean REE,
+and between person variation in REE, between women with and without
+PCOS. Mean REE differed between groups by 30 kcal/day {[}95\% quantile
+interval: -47 to 113 kcal/day{]} and the contrast ratio for between
+person standard deviations was 0.98 {[}95\% quantile interval: 0.71 to
+1.33{]}. Conclusions: These findings indicate that REE does not
+meaningfully differ between women with and without PCOS. Group-level
+differences in resting energy expenditure are small, insignificant, or
+not physiologically relevant.
+
+Keywords: Polycystic ovary syndrome, Energy Metabolism, Resting
+Metabolic Rate, Basal Metabolism
+
+\newpage
+
+\section{Introduction}\label{introduction}
+
+Polycystic ovary syndrome (PCOS) affects approximately 10\% of women of
+reproductive age worldwide, making it the most common endocrine disorder
+affecting this population\textsuperscript{1}. Due to several factors
+including hyperandrogenism and alterations in insulin resistance, PCOS
+is believed to contribute to an increased risk of diabetes, metabolic
+syndrome and cardiovascular disease\textsuperscript{2--6}, along with
+being a leading cause of anovulatory infertility in
+women\textsuperscript{7}. Furthermore, epidemiological data has
+consistently demonstrated that women with PCOS are significantly more
+likely to suffer from overweight or obesity, compared to the general
+female population, with estimates ranging from 38\% to 88\% of PCOS
+patients falling into overweight or obese body mass index (BMI)
+categories\textsuperscript{8,9}.
+
+The elevated incidence of overweight and obesity in PCOS is likely
+multifactorial with proposed mechanisms including blunted postprandial
+appetite hormone responses leading to reduced satiety and increased food
+cravings\textsuperscript{10--12} and a reduced resting energy
+expenditure (REE)\textsuperscript{13}. Indeed, the study from
+Georgopoulos et al.\textsuperscript{13} examined REE in women with and
+without PCOS using indirect calorimetry and reported that resting energy
+expenditure was approximately \textasciitilde400 kcal/day lower in women
+with PCOS. Notably, they also reported that insulin resistance further
+reduced REE among women with PCOS, with insulin-resistant women
+exhibiting an additional reduction nearly 500 kcal per day compared to
+women with PCOS who were not insulin resistant\textsuperscript{13}.
+Other studies similarly report lower REE in women with PCOS using
+indirect methods (such as prediction from bioelectrical impedance
+analysis or accelerometer physical activity data), also suggesting that
+factors including insulin resistance and BMI category influence REE in
+women with PCOS\textsuperscript{14,15}. However, despite the widespread
+acceptance that women living with PCOS exhibit reduced REE based on
+studies such as these, other research has reported little to no
+difference in REE between women with and without
+PCOS\textsuperscript{16--18}.
+
+The consequences of widespread acceptance that REE is substantially
+lower in women living with PCOS should not be underestimated,
+particularly in light of the aforementioned incidence of overweight and
+obesity in this population. Women with PCOS typically engage in more
+frequent weight-loss attempts than women without
+PCOS\textsuperscript{19}. From a physiological perspective, if women
+with PCOS do exhibit a lower REE, this could imply a meaningful
+metabolic disadvantage that may influence dietary and nutritional
+guidance for weight management; for example, recommending a slightly
+more severe energy restriction to overcome the belief that they have a
+lower REE\textsuperscript{20}. Recommendations such as this could
+influence the well documented prevalence of eating disorders in women
+with PCOS\textsuperscript{21,22}. Contrastingly, belief in a ``slower
+metabolism'' could instead serve as a deterrent to energy restriction
+based weight-loss approaches for some women in line with typical general
+population recommendations that are also recognised as efficacious for
+improving PCOS symptoms\textsuperscript{23,24} and are routinely
+recommended\textsuperscript{25}. It has been well documented that women
+with PCOS already experience higher rates of anxiety, depression, and
+lower quality of life (QOL) as a result of negative body image and
+weight-related concerns\textsuperscript{26--29}. Clarifying the
+relationship between REE and PCOS may therefore help guide more accurate
+clinical recommendations and empower both practitioners and women with
+PCOS.
+
+Therefore, to estimate and describe the magnitude of difference in REE
+between women with and without PCOS, we completed a systematic review
+and meta-analysis of studies reporting REE in these populations.
+
+\section{Materials and Methods}\label{materials-and-methods}
+
+This systematic review and meta-analysis was pre-registered on PROSPERO
+(\href{https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434}{CRD42024601434})
+initially on the \(3^{rd}\) of December 2024 and performed in accordance
+with the Preferred Reporting Items for Systematic Reviews and
+Meta-Analyses (PRISMA) statement guidelines\textsuperscript{30}. The
+PRISMA flow diagram reported below (Figure~\ref{fig-prisma}) was
+produced using the \texttt{PRISMA2020} R package and Shiny
+app\textsuperscript{31}. The primary aim of this review was to examine
+the descriptive question ``Does resting energy expenditure (REE) differ
+between women with and without polycystic ovary syndrome (PCOS)?''. We
+summarise and describe the studies in addition to quantitatively
+synthesising their results via meta-analysis.
+
+\subsection{Search Strategy}\label{search-strategy}
+
+PubMed, Web of Science, and MEDLINE databases were searched using the
+following Boolean search string: ((``Basal Metabolic Rate''{[}MeSH{]} OR
+``Energy Metabolism''{[}MeSH{]} OR ``Resting Metabolic Rate'' OR RMR OR
+``Resting Energy Expenditure'' OR REE OR ``Basal Metabolic Rate'' OR BMR
+OR ``resting energy'' OR ``basal energy expenditure'') AND (``Polycystic
+Ovary Syndrome''{[}MeSH{]} OR ``Polycystic Ovary Syndrome'' OR PCOS OR
+``Polycystic Ovarian Disease'' OR ``Stein-Leventhal Syndrome'')).
+Searches were limited to publications up until May 2025 when the search
+was completed, limited to English language articles, and Rayyan was used
+to manage the search and screening process. Two reviewers (RK and GK)
+independently screened all titles and abstracts against the predefined
+inclusion and exclusion criteria. Articles deemed potentially eligible
+by either reviewer were retrieved in full text. Full texts were then
+independently assessed by RK and LP to determine final eligibility. Any
+disagreements at either stage were resolved through discussion, and when
+consensus could not be reached, a third reviewer acted as an
+adjudicator.
+
+\subsection{Eligibility Criteria}\label{eligibility-criteria}
+
+Studies were included in the systematic review if 1) participants were
+confirmed as women with PCOS between the ages of 18 to 65 years of age
+with or without insulin resistance; 2) otherwise healthy (e.g.,
+non-diabetic, no cardiovascular disease); 3) had a measure of REE
+measured via multiple methods including direct/indirect calorimetry,
+doubly labelled water; and 4) trials were not retracted at the time of
+this analysis. Studies were excluded if they 1) used invalid or
+non-standard methods for measuring REE (e.g., predicted REE from body
+composition or accelerometer data); 2) non-peer-reviewed journal
+articles (including grey literature sources such as conference
+abstracts, theses and dissertations); and 3) were secondary analyses
+with the same primary outcome data as another included study.
+
+The condition being studied was PCOS and we included observational
+cross-sectional design studies, in addition to intervention studies
+where REE was reported for the population (and if present, the
+comparator i.e., women without PCOS) condition of interest. For clarity,
+studies of any design were included if they reported the REE using the
+methods indicated for a sample of adult women with PCOS and who were
+otherwise healthy. This included both studies with and without samples
+of healthy control women without PCOS. As detailed in the statistical
+analysis section below, a Bayesian model with informative priors based
+on normative data for REE in healthy women without PCOS was included to
+provide control information indirectly where this was missing. The use
+of such priors is an efficient tool for incorporating historical
+information on a particular population in a conservative
+manner\textsuperscript{32}.
+
+Following the PICO framework our eligibility criteria can be defined as
+follows:
+
+\begin{itemize}
+\tightlist
+\item
+  Population
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Inclusion criteria:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Women
+    \item
+      18-65 y
+    \item
+      With or without insulin resistance (IR)
+    \end{itemize}
+  \end{itemize}
+\item
+  Intervention(s) or exposure(s)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Otherwise healthy women with PCOS
+  \end{itemize}
+\item
+  Comparator(s) or control(s)
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Otherwise healthy control women without PCOS
+  \end{itemize}
+\item
+  Outcome
+
+  \begin{itemize}
+  \tightlist
+  \item
+    Inclusion criteria
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Resting energy expenditure (REE) measured via multiple methods
+      including direct/indirect calorimetry, doubly labelled water.
+    \end{itemize}
+  \item
+    Exclusion criteria:
+
+    \begin{itemize}
+    \tightlist
+    \item
+      Studies using invalid or non-standard methods for measuring REE
+      (e.g., predicted REE from body composition or accelerometer data)
+    \end{itemize}
+  \end{itemize}
+\end{itemize}
+
+\subsection{Data extraction (selection and
+coding)}\label{data-extraction-selection-and-coding}
+
+Data was extracted by one investigator and checked in triplicate.
+Bibliometric data including authors, journal, and article titles were
+extracted. Descriptive statistics for age, body mass, fat mass, fat free
+mass, height, BMI, race, physical activity levels, country of
+investigation, information regarding glucose/insulin regulation and
+insulin resistance status (where available), diagnostic criteria for
+PCOS, and measurement method and device were extracted for each arm
+within each study in addition to sample size. Descriptive
+characteristics were then tabulated across studies for reporting.
+
+For each arm, and observation time point if multiple observations
+reported (e.g., before and after an intervention), depending on what was
+reported by the authors we extracted the means, medians, standard
+deviations, standard errors, lower and upper range values, and
+interquartile range for the unadjusted and/or body mass adjusted and/or
+fat free mass adjusted REE values. Where REE values adjusted for body
+mass and/or fat free mass were reported we used the reported body mass
+and/or fat free mass mean values for that arm to convert them to
+unadjusted REE values (i.e., multiplied them by body mass and/or fat
+free mass mean values). Where means and/or standard deviations were
+missing the latter were either calculated from standard errors and
+sample size, or all both were estimated from lower and upper range,
+interquartile range, median, and sample size depending on the available
+information using the methods of Wan et al.\textsuperscript{33}.
+Further, where missing, height/body mass/BMI where estimated based on
+the reported means. The units of measurement for which REE was extracted
+and all REE values were converted to kcal/day. In one
+case\textsuperscript{34} REE was reported relative to body mass and the
+unadjusted values were no longer available (confirmed by the authors).
+As such, in this case we used the mean body mass to convert back to
+estimated REE unadjusted.
+
+\subsubsection{Studies with possible reporting
+errors}\label{studies-with-possible-reporting-errors}
+
+During data extraction it was noted that several studies from the same
+lab/research group\textsuperscript{13,35--37} contained a number of
+discrepancies that seemed to be possible reporting errors. This
+included, based on taking the authors results as written, standard
+errors that implied impossible or at least incredibly unlikely standard
+deviations, and discrepancies in sample size reporting throughout for
+most variables without explanation or where this was explained the
+sample sizes were discrepant with the text Further, data was not
+reported for the healthy control women without PCOS in three of the
+studies\textsuperscript{35--37}, and REE was reported as an ``adjusted''
+value whereby
+\(\textrm{REE}_{adjusted}=\textrm{REE}_{group~mean}+(\textrm{REE}_{adjusted}−\textrm{REE}_{predicted})\)
+and the \(\textrm{REE}_{predicted}\) was obtained by substituting the
+individual lean body mass, fat mass, gender, and age in the linear
+regression equation generated by the data of all patients. In
+correspondence with the senior author we were unable to clarify the
+reporting discrepancies as the person responsible for the data/results
+was no longer contactable. The original data were also no longer
+available and so we could not calculated the unadjusted REE.
+
+Given these issues we decided to extract the results from these studies
+as reported and to conduct analyses both with and without their
+inclusion. Though not pre-registered, due to a lack of confidence in the
+reported results, we decided to include the analysis omitting these
+studies as our main models in the results reported below. The results of
+the analysis including them are reported in the sensitivity analysis
+section.
+
+\subsection{Statistical Analysis}\label{statistical-analysis}
+
+Statistical analysis of the data extracted was be performed in R, (v
+4.3.3; R Core Team, https://www.r-project.org/) and RStudio (v
+2023.06.1; Posit, https://posit.co/). All code utilised for data
+preparation, transformations, analyses, plotting, and reporting are
+available in the corresponding GitHub repository
+\url{https://github.com/jamessteeleii/pcos_ree_meta}. We cite all
+software and packages used in the analysis pipeline using the
+\texttt{grateful} package\textsuperscript{38} which can be seen here:
+\url{https://github.com/jamessteeleii/pcos_ree_meta/blob/main/grateful-report.pdf}.
+The statistical analysis plan was linked in our pre-registration
+(PROSPERO:
+\href{https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434}{CRD42024601434})
+and available at the accompanying GitHub repository. Any deviations from
+the pre-registration are noted below.
+
+Given our research question our analysis was aimed at parameter
+estimation\textsuperscript{39} within a Bayesian meta-analytic
+framework\textsuperscript{40}. For all analyses model parameter
+estimates and their precision, along with conclusions based upon them,
+are interpreted continuously and probabilistically, considering data
+quality, plausibility of effect, and previous literature, all within the
+context of each model. The \texttt{renv} package\textsuperscript{41} was
+used for package version reproducibility and a function based analysis
+pipeline using the \texttt{targets} package\textsuperscript{42} was
+employed (the analysis pipeline can be viewed by downloading the R
+Project and running the function \texttt{targets::tar\_visnetwork()}).
+Effect sizes and their variances were all calculated using the
+\texttt{metafor} packages \texttt{escalc()}
+function\textsuperscript{43}. The main package
+\texttt{brms}\textsuperscript{44} was used in fitting all the Bayesian
+meta-analysis models. Prior and posterior draws were taken using
+\texttt{marginaleffects}\textsuperscript{45} and
+\texttt{tidybayes}\textsuperscript{46} packages. All visualisations are
+created using \texttt{ggplot2}\textsuperscript{47}, \texttt{tidybayes},
+and the \texttt{patchwork}\textsuperscript{48} packages.
+
+\subsubsection{Main Pre-registered
+Models}\label{main-pre-registered-models}
+
+We adopted an arm-based multiple condition comparison (i.e., network)
+type model given that the studies included had arms of women with PCOS
+both with, and without, a non-PCOS control arm\textsuperscript{49}, and
+also in some cases multiple observations of REE in the different arms
+included in the study (for example, where an intervention was conducted
+and pre- and post-intervention REE was reported). In typical
+contrast-based meta-analyses data is limited to the effect sizes for
+paired contrasts between arms and thus studies that include both arms
+(i.e., relative effects between non-PCOS control vs PCOS arms); however,
+in arm-based analyses the data are the absolute effects within each arm
+and information is borrowed across studies to enable both within
+condition absolute, and between condition relative contrasts to be
+estimated. We made use of historical information regarding REE in
+healthy control women without PCOS by setting informative priors based
+on meta-analysis of large scale studies reporting normative data for REE
+in this population. This was included to provide indirect control
+information where it was missing from particular studies. The use of
+historical priors like this is an efficient tool to incorporate
+historical information about a particular population in a conservative
+manner in meta-analyses\textsuperscript{32}. From this model we focus on
+reporting the global grand mean estimate for the fixed between condition
+relative contrast for non-PCOS control vs PCOS arms as our primary
+estimand of interest (i.e., \(\beta_1\) in both mean and standard
+deviation models). We examined both raw mean REE (i.e., the absolute
+mean REE in kcals per day for each arm) in addition to the between
+person standard deviation in REE (i.e., the absolute standard deviation
+in REE in kcals per day for each arm). Both models were multilevel in
+that they included nested random intercepts for both study and arm
+within study. In addition, and in deviation from our pre-registration,
+we also included lab as a random intercept as in some cases we had
+multiple studies from the same lab or research group. Lastly, the
+inclusion of a random intercept for each effect size was accidentally
+omitted from our pre-registration, and so this is also included in the
+model.
+
+\paragraph{Mean REE Model}\label{mean-ree-model}
+
+The main model for mean REE with \(\textrm{cond}\) representing the
+condition (either control or PCOS) was as follows: \[
+\scriptsize
+\begin{aligned}
+\hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl]
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[10pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{1,\mathrm{lab}[i]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{lab}}
+\right),
+\quad
+\Sigma_{\mathrm{lab}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{1,\mathrm{study}[j]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{study}}
+\right),
+\quad
+\Sigma_{\mathrm{study}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L}
+\end{aligned}
+\]
+
+where \(\hat{\theta}_{ijkl}\) is the \(l\textrm{th}\) mean REE estimate
+from the \(k\textrm{th}\) arm, for the \(j\textrm{th}\) study, conducted
+by the \(i\textrm{th}\) lab and \(\sigma^2_{ijkl}\) is the corresponding
+sampling error for that estimate. The random intercepts for the
+\(i\textrm{th}\) lab, \(j\textrm{th}\) study, \(k\textrm{th}\) arm, and
+\(l\textrm{th}\) mean REE estimate are \(\alpha_{0,lab[i]}\),
+\(\alpha_{0,study[j]}\), \(\alpha_{0,arm[k]}\), and
+\(\alpha_{0,effect[l]}\) respectively each with standard deviation of
+\(\sigma^2_{0,lab[i]}\), \(\sigma^2_{0,study[j]}\),
+\(\sigma^2_{0,arm[k]}\), and \(\sigma^2_{0,effect[l]}\). The parameter
+\(\beta_0\) represents the fixed effect estimate of REE for control
+conditions and \(\beta_1\) the fixed effect estimate for the offset from
+this for the PCOS conditions (i.e., the difference between conditions).
+The estimated offset was allowed to vary across both labs and studies
+each reflected by \(\alpha_{1,lab[i]}\) and \(\alpha_{1,study[j]}\)
+respectively, and these effects were also modelled as correlated with
+the corresponding random intercepts with covariance \(\Sigma_{lab}\) and
+\(\Sigma_{study}\), and \(\mathrm{corr}_{\mathrm{lab}}\) and
+\(\mathrm{corr}_{\mathrm{study}}\) correlation matrices.
+
+The priors for this model were as follows:
+
+\[
+\small
+\begin{aligned}
+\beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt]
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt]
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{aligned}
+\] where the prior for \(\beta_{0}\), which corresponded to the model
+intercept and mean REE in the control condition, was set based on
+meta-analysis of the mean REEs for women from two large studies of
+healthy people\textsuperscript{50,51} though set with a conservative
+degrees of freedom for the \(\textrm{Student-}t\) distribution.The
+random intercept \(\sigma^2_{0,study}\) was set similarly to this. The
+prior for the fixed effect \(\beta_{1}\), reflecting the difference
+between control and PCOS conditions was set based on a wide range of
+possible values considering the minimum and and maximum values of the
+ranges reported in the two studies noted (i.e., 2492 - 908 = 1584). We
+then set a prior that permits values approximately across this range of
+values with the majority of it's mass centred around zero. The remaining
+random effects were set based on the default weakly regularising priors
+for \texttt{brms} and scaled to the expected response values using a
+\(\textrm{half-student-}t\) distribution with 3 degrees of freedom and
+\(\mu=0\), and both correlation matrices \(\textrm{corr}_{lab}\) and
+\(\textrm{corr}_{study}\) were set with an \(\textrm{LKJcorr(1)}\)
+distribution.
+
+\paragraph{Standard Deviation of REE
+Model}\label{standard-deviation-of-ree-model}
+
+The main model for the standard deviation of REE with \(\textrm{cond}\)
+representing the condition (either control or PCOS) was as follows:
+
+\[
+\scriptsize
+\begin{aligned}
+\log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]}
+       + \beta_2\,\tilde{m}_{[ijkl]}
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[8pt]
+m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt]
+\tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{1,\mathrm{lab}[i]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{lab}}
+\right),
+\quad
+\Sigma_{\mathrm{lab}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{1,\mathrm{study}[j]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{study}}
+\right),
+\quad
+\Sigma_{\mathrm{study}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L}
+\end{aligned}
+\]
+
+where \(\log(\hat{\theta}_{ijkl})\) is the \(l\textrm{th}\) natural
+logarithm of the standard deviation of REE estimate from the
+\(k\textrm{th}\) arm, for the \(j\textrm{th}\) study, conducted by the
+\(i\textrm{th}\) lab and \(\sigma^2_{ijkl}\) is the corresponding
+sampling error for that estimate. The random intercepts for the
+\(i\textrm{th}\) lab, \(j\textrm{th}\) study, \(k\textrm{th}\) arm, and
+\(l\textrm{th}\) standard deviation of REE estimate are
+\(\alpha_{0,lab[i]}\), \(\alpha_{0,study[j]}\), \(\alpha_{0,arm[k]}\),
+and \(\alpha_{0,effect[l]}\) respectively each with standard deviation
+of \(\sigma^2_{0,lab[i]}\), \(\sigma^2_{0,study[j]}\),
+\(\sigma^2_{0,arm[k]}\), and \(\sigma^2_{0,effect[l]}\). The parameter
+\(\beta_0\) represents the fixed effect estimate of standard deviation
+of REE for control conditions and \(\beta_1\) the fixed effect estimate
+for the offset from this for the PCOS conditions (i.e., the difference
+between conditions). The estimated offset was allowed to vary across
+both labs and studies each reflected by \(\alpha_{1,lab[i]}\) and
+\(\alpha_{1,study[j]}\) respectively, and these effects were also
+modelled as correlated with the corresponding random intercepts with
+covariance \(\Sigma_{lab}\) and \(\Sigma_{study}\), and
+\(\mathrm{corr}_{\mathrm{lab}}\) and \(\mathrm{corr}_{\mathrm{study}}\)
+correlation matrices. Finally, \(\beta_{2}\) represents the fixed effect
+of the natural logarithm of the corresponding mean REE estimate
+\(\tilde{m}\) which is modelled as estimated with measurement error
+i.e., \(m\) represents the point estimate for the \(l\textrm{th}\)
+natural logarithm of the mean REE estimate from the \(k\textrm{th}\)
+arm, for the \(j\textrm{th}\) study, conducted by the \(i\textrm{th}\)
+lab and \(\sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2\) is the
+corresponding sampling error for that estimate.
+
+The priors for this model were as follows: \[
+\small
+\begin{aligned}
+\beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt]
+\beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt]
+\text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt]
+\text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt]
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt]
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{aligned}
+\]
+
+where the prior for \(\beta_{0}\), which corresponded to the model
+intercept and standard deviation of REE in the control condition, was
+again set based on meta-analysis of the standard deviation of REEs for
+women from two large studies of healthy people\textsuperscript{50,51}
+though set with a conservative degrees of freedom for the
+\(\textrm{Student-}t\) distribution.The random intercept
+\(\sigma^2_{0,study}\) was set similarly to this. The prior for the
+fixed effect \(\beta_{1}\), reflecting the difference between control
+and PCOS conditions was set based on a wide range of possible values.
+Given that in many cases of variables in the field there is an
+approximate relationship of \textasciitilde1 for the natural logarithm
+of the standard deviation conditioned upon the natural logarithm of the
+mean\textsuperscript{52} we set this prior to reflect the range of
+differences on the on the log scale (i.e., \(\log(1584)\)). We then set
+a prior that permits values approximately across this range of values
+with the majority of it's mass centred around zero. The prior for the
+fixed effect \(\beta_{2}\), reflecting the relationship between the
+natural logarithm of the mean REE with the natural logarithm of the
+standard deviation of REE, was set it to be weakly informative centred
+on zero with a wide scale to indicate uncertainty in this outcome
+specifically despite the typical relationship close to \textasciitilde1.
+Priors for the measurement error of the natural logarithm of the mean
+REE estimate \(\tilde{m}\) were again based upon meta-analysis of the
+aforementioned studies, though measurement error has to be positive, as
+does the corresponding standard deviation of this error, so we set these
+to conservative wide \(\textrm{half-student-}t\) distributions. The
+remaining random effects were set based on the default weakly
+regularising priors for \texttt{brms} and scaled to the expected
+response values using a \(\textrm{half-student-}t\) distribution with 3
+degrees of freedom and \(\mu=0\), and both correlation matrices
+\(\textrm{corr}_{lab}\) and \(\textrm{corr}_{study}\) were set with an
+\(\textrm{LKJcorr(1)}\) distribution.
+
+\paragraph{Post-processing of models}\label{post-processing-of-models}
+
+For both models we examined trace plots along with \(\hat{R}\) values to
+examine whether chains have converged, and posterior predictive checks
+for each model to understand the model implied distributions. From each
+model we took draws from the posterior distributions for the conditional
+absolute estimates for each condition (i.e., controls and PCOS) by study
+incorporating random effects, the global grand mean absolute estimates
+for each condition ignoring random effects, and the global grand mean
+between condition relative contrast for controls vs PCOS conditions
+ignoring random effects. The between condition relative contrast for
+controls vs PCOS conditions corresponded to \(\beta{1}\) in each model
+and was our primary estimand of interest; for the mean REE model this
+corresponded to the absolute difference in mean REE, and for the
+standard deviation of REE model this corresponded to the natural
+logarithm of the ratio of standard deviations of REE which was
+exponentiated (note, all log standard deviation of REE model estimates
+were exponentiated back to the original scale to aid interpretibility).
+We present the full probability density functions for posterior
+visually, and also to calculate mean and 95\% quantile intervals (QI:
+i.e., `credible' or `compatibility' intervals) for each estimate
+providing the most probable value of the parameter in addition to the
+range from 2.5\% to 97.5\% percentiles given our priors and data.
+
+\subsubsection{Sensitivity analyses}\label{sensitivity-analyses}
+
+\paragraph{Pairwise contrast based
+models}\label{pairwise-contrast-based-models}
+
+By way of pre-registered sensitivity analysis we also conducted pairwise
+contrast based models where we limited the included effects to those
+extracted from studies including only a directly comparable control and
+PCOS arm at baseline. These models were both as follows:
+
+\[
+\small
+\begin{aligned}
+\hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt]
+\mu_{ij} &= \beta_0
+       + \alpha_{0,\mathrm{lab}[i]}
+       + \alpha_{0,\mathrm{study}[j]} \\[10pt]
+\alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}})
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}})
+\text{, for study j = 1,} \dots \text{,J}
+\end{aligned}
+\]
+
+where \(\hat{\theta}_{ijkl}\) is the pairwise effect size, either the
+mean difference in REE or the log coefficient of variation ratio
+(calculated as PCOS vs control), for the \(j\textrm{th}\) study,
+conducted by the \(i\textrm{th}\) lab and \(\sigma^2_{ijkl}\) is the
+corresponding sampling error for that effect size estimate. The random
+intercepts for the \(i\textrm{th}\) lab, \(j\textrm{th}\) study are
+\(\alpha_{0,lab[i]}\) and \(\alpha_{0,study[j]}\) respectively each with
+standard deviation of \(\sigma^2_{0,lab[i]}\),
+\(\sigma^2_{0,study[j]}\). The parameter \(\beta_0\) represents the
+fixed effect estimate of the pairwise effect size i.e., the pooled
+estimate of the contrast between conditions. The priors for
+\(\beta_{0}\) in these models were set as default weakly regularising
+which is set on an intercept that results when internally centering all
+population-level predictors around zero to improve sampling efficiency
+and scaled to the expected response values using a
+\(\textrm{student-}t\) distribution; for the mean difference in REE this
+was \(\textrm{student-}t(3,\ 5.5,\ 50.2)\) and for the log coefficient
+of variance ratio this was \(\textrm{student-}t(3,\ -0.1,\ 2.5)\). The
+random effects were set similarly scaled to the expected response values
+but using a \(\textrm{half-student-}t\) distribution centred on zero.
+From these models we calculated the mean and 95\% quantile intervals
+(i.e., `credible' or `compatibility' intervals) for the \(\beta_0\)
+(comparable to the \(\beta_1\) from the corresponding mean and standard
+deviation of REE arm-based models) for each effect size providing the
+most probable value of the parameter in addition to the range from 2.5\%
+to 97.5\% percentiles given our priors and data.
+
+\paragraph{Additional sensitivity
+analyses}\label{additional-sensitivity-analyses}
+
+As noted in the section above, \emph{``Studies with possible reporting
+errors''}, we opted to conduct analysis with and without the inclusion
+of four studies with possible reporting errors we could not
+resolve\textsuperscript{13,35--37}. Thus the main models described above
+were run with and without these studies, the main results are presented
+without them and the sensitivity results with them are reported
+separately below.
+
+As a further sensitivity analysis, given the inclusion of some studies
+with interventions in women with PCOS reporting REE at multiple
+timepoints such as mid- and post-intervention\textsuperscript{34,53,54}
+but lacking of control women without PCOS, we opted to also conduct
+sensitivity analysis excluding these and only examining their baseline
+results in addition to the cross-sectional studies. As such, the main
+models described above were run without the follow-up (i.e., mid- or
+post-intervention timepoints) from these studies and only using the
+baseline results in addition to other cross-sectional studies.
+
+Lastly, given the role of body mass and, in particular, highly
+metabolically active tissue on REE we included models adjusted for these
+group level characteristics where studies reported them. These models
+were essentially extensions of the main models noted above for BMI and
+fat-free mass where each was modelled with it's corresponding sampling
+error similarly to how the log mean REE was modelled in the models for
+standard deviation of REE i.e., the mean BMI or fat-free mass estimates
+were modelled as estimated with measurement error. When extracting
+posterior distributions for the contrasts between conditions in these
+models both BMI and fat-free mass where adjusted to the median values
+seen in the control conditions i.e., BMI = 26.03 kg/\(\textrm{m}^2\) and
+fat-free mass = 48.8 kg.
+
+\section{Results}\label{results}
+
+\subsection{Systematic Review}\label{systematic-review}
+
+Note, the numbers in this section exclude the four studies previously
+noted with possible reporting issues that were unresolved. These studies
+are however summarised in fully in the descriptive characteristics table
+in the online supplementary materials (see
+\href{https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html}{Descriptives
+Table} where some of the possible reporting errors are seen in the
+standard deviations reported or calculated e.g., the standard deviation
+calculated for body mass of women with PCOS in Saltamavros et
+al.\textsuperscript{36}. The PRISMA flow diagram
+(Figure~\ref{fig-prisma}) also includes all studies identified including
+the four with possible errors.
+
+Our systematic review identified 13 studies from 12 lab/research groups
+including 24 arms (Control arms = 9, PCOS arms = 15) and a total of 918
+participants (Controls: minimum n = 9, median n = 29, maximum n = 54;
+PCOS: minimum n = 5, median n = 28, maximum n = 266). Descriptive
+characteristics of the arms and participants in these studies are
+reported fully in the online supplementary materials (see
+\href{https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html}{Descriptives
+Table}).
+
+Studies were carried out in multiple countries: Brazil (k = 3) ,and USA
+(k = 3 studies), Australia, Cameroon, Canada, Italy, Sweden, Turkey, UK
+(all k = 1 study). The four studies with noted reporting errors were
+carried out in Greece. A total of 11 studies used the Rotterdam criteria
+(or a modified version there of) for diagnosing
+PCOS\textsuperscript{16,17,34,53--60}. One study used the 1990 National
+Institutes of Health criteria\textsuperscript{61}, and two
+studies\textsuperscript{18,55} diagnosed PCOS via the presence of
+oligomenorrhea or amenorrhea alongside additional criteria including
+plasma androgen levels, hirsutism or polycystic ovaries on ultrasound
+scanning. All but one study\textsuperscript{61}, which used doubly
+labelled water, measured REE using indirect calorimetry. The specific
+devices reported by these studies are included in the online
+supplementary materials (see
+\href{https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html}{Descriptives
+Table}). We originally considered in our pre-registration that, given
+sufficient data, we would compare sub groups of women with PCOS who did
+and did not have accompanying insulin resistance. However, based on the
+metabolic health variables reported in studies with this information
+(see
+\href{https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html}{Descriptives
+Table}) and, where available, considering primary criteria of either
+homeostatic model assessment of insulin resistance (HOMA-IR) \(\geq2.5\)
+or secondary criteria including fasting insulin \(>12\mu \textrm{U/mL}\)
+or fasting glucose \(\geq100\textrm{mg/dL}\), all groups of women with
+PCOS in the included studies would be considered to have insulin
+resistance. Mean age of women with PCOS in these studies ranged from 23
+to 33 which was similar to the control women without PCOS ranging from
+23 to 30. Across those studies where BMI was reported or it was possible
+to estimate the mean BMI of women with PCOS ranged from 26.4 to 39.9 was
+typically greater than women without PCOS which ranged 20.5 to 27.9.
+
+\subsection{Mean REE Model Results}\label{mean-ree-model-results}
+
+The main model for mean REE resulted in a posterior distribution for the
+contrast between control and PCOS conditions with a mean point estimate
+of 30 kcal/day with a 95\% quantile interval ranging from -47 kcal/day
+to 113 kcal/day suggesting there is a 95\% probability that the true
+difference lies between these values given our priors and the data from
+included studies. The corresponding conditional estimates for the
+control condition and PCOS condition respectively were 1442 kcal/day
+{[}95\%QI:1334 kcal/day to 1553 kcal/day{]} and 1472 kcal/day
+{[}95\%QI:1359 kcal/day to 1587 kcal/day{]}. These results, including
+the full visualisation of the posterior distribution and the conditional
+estimates by study, can be seen in Figure~\ref{fig-mean-REE}.
+
+\subsection{Standard Deviation of REE Model
+Results}\label{standard-deviation-of-ree-model-results}
+
+The main model for the between participant standard deviation of REE
+resulted in a posterior distribution for the contrast ratio between
+control and PCOS conditions with a mean point estimate of 0.98 with a
+95\% quantile interval ranging from 0.71 to 1.33 suggesting there is a
+95\% probability that the true ratio of standard deviations lies between
+these values given our priors and the data from included studies. The
+corresponding conditional estimates for the standard deviations of the
+control condition and PCOS condition respectively were 238 kcal/day
+{[}95\%QI:178 kcal/day to 312 kcal/day{]} and 229 kcal/day {[}95\%QI:169
+kcal/day to 303 kcal/day{]}. These results, including the full
+visualisation of the posterior distribution and the conditional
+estimates by study, can be seen in Figure~\ref{fig-variance-REE}.
+
+\subsection{Sensitivity Analyses}\label{sensitivity-analyses-1}
+
+\subsubsection{Pairwise Models}\label{pairwise-models}
+
+For mean REE the pairwise model resulted in qualitatively similar
+inferences suggesting little difference between control and PCOS
+conditions with mean point estimate of 16 kcal/day with a 95\% quantile
+interval ranging from -36 kcal/day to 70 kcal/day. This was similar for
+the standard deviation of REE with the pairwise model resulting in a
+contrast ratio between the control and PCOS conditions with a mean point
+estimate of 0.9 and a 95\% quantile interval ranging from 0.6 to 1.35.
+
+\subsubsection{Models including studies with possible reporting
+issues}\label{models-including-studies-with-possible-reporting-issues}
+
+For mean REE the model including the studies noted with possible
+reporting issues that were not resolved\textsuperscript{13,35--37} still
+resulted in qualitatively similar inferences suggesting little
+difference between control and PCOS conditions with mean point estimate
+of 15 kcal/day with a 95\% quantile interval ranging from -69 kcal/day
+to 95 kcal/day. This was similar for the standard deviation of REE with
+the model including these studies resulting in a contrast ratio between
+the control and PCOS conditions with a mean point estimate of 1.21 and a
+95\% quantile interval ranging from 0.68 to 2.13.
+
+\subsubsection{Basline REE Measurement
+Models}\label{basline-ree-measurement-models}
+
+For mean REE the model which included only baseline REE measurements
+from studies involving interventions\textsuperscript{34,53,54}, in
+addition to other cross-sectional studies, also resulted in
+qualitatively similar inferences suggesting little difference between
+control and PCOS conditions with mean point estimate of 32 kcal/day with
+a 95\% quantile interval ranging from -46 kcal/day to 118 kcal/day. This
+was also the case for the standard deviation of REE with this model
+resulting in a contrast ratio between the control and PCOS conditions
+with a mean point estimate of 0.97 and a 95\% quantile interval ranging
+from 0.71 to 1.36.
+
+\subsubsection{BMI and Fat-Free Mass Adjusted
+Models}\label{bmi-and-fat-free-mass-adjusted-models}
+
+For mean REE the model adjusted for BMI, also resulted in qualitatively
+similar inferences suggesting little difference between control and PCOS
+conditions with mean point estimate of 20 kcal/day with a 95\% quantile
+interval ranging from -96 kcal/day to 140 kcal/day. This was also the
+case for the standard deviation of REE with this model resulting in a
+contrast ratio between the control and PCOS conditions with a mean point
+estimate of 0.91 and a 95\% quantile interval ranging from 0.56 to 1.41.
+This was similar for fat-free mass adjusted models too showing little
+difference in mean REE between control and PCOS conditions with mean
+point estimate of -9 kcal/day with a 95\% quantile interval ranging from
+-195 kcal/day to 168 kcal/day and a contrast ratio between the control
+and PCOS conditions with a mean point estimate of 0.79 and a 95\%
+quantile interval ranging from 0.31 to 1.94.
+
+\section{Discussion}\label{discussion}
+
+This study sought to estimate and describe the magnitude of difference
+in REE between women with and without PCOS. Most studies identified in
+the systematic review, and included in the meta-analysis, used indirect
+calorimetry as the primary measure of REE and assessed women with PCOS
+who were insulin resistant and categorised as being in overweight or
+obese BMI categories compared to healthy controls. Our results indicate
+there is only a small magnitude of difference in REE (30 kcal/day
+{[}95\%QI: -47 kcal/day to 113kcal/day{]}) between women with PCOS and
+those without. Further, there is little difference in between person
+variation between the groups based on the ratio of standard deviations
+(0.98 {[}95\%QI: 0.71 to 1.33{]}) suggesting that, despite individual
+differences in REE, PCOS is not systematically associated with lesser or
+greater individual variability.
+
+These findings challenge the widely held belief that PCOS is inherently
+associated with a slower metabolism\textsuperscript{@ 25}, predisposing
+women with PCOS to weight gain. This belief largely stems from a single
+but influential 2009 study from Georgopoulos et al.~that reported a
+significantly reduced BMR in women with PCOS\textsuperscript{13}, which
+has been widely cited and reinforced in both academic and clinical
+contexts. However, as we have noted, this study along with
+others\textsuperscript{35--37} have numerous reporting errors which led
+us to drop them from our present analysis (though sensitivity analysis
+including them did not alter our overall conclusions). The mistaken
+belief that REE is lower for those with PCOS may have mistakenly lead to
+recommendations centred on slightly more severe calorie restriction to
+achieve weight-loss goals, compared with recommendations for the general
+population, as primary management strategies for women with
+PCOS\textsuperscript{20}. Recognising that there may be minimal
+differences in REE between women with PCOS and those without can inform
+both clinical and public practices, potentially leading to a shift in
+focus away from a requirement for more severe caloric restriction as a
+primary method of treatment towards more comprehensive, individualised,
+and psychologically safe approaches to care\textsuperscript{25}.
+
+The current study suggests that REE may not a barrier to weight
+regulation in PCOS given small group-level differences between women
+with PCOS and those without (1472 kcal/day {[}95\%QI:1359 kcal/day to
+1587 kcal/day{]} versus 1442 kcal/day {[}95\%QI:1334 kcal/day to 1553
+kcal/day{]}, respectively). If anything, REE may be slightly higher in
+women with PCOS compared to healthy women without PCOS. BMI of women
+with PCOS ranged from 26.4 to 39.9 was typically greater than women
+without PCOS which ranged 20.5 to 27.9 and this may explain the slightly
+greater REE in the former group. However, for those studies where we
+could extract or estimate BMI, our additional exploratory models
+adjusted for this similarly showed little difference in REE (20 kcal/day
+{[}95\%QI: -96 kcal/day to 140kcal/day{]}) between women with PCOS and
+those without. However, one of the studies included in our
+analysis\textsuperscript{62} reported that, whilst there was little
+difference in unadjusted REE, when REE was adjusted for fat-free mass it
+was lower in women with PCOS suggesting the potential importance of
+fat-free tissue in energy regulation. Yet, for those studies where
+fat-free mass was reported, our additional exploratory models adjusted
+for this similarly showed little difference in REE (-9 kcal/day
+{[}95\%QI: -195 kcal/day to 168kcal/day{]}) between women with PCOS and
+those without. As such, even adjusted for both BMI and fat-free mass,
+there seems to be little difference in REE between women with, and
+without, PCOS. Yet, a recent systematic review of mechanisms for
+metabolic dysfunction has reported excess androgen drives metabolic
+issues within adipose tissue and muscle tissue contributing to
+complications like obesity and insulin resistance\textsuperscript{63}.
+Taken together, these findings highlight that factors beyond REE and
+typical correlates of this including BMI or fat-free mass, such as
+hormonal and tissue-specific metabolic effects, may play a more
+significant role in weight regulation challenges in women with PCOS.
+
+As noted, women with PCOS are more likely to engage in weight-loss
+attempts\textsuperscript{19} and there could be concerns that this could
+inadvertently further foster the already well documented disordered
+eating in this population\textsuperscript{21,22,64,65}. The pathways
+linking PCOS and disordered eating are multifactorial. Biological
+mechanisms such as hyperandrogenism, hyperinsulinaemia, and altered
+ghrelin and leptin signalling can heighten hunger, carbohydrate
+cravings, and appetite variability\textsuperscript{66}. Frequent
+hypoglycaemia and associated mood changes have also been observed, which
+can trigger compensatory eating or binge episodes\textsuperscript{66}.
+These physiological processes interact with psychological and social
+stressors, including infertility concerns, conflicting nutrition advice,
+chronic dieting, and exposure to idealised body images on social media,
+which together compound vulnerability to disordered
+eating\textsuperscript{67}. Moreover, eating disorders themselves can
+disrupt endocrine function, potentially worsening PCOS symptoms and
+creating a self-reinforcing cycle\textsuperscript{65,68}.
+
+Understanding the intertwined biological, psychological, and social
+influences suggests the importance of considering whether restrictive
+dietary advice is appropriate given it may exacerbate feelings of
+failure, hunger dysregulation, and shame\textsuperscript{69}. These
+concerns, coupled with the lack of difference in REE between women with
+and without PCOS might suggest that energy restriction based dietary
+interventions for weight-loss may be unnecessary. But, there is also
+evidence supporting the effect of energy restricted dietary
+interventions for improving PCOS symptoms\textsuperscript{23,24} and
+they are recommended in international guidelines\textsuperscript{25}.
+Encouragingly though, these guidelines also recognise weight stigma as a
+determinant of health and call for its reduction across clinical and
+public health settings. Evidently the greater prevalence of women with
+PCOS falling into overweight and obese BMI categories compared to women
+without PCOS\textsuperscript{8,9} is unlikely to be due to differences
+in REE and so, despite the potential effectiveness of energy restriction
+dietary interventions, there is potential value in moving towards more
+weight-neutral, individualised, and empowering care following holistic
+guidelines recommending multiple approaches to
+management\textsuperscript{20,25}.
+
+\subsection{Strengths and Limitations}\label{strengths-and-limitations}
+
+The current study has multiple strengths stemming from its
+preregistered, comprehensive methodology and Bayesian statistical
+approach. This statistical framework allowed us to incorporate studies
+with and without control groups to better estimate REE in women with and
+without PCOS and to perform multiple sensitivity analyses that confirmed
+the stability of our findings. However, a limitation here is that
+variability in methods across studies, such as differences in PCOS
+diagnostic criteria and REE testing protocols, may have influenced
+results and the relatively small number of studies overall limits the
+extent to which we can explore these potential moderators. Furthermore,
+some studies controlled for body weight or body composition when
+reporting REE values, while others did not. We accounted for this by
+estimating or converting reported data to obtain unadjusted REE values
+across all groups, thereby reducing this variability and further as
+noted above provided estimates adjusted for BMI and fat-free mass both
+of which had little influence on our conclusions. Another limitation is
+that, due to fewer total control groups than PCOS groups, informed
+priors were required in several statistical models. However, in the
+context of Bayesian meta-analysis this can also be considered a
+strength. Additionally, some studies reported data inconsistencies that
+could not be clarified (e.g.,\textsuperscript{13,35--37}) and were
+dropped from our main analysis though our conclusions again did not
+qualitative change when we conducted sensitivity analyses including
+these studies. Finally, most included studies were cross-sectional or
+baseline assessments within intervention trials, which limits causal
+inference. Indeed, we did not pre-register any kind of causal model
+(e.g., a directed acyclic graph) to inform our analysis approach for
+causal inference and as such have been explicit about the estimates
+presented as being descriptive.
+
+\section{Conclusion}\label{conclusion}
+
+In conclusion, the findings from this meta-analysis indicate that REE
+does not meaningfully differ between women with and without PCOS.
+Group-level differences in REE were small, insignificant, or not
+physiologically relevant. Additionally, variability in REE between
+individuals was also similar. These results suggest that a lower
+baseline REE is not associated with the weight-related challenges often
+associated with PCOS. These findings challenge the popular narrative
+that women with PCOS have a lower REE and may help better inform dietary
+interventions and nutritional support for these individuals. Future
+research should include more standardized REE measurement and reporting
+protocols, greater data transparency, consistent control and reporting
+of body weight or body composition, the presentation of both absolute
+and relative REE, and more precise characterization of PCOS phenotypes.
+Overall, these findings support the conclusion that PCOS is not
+negatively associated with REE and may help practitioners and
+researchers focus on individually targeted and holistic lifestyle
+interventions rather than negatively framed interventions based on
+unsupported assumptions regarding REE.
+
+\section{Data Availability}\label{data-availability}
+
+All code utilised for data preparation, transformations, analyses,
+plotting, and reporting are available in the corresponding GitHub
+repository \url{https://github.com/jamessteeleii/pcos_ree_meta}.
+
+\section{References}\label{references}
+
+\phantomsection\label{refs}
+\begin{CSLReferences}{0}{1}
+\bibitem[\citeproctext]{ref-salariGlobalPrevalencePolycystic2024}
+\CSLLeftMargin{1. }%
+\CSLRightInline{Salari N, Nankali A, Ghanbari A, et al. Global
+prevalence of polycystic ovary syndrome in women worldwide: A
+comprehensive systematic review and meta-analysis. \emph{Archives of
+Gynecology and Obstetrics}. 2024;310(3):1303-1314.
+doi:\href{https://doi.org/10.1007/s00404-024-07607-x}{10.1007/s00404-024-07607-x}}
+
+\bibitem[\citeproctext]{ref-glintborgCardiovascularDiseaseNationwide2018}
+\CSLLeftMargin{2. }%
+\CSLRightInline{Glintborg D, Rubin KH, Nybo M, Abrahamsen B, Andersen M.
+Cardiovascular disease in a nationwide population of {Danish} women with
+polycystic ovary syndrome. \emph{Cardiovascular Diabetology}.
+2018;17(1):37.
+doi:\href{https://doi.org/10.1186/s12933-018-0680-5}{10.1186/s12933-018-0680-5}}
+
+\bibitem[\citeproctext]{ref-glintborgProspectiveRiskType2022}
+\CSLLeftMargin{3. }%
+\CSLRightInline{Glintborg D, Kolster ND, Ravn P, Andersen MS.
+Prospective {Risk} of {Type} 2 {Diabetes} in {Normal Weight Women} with
+{Polycystic Ovary Syndrome}. \emph{Biomedicines}. 2022;10(6):1455.
+doi:\href{https://doi.org/10.3390/biomedicines10061455}{10.3390/biomedicines10061455}}
+
+\bibitem[\citeproctext]{ref-perssonHigherRiskType2021}
+\CSLLeftMargin{4. }%
+\CSLRightInline{Persson S, Elenis E, Turkmen S, Kramer MS, Yong EL,
+Poromaa IS. Higher risk of type 2 diabetes in women with hyperandrogenic
+polycystic ovary syndrome. \emph{Fertility and Sterility}.
+2021;116(3):862-871.
+doi:\href{https://doi.org/10.1016/j.fertnstert.2021.04.018}{10.1016/j.fertnstert.2021.04.018}}
+
+\bibitem[\citeproctext]{ref-glintborgProspectiveRiskType2024}
+\CSLLeftMargin{5. }%
+\CSLRightInline{Glintborg D, Ollila MM, Møller JJK, et al. Prospective
+risk of {Type} 2 diabetes in 99~892 {Nordic} women with polycystic ovary
+syndrome and 446~055 controls: National cohort study from {Denmark},
+{Finland}, and {Sweden}. \emph{Human Reproduction (Oxford, England)}.
+2024;39(8):1823-1834.
+doi:\href{https://doi.org/10.1093/humrep/deae124}{10.1093/humrep/deae124}}
+
+\bibitem[\citeproctext]{ref-limMetabolicSyndromePolycystic2019}
+\CSLLeftMargin{6. }%
+\CSLRightInline{Lim SS, Kakoly NS, Tan JWJ, et al. Metabolic syndrome in
+polycystic ovary syndrome: A systematic review, meta-analysis and
+meta-regression. \emph{Obesity Reviews: An Official Journal of the
+International Association for the Study of Obesity}. 2019;20(2):339-352.
+doi:\href{https://doi.org/10.1111/obr.12762}{10.1111/obr.12762}}
+
+\bibitem[\citeproctext]{ref-johamPrevalenceInfertilityUse2015}
+\CSLLeftMargin{7. }%
+\CSLRightInline{Joham AE, Teede HJ, Ranasinha S, Zoungas S, Boyle J.
+Prevalence of infertility and use of fertility treatment in women with
+polycystic ovary syndrome: Data from a large community-based cohort
+study. \emph{Journal of Women's Health (2002)}. 2015;24(4):299-307.
+doi:\href{https://doi.org/10.1089/jwh.2014.5000}{10.1089/jwh.2014.5000}}
+
+\bibitem[\citeproctext]{ref-barberWhyAreWomen2022}
+\CSLLeftMargin{8. }%
+\CSLRightInline{Barber TM. Why are women with polycystic ovary syndrome
+obese? \emph{British Medical Bulletin}. 2022;143(1):4-15.
+doi:\href{https://doi.org/10.1093/bmb/ldac007}{10.1093/bmb/ldac007}}
+
+\bibitem[\citeproctext]{ref-barberObesityPolycysticOvary2021}
+\CSLLeftMargin{9. }%
+\CSLRightInline{Barber TM, Franks S. Obesity and polycystic ovary
+syndrome. \emph{Clinical Endocrinology}. 2021;95(4):531-541.
+doi:\href{https://doi.org/10.1111/cen.14421}{10.1111/cen.14421}}
+
+\bibitem[\citeproctext]{ref-hirschbergImpairedCholecystokininSecretion2004}
+\CSLLeftMargin{10. }%
+\CSLRightInline{Hirschberg AL, Naessén S, Stridsberg M, Byström B,
+Holtet J. Impaired cholecystokinin secretion and disturbed appetite
+regulation in women with polycystic ovary syndrome. \emph{Gynecological
+Endocrinology: The Official Journal of the International Society of
+Gynecological Endocrinology}. 2004;19(2):79-87.
+doi:\href{https://doi.org/10.1080/09513590400002300}{10.1080/09513590400002300}}
+
+\bibitem[\citeproctext]{ref-moranGhrelinMeasuresSatiety2004}
+\CSLLeftMargin{11. }%
+\CSLRightInline{Moran LJ, Noakes M, Clifton PM, et al. Ghrelin and
+measures of satiety are altered in polycystic ovary syndrome but not
+differentially affected by diet composition. \emph{The Journal of
+Clinical Endocrinology and Metabolism}. 2004;89(7):3337-3344.
+doi:\href{https://doi.org/10.1210/jc.2003-031583}{10.1210/jc.2003-031583}}
+
+\bibitem[\citeproctext]{ref-stefanakiFoodCravingsObesity2024}
+\CSLLeftMargin{12. }%
+\CSLRightInline{Stefanaki K, Karagiannakis DS, Peppa M, et al. Food
+{Cravings} and {Obesity} in {Women} with {Polycystic Ovary Syndrome}:
+{Pathophysiological} and {Therapeutic Considerations}. \emph{Nutrients}.
+2024;16(7):1049.
+doi:\href{https://doi.org/10.3390/nu16071049}{10.3390/nu16071049}}
+
+\bibitem[\citeproctext]{ref-georgopoulosBasalMetabolicRate2009}
+\CSLLeftMargin{13. }%
+\CSLRightInline{Georgopoulos NA, Saltamavros AD, Vervita V, et al. Basal
+metabolic rate is decreased in women with polycystic ovary syndrome and
+biochemical hyperandrogenemia and is associated with insulin resistance.
+\emph{Fertility and Sterility}. 2009;92(1):250-255.
+doi:\href{https://doi.org/10.1016/j.fertnstert.2008.04.067}{10.1016/j.fertnstert.2008.04.067}}
+
+\bibitem[\citeproctext]{ref-romualdiRestingMetabolicRate2019}
+\CSLLeftMargin{14. }%
+\CSLRightInline{Romualdi D, Versace V, Tagliaferri V, et al. The resting
+metabolic rate in women with polycystic ovary syndrome and its relation
+to the hormonal milieu, insulin metabolism, and body fat distribution: A
+cohort study. \emph{Journal of Endocrinological Investigation}.
+2019;42(9):1089-1097.
+doi:\href{https://doi.org/10.1007/s40618-019-01029-2}{10.1007/s40618-019-01029-2}}
+
+\bibitem[\citeproctext]{ref-churchillBasalMetabolicRate2015}
+\CSLLeftMargin{15. }%
+\CSLRightInline{Churchill SJ, Wang ET, Bhasin G, et al. Basal metabolic
+rate in women with {PCOS} compared to eumenorrheic controls.
+\emph{Clinical Endocrinology}. 2015;83(3):384-388.
+doi:\href{https://doi.org/10.1111/cen.12740}{10.1111/cen.12740}}
+
+\bibitem[\citeproctext]{ref-graffSaturatedFatIntake2017}
+\CSLLeftMargin{16. }%
+\CSLRightInline{Graff SK, Mario FM, Magalhães JA, Moraes RS, Spritzer
+PM. Saturated {Fat Intake Is Related} to {Heart Rate Variability} in
+{Women} with {Polycystic Ovary~Syndrome}. \emph{Annals of Nutrition \&
+Metabolism}. 2017;71(3-4):224-233.
+doi:\href{https://doi.org/10.1159/000484325}{10.1159/000484325}}
+
+\bibitem[\citeproctext]{ref-larssonDietaryIntakeResting2016}
+\CSLLeftMargin{17. }%
+\CSLRightInline{Larsson I, Hulthén L, Landén M, Pålsson E, Janson P,
+Stener-Victorin E. Dietary intake, resting energy expenditure, and
+eating behavior in women with and without polycystic ovary syndrome.
+\emph{Clinical Nutrition (Edinburgh, Scotland)}. 2016;35(1):213-218.
+doi:\href{https://doi.org/10.1016/j.clnu.2015.02.006}{10.1016/j.clnu.2015.02.006}}
+
+\bibitem[\citeproctext]{ref-segalRestingMetabolicRate1990}
+\CSLLeftMargin{18. }%
+\CSLRightInline{Segal KR, Dunaif A.
+\href{https://www.ncbi.nlm.nih.gov/pubmed/2228390}{Resting metabolic
+rate and postprandial thermogenesis in polycystic ovarian syndrome}.
+\emph{International Journal of Obesity}. 1990;14(7):559-567.}
+
+\bibitem[\citeproctext]{ref-pesonenPolycysticOvarySyndrome2023}
+\CSLLeftMargin{19. }%
+\CSLRightInline{Pesonen E, Nurkkala M, Niemelä M, et al. Polycystic
+ovary syndrome is associated with weight-loss attempts and perception of
+overweight independent of {BMI}: A population-based cohort study.
+\emph{Obesity (Silver Spring, Md)}. 2023;31(4):1108-1120.
+doi:\href{https://doi.org/10.1002/oby.23681}{10.1002/oby.23681}}
+
+\bibitem[\citeproctext]{ref-ozgensaydamWeightManagementStrategies2021}
+\CSLLeftMargin{20. }%
+\CSLRightInline{Ozgen Saydam B, Yildiz BO. Weight management strategies
+for patients with {PCOS}: Current perspectives. \emph{Expert Review of
+Endocrinology \& Metabolism}. 2021;16(2):49-62.
+doi:\href{https://doi.org/10.1080/17446651.2021.1896966}{10.1080/17446651.2021.1896966}}
+
+\bibitem[\citeproctext]{ref-lalonde-besterPrevalenceEtiologyEating2024}
+\CSLLeftMargin{21. }%
+\CSLRightInline{Lalonde-Bester S, Malik M, Masoumi R, et al. Prevalence
+and {Etiology} of {Eating Disorders} in {Polycystic Ovary Syndrome}: {A
+Scoping Review}. \emph{Advances in Nutrition (Bethesda, Md)}.
+2024;15(4):100193.
+doi:\href{https://doi.org/10.1016/j.advnut.2024.100193}{10.1016/j.advnut.2024.100193}}
+
+\bibitem[\citeproctext]{ref-jeanesBingeEatingBehaviours2017}
+\CSLLeftMargin{22. }%
+\CSLRightInline{Jeanes YM, Reeves S, Gibson EL, Piggott C, May VA, Hart
+KH. Binge eating behaviours and food cravings in women with {Polycystic
+Ovary Syndrome}. \emph{Appetite}. 2017;109:24-32.
+doi:\href{https://doi.org/10.1016/j.appet.2016.11.010}{10.1016/j.appet.2016.11.010}}
+
+\bibitem[\citeproctext]{ref-aleneziImpactDietInducedWeight2024}
+\CSLLeftMargin{23. }%
+\CSLRightInline{Alenezi SA, Elkmeshi N, Alanazi A, Alanazi ST, Khan R,
+Amer S. The {Impact} of {Diet-Induced Weight Loss} on {Inflammatory
+Status} and {Hyperandrogenism} in {Women} with {Polycystic Ovarian
+Syndrome} ({PCOS})-{A Systematic Review} and {Meta-Analysis}.
+\emph{Journal of Clinical Medicine}. 2024;13(16):4934.
+doi:\href{https://doi.org/10.3390/jcm13164934}{10.3390/jcm13164934}}
+
+\bibitem[\citeproctext]{ref-holteRestoredInsulinSensitivity1995}
+\CSLLeftMargin{24. }%
+\CSLRightInline{Holte J, Bergh T, Berne C, Wide L, Lithell H. Restored
+insulin sensitivity but persistently increased early insulin secretion
+after weight loss in obese women with polycystic ovary syndrome.
+\emph{The Journal of Clinical Endocrinology and Metabolism}.
+1995;80(9):2586-2593.
+doi:\href{https://doi.org/10.1210/jcem.80.9.7673399}{10.1210/jcem.80.9.7673399}}
+
+\bibitem[\citeproctext]{ref-teedeRecommendations2023International2023}
+\CSLLeftMargin{25. }%
+\CSLRightInline{Teede HJ, Tay CT, Laven JJE, et al. Recommendations
+{From} the 2023 {International Evidence-based Guideline} for the
+{Assessment} and {Management} of {Polycystic Ovary Syndrome}. \emph{The
+Journal of Clinical Endocrinology and Metabolism}.
+2023;108(10):2447-2469.
+doi:\href{https://doi.org/10.1210/clinem/dgad463}{10.1210/clinem/dgad463}}
+
+\bibitem[\citeproctext]{ref-himeleinDepressionBodyImage2006}
+\CSLLeftMargin{26. }%
+\CSLRightInline{Himelein MJ, Thatcher SS. Depression and body image
+among women with polycystic ovary syndrome. \emph{Journal of Health
+Psychology}. 2006;11(4):613-625.
+doi:\href{https://doi.org/10.1177/1359105306065021}{10.1177/1359105306065021}}
+
+\bibitem[\citeproctext]{ref-hofmannBodyImageMental2025}
+\CSLLeftMargin{27. }%
+\CSLRightInline{Hofmann K, Decrinis C, Bitterlich N, Tropschuh K, Stute
+P, Bachmann A. Body image and mental health in women with polycystic
+ovary syndrome-a cross-sectional study. \emph{Archives of Gynecology and
+Obstetrics}. 2025;312(1):177-190.
+doi:\href{https://doi.org/10.1007/s00404-024-07913-4}{10.1007/s00404-024-07913-4}}
+
+\bibitem[\citeproctext]{ref-gellerBodyImageIllness2025}
+\CSLLeftMargin{28. }%
+\CSLRightInline{Geller S, Levy S, Avitsur R. Body image, illness
+perception, and psychological distress in women coping with polycystic
+ovary syndrome ({PCOS}). \emph{Health Psychology Open}.
+2025;12:20551029251327441.
+doi:\href{https://doi.org/10.1177/20551029251327441}{10.1177/20551029251327441}}
+
+\bibitem[\citeproctext]{ref-davitadzeBodyImageConcerns2023}
+\CSLLeftMargin{29. }%
+\CSLRightInline{Davitadze M, Malhotra K, Khalil H, et al. Body image
+concerns in women with polycystic ovary syndrome: A systematic review
+and meta-analysis. \emph{European Journal of Endocrinology}.
+2023;189(2):R1-R9.
+doi:\href{https://doi.org/10.1093/ejendo/lvad110}{10.1093/ejendo/lvad110}}
+
+\bibitem[\citeproctext]{ref-pagePRISMA2020Statement2021a}
+\CSLLeftMargin{30. }%
+\CSLRightInline{Page MJ, McKenzie JE, Bossuyt PM, et al. The {PRISMA}
+2020 statement: An updated guideline for reporting systematic reviews.
+\emph{BMJ}. 2021;372:n71.
+doi:\href{https://doi.org/10.1136/bmj.n71}{10.1136/bmj.n71}}
+
+\bibitem[\citeproctext]{ref-haddawayPRISMA2020PackageShiny2022}
+\CSLLeftMargin{31. }%
+\CSLRightInline{Haddaway NR, Page MJ, Pritchard CC, McGuinness LA.
+{PRISMA2020}: {An R} package and {Shiny} app for producing {PRISMA}
+2020-compliant flow diagrams, with interactivity for optimised digital
+transparency and {Open Synthesis}. \emph{Campbell Systematic Reviews}.
+2022;18(2):e1230.
+doi:\href{https://doi.org/10.1002/cl2.1230}{10.1002/cl2.1230}}
+
+\bibitem[\citeproctext]{ref-weberApplyingMetaAnalyticPredictivePriors2021}
+\CSLLeftMargin{32. }%
+\CSLRightInline{Weber S, Li Y, Iii JWS, Kakizume T, Schmidli H. Applying
+{Meta-Analytic-Predictive Priors} with the {R Bayesian Evidence
+Synthesis Tools}. \emph{Journal of Statistical Software}. 2021;100:1-32.
+doi:\href{https://doi.org/10.18637/jss.v100.i19}{10.18637/jss.v100.i19}}
+
+\bibitem[\citeproctext]{ref-wanEstimatingSampleMean2014}
+\CSLLeftMargin{33. }%
+\CSLRightInline{Wan X, Wang W, Liu J, Tong T. Estimating the sample mean
+and standard deviation from the sample size, median, range and/or
+interquartile range. \emph{BMC Medical Research Methodology}.
+2014;14(1):135.
+doi:\href{https://doi.org/10.1186/1471-2288-14-135}{10.1186/1471-2288-14-135}}
+
+\bibitem[\citeproctext]{ref-pohlmeierEffectLowstarchLowdairy2014}
+\CSLLeftMargin{34. }%
+\CSLRightInline{Pohlmeier AM, Phy JL, Watkins P, et al. Effect of a
+low-starch/low-dairy diet on fat oxidation in overweight and obese women
+with polycystic ovary syndrome. \emph{Applied Physiology, Nutrition, and
+Metabolism = Physiologie Appliquee, Nutrition Et Metabolisme}.
+2014;39(11):1237-1244.
+doi:\href{https://doi.org/10.1139/apnm-2014-0073}{10.1139/apnm-2014-0073}}
+
+\bibitem[\citeproctext]{ref-kritikouA2BV3Adrenergic2006}
+\CSLLeftMargin{35. }%
+\CSLRightInline{Kritikou S, Saltamavros AD, Adonakis G, et al. The
+{\(\alpha\)2B} and {\(\beta\)}3 adrenergic receptor genes polymorphisms
+in women with polycystic ovarian syndrome ({PCOS}) and their association
+with insulin resistance and basal metabolic rate ({BMR}). \emph{Review
+of Clinical Pharmacology and Pharmacokinetics -- International Edition}.
+2006;2006(2).}
+
+\bibitem[\citeproctext]{ref-saltamavrosAlpha2Beta2007}
+\CSLLeftMargin{36. }%
+\CSLRightInline{Saltamavros AD, Adonakis G, Kritikou S, et al. Alpha 2
+beta adrenoreceptor 301-303 deletion polymorphism in polycystic ovary
+syndrome. \emph{Clinical Autonomic Research: Official Journal of the
+Clinical Autonomic Research Society}. 2007;17(2):112-114.
+doi:\href{https://doi.org/10.1007/s10286-007-0403-6}{10.1007/s10286-007-0403-6}}
+
+\bibitem[\citeproctext]{ref-koikaAssociationPro12AlaPolymorphism2009}
+\CSLLeftMargin{37. }%
+\CSLRightInline{Koika V, Marioli DJ, Saltamavros AD, et al. Association
+of the {Pro12Ala} polymorphism in peroxisome proliferator-activated
+receptor Gamma2 with decreased basic metabolic rate in women with
+polycystic ovary syndrome. \emph{European Journal of Endocrinology}.
+2009;161(2):317-322.
+doi:\href{https://doi.org/10.1530/EJE-08-1014}{10.1530/EJE-08-1014}}
+
+\bibitem[\citeproctext]{ref-rodriguez-sanchezGratefulFacilitateCitation2023}
+\CSLLeftMargin{38. }%
+\CSLRightInline{Rodriguez-Sanchez F, cre, cph, Jackson CP, Hutchins SD,
+Clawson JM. Grateful: {Facilitate Citation} of {R Packages}. Published
+online October 2023.}
+
+\bibitem[\citeproctext]{ref-cummingNewStatisticsWhy2014}
+\CSLLeftMargin{39. }%
+\CSLRightInline{Cumming G. The {New Statistics}: {Why} and {How}.
+\emph{Psychological Science}. 2014;25(1):7-29.
+doi:\href{https://doi.org/10.1177/0956797613504966}{10.1177/0956797613504966}}
+
+\bibitem[\citeproctext]{ref-kruschkeBayesianNewStatistics2018}
+\CSLLeftMargin{40. }%
+\CSLRightInline{Kruschke JK, Liddell TM. The {Bayesian New Statistics}:
+{Hypothesis} testing, estimation, meta-analysis, and power analysis from
+a {Bayesian} perspective. \emph{Psychonomic Bulletin \& Review}.
+2018;25:178-206.}
+
+\bibitem[\citeproctext]{ref-usheyRenvProjectEnvironments2023}
+\CSLLeftMargin{41. }%
+\CSLRightInline{Ushey K, cre, Wickham H, Software P, PBC. Renv: {Project
+Environments}. Published online September 2023.}
+
+\bibitem[\citeproctext]{ref-landauTargetsDynamicFunctionOriented2023}
+\CSLLeftMargin{42. }%
+\CSLRightInline{Landau WM, Warkentin MT, Edmondson M, Oliver S, Mahr T,
+Company EL and. Targets: {Dynamic Function-Oriented} '{Make}'-{Like
+Declarative Pipelines}. Published online October 2023.}
+
+\bibitem[\citeproctext]{ref-viechtbauerMetaforMetaAnalysisPackage2023}
+\CSLLeftMargin{43. }%
+\CSLRightInline{Viechtbauer W. Metafor: {Meta-Analysis Package} for {R}.
+Published online September 2023.}
+
+\bibitem[\citeproctext]{ref-burknerBrmsBayesianRegression2023}
+\CSLLeftMargin{44. }%
+\CSLRightInline{Bürkner PC, Gabry J, Weber S, et al. Brms: {Bayesian
+Regression Models} using '{Stan}'. Published online September 2023.}
+
+\bibitem[\citeproctext]{ref-arel-bundockMarginaleffectsPredictionsComparisons2023}
+\CSLLeftMargin{45. }%
+\CSLRightInline{Arel-Bundock V, cre, cph, Diniz MA, Greifer N, Bacher E.
+Marginaleffects: {Predictions}, {Comparisons}, {Slopes}, {Marginal
+Means}, and {Hypothesis Tests}. Published online October 2023.}
+
+\bibitem[\citeproctext]{ref-kayTidybayesTidyData2023}
+\CSLLeftMargin{46. }%
+\CSLRightInline{Kay M, Mastny T. Tidybayes: {Tidy Data} and '{Geoms}'
+for {Bayesian Models}. Published online August 2023.}
+
+\bibitem[\citeproctext]{ref-wickhamGgplot2CreateElegant2023}
+\CSLLeftMargin{47. }%
+\CSLRightInline{Wickham H, Chang W, Henry L, et al. Ggplot2: {Create
+Elegant Data Visualisations Using} the {Grammar} of {Graphics}.
+Published online October 2023.}
+
+\bibitem[\citeproctext]{ref-pedersenPatchworkComposerPlots2023}
+\CSLLeftMargin{48. }%
+\CSLRightInline{Pedersen TL. Patchwork: {The Composer} of {Plots}.
+Published online August 2023.}
+
+\bibitem[\citeproctext]{ref-hongBayesianMissingData2016}
+\CSLLeftMargin{49. }%
+\CSLRightInline{Hong H, Chu H, Zhang J, Carlin BP. A {Bayesian} missing
+data framework for generalized multiple outcome mixed treatment
+comparisons. \emph{Research Synthesis Methods}. 2016;7(1):6-22.
+doi:\href{https://doi.org/10.1002/jrsm.1153}{10.1002/jrsm.1153}}
+
+\bibitem[\citeproctext]{ref-velasquezUseAmmoniaInhalants2011}
+\CSLLeftMargin{50. }%
+\CSLRightInline{Velasquez JR. The {Use} of {Ammonia Inhalants Among
+Athletes}. \emph{Strength \& Conditioning Journal}. 2011;33(2):33.
+doi:\href{https://doi.org/10.1519/SSC.0b013e3181fd5c9b}{10.1519/SSC.0b013e3181fd5c9b}}
+
+\bibitem[\citeproctext]{ref-pavlidouRevisedHarrisBenedict2023}
+\CSLLeftMargin{51. }%
+\CSLRightInline{Pavlidou E, Papadopoulou SK, Seroglou K, Giaginis C.
+Revised {Harris}--{Benedict Equation}: {New Human Resting Metabolic Rate
+Equation}. \emph{Metabolites}. 2023;13(2):189.
+doi:\href{https://doi.org/10.3390/metabo13020189}{10.3390/metabo13020189}}
+
+\bibitem[\citeproctext]{ref-steeleMetaanalysisVariationSport2023a}
+\CSLLeftMargin{52. }%
+\CSLRightInline{Steele J, Fisher, Smith, Schoenfeld, Yang, and Nakagawa
+S. Meta-analysis of variation in sport and exercise science: {Examples}
+of application within resistance training research. \emph{Journal of
+Sports Sciences}. 2023;41(17):1617-1634.
+doi:\href{https://doi.org/10.1080/02640414.2023.2286748}{10.1080/02640414.2023.2286748}}
+
+\bibitem[\citeproctext]{ref-moranShorttermMealReplacements2006}
+\CSLLeftMargin{53. }%
+\CSLRightInline{Moran LJ, Noakes M, Clifton PM, Wittert GA, Williams G,
+Norman RJ. Short-term meal replacements followed by dietary
+macronutrient restriction enhance weight loss in polycystic ovary
+syndrome. \emph{The American Journal of Clinical Nutrition}.
+2006;84(1):77-87.
+doi:\href{https://doi.org/10.1093/ajcn/84.1.77}{10.1093/ajcn/84.1.77}}
+
+\bibitem[\citeproctext]{ref-brunerEffectsExerciseNutritional2006}
+\CSLLeftMargin{54. }%
+\CSLRightInline{Bruner B, Chad K, Chizen D. Effects of exercise and
+nutritional counseling in women with polycystic ovary syndrome.
+\emph{Applied Physiology, Nutrition, and Metabolism = Physiologie
+Appliquee, Nutrition Et Metabolisme}. 2006;31(4):384-391.
+doi:\href{https://doi.org/10.1139/h06-007}{10.1139/h06-007}}
+
+\bibitem[\citeproctext]{ref-robinsonPostprandialThermogenesisReduced1992}
+\CSLLeftMargin{55. }%
+\CSLRightInline{Robinson S, Chan SP, Spacey S, Anyaoku V, Johnston DG,
+Franks S. Postprandial thermogenesis is reduced in polycystic ovary
+syndrome and is associated with increased insulin resistance.
+\emph{Clinical Endocrinology}. 1992;36(6):537-543.
+doi:\href{https://doi.org/10.1111/j.1365-2265.1992.tb02262.x}{10.1111/j.1365-2265.1992.tb02262.x}}
+
+\bibitem[\citeproctext]{ref-cosarRestingMetabolicRate2008}
+\CSLLeftMargin{56. }%
+\CSLRightInline{Cosar E, Köken G, Sahin FK, et al. Resting metabolic
+rate and exercise capacity in women with polycystic ovary syndrome.
+\emph{International Journal of Gynaecology and Obstetrics: The Official
+Organ of the International Federation of Gynaecology and Obstetrics}.
+2008;101(1):31-34.
+doi:\href{https://doi.org/10.1016/j.ijgo.2007.10.011}{10.1016/j.ijgo.2007.10.011}}
+
+\bibitem[\citeproctext]{ref-graffDietaryGlycemicIndex2013}
+\CSLLeftMargin{57. }%
+\CSLRightInline{Graff SK, Mário FM, Alves BC, Spritzer PM. Dietary
+glycemic index is associated with less favorable anthropometric and
+metabolic profiles in polycystic ovary syndrome women with different
+phenotypes. \emph{Fertility and Sterility}. 2013;100(4):1081-1088.
+doi:\href{https://doi.org/10.1016/j.fertnstert.2013.06.005}{10.1016/j.fertnstert.2013.06.005}}
+
+\bibitem[\citeproctext]{ref-dohRelationshipAdiposityInsulin2016}
+\CSLLeftMargin{58. }%
+\CSLRightInline{Doh E, Mbanya A, Kemfang-Ngowa JD, et al. The
+{Relationship} between {Adiposity} and {Insulin Sensitivity} in {African
+Women Living} with the {Polycystic Ovarian Syndrome}: {A Clamp Study}.
+\emph{International Journal of Endocrinology}. 2016;2016:9201701.
+doi:\href{https://doi.org/10.1155/2016/9201701}{10.1155/2016/9201701}}
+
+\bibitem[\citeproctext]{ref-rodriguesLowValidityPredictive2018}
+\CSLLeftMargin{59. }%
+\CSLRightInline{Rodrigues AM dos S, Costa ABP, Campos DL, et al. Low
+validity of predictive equations for calculating resting energy
+expenditure in overweight and obese women with polycystic ovary
+syndrome. \emph{Journal of Human Nutrition and Dietetics}.
+2018;31(2):266-275.
+doi:\href{https://doi.org/10.1111/jhn.12498}{10.1111/jhn.12498}}
+
+\bibitem[\citeproctext]{ref-tosiInsulinMediatedSubstrateUse2021}
+\CSLLeftMargin{60. }%
+\CSLRightInline{Tosi F, Villani M, Migazzi M, et al. Insulin-{Mediated
+Substrate Use} in {Women With Different Phenotypes} of {PCOS}: The
+{Role} of {Androgens}. \emph{The Journal of Clinical Endocrinology and
+Metabolism}. 2021;106(9):e3414-e3425.
+doi:\href{https://doi.org/10.1210/clinem/dgab380}{10.1210/clinem/dgab380}}
+
+\bibitem[\citeproctext]{ref-broskeyAssessingEnergyRequirements2017}
+\CSLLeftMargin{61. }%
+\CSLRightInline{Broskey NT, Klempel MC, Gilmore LA, et al. Assessing
+{Energy Requirements} in {Women With Polycystic Ovary Syndrome}: {A
+Comparison Against Doubly Labeled Water}. \emph{The Journal of Clinical
+Endocrinology and Metabolism}. 2017;102(6):1951-1959.
+doi:\href{https://doi.org/10.1210/jc.2017-00459}{10.1210/jc.2017-00459}}
+
+\bibitem[\citeproctext]{ref-tosiRestingEnergyExpenditure2024}
+\CSLLeftMargin{62. }%
+\CSLRightInline{Tosi F, Rosmini F, Gremes V, et al. Resting energy
+expenditure in women with polycystic ovary syndrome. \emph{Human
+Reproduction (Oxford, England)}. 2024;39(8):1794-1803.
+doi:\href{https://doi.org/10.1093/humrep/deae129}{10.1093/humrep/deae129}}
+
+\bibitem[\citeproctext]{ref-sanchez-garridoMetabolicDysfunctionPolycystic2020}
+\CSLLeftMargin{63. }%
+\CSLRightInline{Sanchez-Garrido MA, Tena-Sempere M. Metabolic
+dysfunction in polycystic ovary syndrome: {Pathogenic} role of androgen
+excess and potential therapeutic strategies. \emph{Molecular
+Metabolism}. 2020;35:100937.
+doi:\href{https://doi.org/10.1016/j.molmet.2020.01.001}{10.1016/j.molmet.2020.01.001}}
+
+\bibitem[\citeproctext]{ref-leeIncreasedRiskDisordered2017}
+\CSLLeftMargin{64. }%
+\CSLRightInline{Lee I, Cooney LG, Saini S, et al. Increased risk of
+disordered eating in~polycystic ovary syndrome. \emph{Fertility and
+Sterility}. 2017;107(3):796-802.
+doi:\href{https://doi.org/10.1016/j.fertnstert.2016.12.014}{10.1016/j.fertnstert.2016.12.014}}
+
+\bibitem[\citeproctext]{ref-bernadettPrevalenceEatingDisorders2016}
+\CSLLeftMargin{65. }%
+\CSLRightInline{Bernadett M, Szemán-N A.
+\href{https://www.ncbi.nlm.nih.gov/pubmed/27244869}{{{[}Prevalence of
+eating disorders among women with polycystic ovary syndrome{]}}}.
+\emph{Psychiatria Hungarica: A Magyar Pszichiatriai Tarsasag Tudomanyos
+Folyoirata}. 2016;31(2):136-145.}
+
+\bibitem[\citeproctext]{ref-barryImpactEatingBehavior2011}
+\CSLLeftMargin{66. }%
+\CSLRightInline{Barry JA, Bouloux P, Hardiman PJ. The impact of eating
+behavior on psychological symptoms typical of reactive hypoglycemia. {A}
+pilot study comparing women with polycystic ovary syndrome to controls.
+\emph{Appetite}. 2011;57(1):73-76.
+doi:\href{https://doi.org/10.1016/j.appet.2011.03.003}{10.1016/j.appet.2011.03.003}}
+
+\bibitem[\citeproctext]{ref-steegers-theunissenPolycysticOvarySyndrome2020}
+\CSLLeftMargin{67. }%
+\CSLRightInline{Steegers-Theunissen RPM, Wiegel RE, Jansen PW, Laven
+JSE, Sinclair KD. Polycystic {Ovary Syndrome}: {A Brain Disorder
+Characterized} by {Eating Problems Originating} during {Puberty} and
+{Adolescence}. \emph{International Journal of Molecular Sciences}.
+2020;21(21):8211.
+doi:\href{https://doi.org/10.3390/ijms21218211}{10.3390/ijms21218211}}
+
+\bibitem[\citeproctext]{ref-cooneyIncreasedPrevalenceBinge2024}
+\CSLLeftMargin{68. }%
+\CSLRightInline{Cooney LG, Gyorfi K, Sanneh A, et al. Increased
+{Prevalence} of {Binge Eating Disorder} and {Bulimia Nervosa} in {Women
+With Polycystic Ovary Syndrome}: {A Systematic Review} and
+{Meta-Analysis}. \emph{The Journal of Clinical Endocrinology and
+Metabolism}. 2024;109(12):3293-3305.
+doi:\href{https://doi.org/10.1210/clinem/dgae462}{10.1210/clinem/dgae462}}
+
+\bibitem[\citeproctext]{ref-pirottaDisorderedEatingBehaviours2019}
+\CSLLeftMargin{69. }%
+\CSLRightInline{Pirotta S, Barillaro M, Brennan L, et al. Disordered
+{Eating Behaviours} and {Eating Disorders} in {Women} in {Australia}
+with and without {Polycystic Ovary Syndrome}: {A Cross-Sectional Study}.
+\emph{Journal of Clinical Medicine}. 2019;8(10):1682.
+doi:\href{https://doi.org/10.3390/jcm8101682}{10.3390/jcm8101682}}
+
+\end{CSLReferences}
+
+\newpage
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{prisma.png}}
+
+}
+
+\caption{\label{fig-prisma}PRISMA 2020 flow diagram template for
+systematic reviews. Note that a ``report'' could be a journal article,
+preprint, conference abstract, study register entry, clinical study
+report, dissertation, unpublished manuscript, government report or any
+other document providing relevant information. The website noted was a
+prior narrative review on this topic by some of the authors
+(https://macrofactorapp.com/pcos-bmr/) which identified two studies not
+found in our systematic database search.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{submission_manuscript_files/figure-pdf/fig-mean-REE-1.pdf}}
+
+}
+
+\caption{\label{fig-mean-REE}Posterior distribution, mean point
+estimates, and 95\% quantile intervals for conditional estimates by
+study, global grand mean estimates by condition, and the contrast
+between conditions for mean resting energy expenditure of control women
+without PCOS and women with PCOS.}
+
+\end{figure}%
+
+\begin{figure}
+
+\centering{
+
+\pandocbounded{\includegraphics[keepaspectratio]{submission_manuscript_files/figure-pdf/fig-variance-REE-1.pdf}}
+
+}
+
+\caption{\label{fig-variance-REE}Posterior distribution, variance point
+estimates, and 95\% quantile intervals for conditional estimates by
+study, global grand variance estimates by condition, and the contrast
+ratio between conditions for the standard deviation of resting energy
+expenditure of control women without PCOS and women with PCOS.}
+
+\end{figure}%
+
+
+
+
+\end{document}

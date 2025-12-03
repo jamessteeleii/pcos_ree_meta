@@ -22,6 +22,7 @@ format:
         \renewcommand*{\Authand}{, }
         \renewcommand*{\Authands}{, }
         \renewcommand\Affilfont{\small}
+        \usepackage{etoolbox}
 geometry:
   - left=1in
   - right=1in
@@ -29,46 +30,37 @@ geometry:
   - bottom=1in
 author:
   - name: Richard Kirwan
-    affiliations:
-      - ref: 1
+    affil-id: 1
     orcid: 0000-0003-4645-0077
     email: R.P.Kirwan@ljmu.ac.uk
   - name: Leigh Peele
-    affiliations:
-      - ref: 2
+    affil-id: 2
     email: leigh@macrofactorapp.com
-  - name: Greg Nuckols
-    affiliations:
-      - ref: 2
+  - name: Gregory Nuckols
+    affil-id: 2
     orcid: 0009-0004-2679-7967
     email: greg@macrofactorapp.com
   - name: Georgia Kohlhoff
-    affiliations:
-      - ref: 3
+    affil-id: 3
     email: g_kohlhoff@hotmail.co.uk
   - name: Hannah Cabré
-    affiliations:
-      - ref: 4
+    affil-id: 4
     orcid: 0000-0002-3235-6867
     email: Hannah.Cabre@pbrc.edu
   - name: Alyssa Olenick
-    affiliations:
-      - ref: 5
+    affil-id: 5
     orcid: 0000-0002-2217-8067
     email: alyssaolenickphd@gmail.com
   - name: James Steele
-    affiliations:
-      - ref: 6
-      - ref: 2
-      - ref: 7
+    affil-id: 2,6,7
     orcid: 0000-0002-8003-0757
     corresponding: true
     email: james@steele-research.com
 affiliations:
   - id: 1
-    name: Research Institute for Sports and Exercise Sciences, Liverpool John Moores Universtiy, Liverpool, UK
+    name: Research Institute for Sports and Exercise Sciences, Liverpool John Moores University, Liverpool, UK
   - id: 2
-    name: MacroFactor, Stronger by Science LLC, Raleigh, North Carolina, USA
+    name: MacroFactor, Stronger by Science Technologies LLC, Raleigh, North Carolina, USA
   - id: 3
     name: Flourishing Health, Liverpool, UK
   - id: 4
@@ -79,9 +71,8 @@ affiliations:
     name: Steele Research Limited, Eastleigh, Hampshire, UK
   - id: 7
     name: School of Health and Biomedical Sciences, Royal Melbourne Institute of Technology, Melbourne, VIC, Australia
-abstract: |
-  Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
-keywords: Polycystic ovary syndrome, PCOS, resting energy expenditure, REE, basal metabolic rate, BMR
+thanks: |
+  Corresponding author: James Steele (james@steele-research.com)
 bibliography: 
   mylibrary.bib
 csl: american-medical-association.csl
@@ -98,7 +89,22 @@ library(tidybayes)
 targets::tar_config_set(store = here::here('_targets'))
 
 ```
+\newpage
 
+## Financial Disclosures/Conflicts of Interest
+Richard Kirwan provides nutrition consultancy through his company Be More Nutrition. Leigh Peele is employed by MacroFactor, a nutrition-tracking app. Gregory Nuckols is co-owner of MacroFactor. Georgia Kohlhoff provides nutrition consultancy through her company Flourishing Health. Hannah Cabré was supported by the National Institute of Diabetes and Digestive and Kidney Diseases of the National Institutes of Health under Award Number T32DK064584. Alyssa Olenick provides fitness coaching and scientific consulting under ALYSSA OLENICK LLC. She receives compensation from scientific consulting, speaking engagments, affiliated social media partnerships, and book publishing. James Steele provides research consultancy through his company Steele Research Limited, is contracted currently by MacroFactor and Kieser Australia through Steele Research Limited, and has also received travel expenses and honoraria for speaking from fit20 International, Exercise School Portugal, and Discover Strength.
+
+The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health or any other funding agencies or institutions noted above. The authors declare no other conflicts of interest related to the submitted work.
+
+\newpage
+
+## Abstract
+Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
+
+Keywords: Polycystic ovary syndrome, Energy Metabolism, Resting Metabolic Rate, Basal Metabolism
+
+
+\newpage
 # Introduction
 Polycystic ovary syndrome (PCOS) affects approximately 10% of women of reproductive age worldwide, making it the most common endocrine disorder affecting this population [@salariGlobalPrevalencePolycystic2024]. Due to several factors including hyperandrogenism and alterations in insulin resistance, PCOS is believed to contribute to an increased risk of diabetes, metabolic syndrome and cardiovascular disease [@glintborgCardiovascularDiseaseNationwide2018; @glintborgProspectiveRiskType2022; @perssonHigherRiskType2021; @glintborgProspectiveRiskType2024; @limMetabolicSyndromePolycystic2019], along with being a leading cause of anovulatory infertility in women [@johamPrevalenceInfertilityUse2015]. Furthermore, epidemiological data has consistently demonstrated that women with PCOS are significantly more likely to suffer from overweight or obesity, compared to the general female population, with estimates ranging from 38% to 88% of PCOS patients falling into overweight or obese body mass index (BMI) categories [@barberWhyAreWomen2022; @barberObesityPolycysticOvary2021].
 
@@ -370,8 +376,6 @@ no_participants <- main_arm_data_imputed_demographics_baseline |>
 
 Note, the numbers in this section exclude the four studies previously noted with possible reporting issues that were unresolved. These studies are however summarised in fully in the descriptive characteristics table in the online supplementary materials (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html) where some of the possible reporting errors are seen in the standard deviations reported or calculated e.g., the standard deviation calculated for body mass of women with PCOS in Saltamavros et al. [-@saltamavrosAlpha2Beta2007]. The PRISMA flow diagram (@fig-prisma) also includes all studies identified including the four with possible errors.
 
-![PRISMA 2020 flow diagram template for systematic reviews. Note that a “report” could be a journal article, preprint, conference abstract, study register entry, clinical study report, dissertation, unpublished manuscript, government report or any other document providing relevant information. The website noted was a prior narrative review on this topic by some of the authors (https://macrofactorapp.com/pcos-bmr/) which identified two studies not found in our systematic database search.](prisma.png){#fig-prisma}
-
 Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PCOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PCOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported fully in the online supplementary materials (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html)). 
 
 ```{r}
@@ -394,7 +398,7 @@ countries <- main_plus_greek_arm_data_imputed_demographics |>
 
 ```
 
-Studies were carried out in multiple countries: Brazil (k = `r filter(countries, country == "Brazil")$n`) ,and USA (k = `r filter(countries, country == "USA")$n` studies), Australia, Cameroon, Canada, Italy, Sweden, Turkey, UK (all k = 1 study). The four studies with noted reporting errors were carried out in Greece. A total of 11 studies used the Rotterdam criteria (or a modified version there of) for diagnosing PCOS [@robinsonPostprandialThermogenesisReduced1992; @brunerEffectsExerciseNutritional2006; @moranShorttermMealReplacements2006; @cosarRestingMetabolicRate2008; @graffDietaryGlycemicIndex2013; @pohlmeierEffectLowstarchLowdairy2014; @dohRelationshipAdiposityInsulin2016; @larssonDietaryIntakeResting2016; @graffSaturatedFatIntake2017; @rodriguesLowValidityPredictive2018; @tosiInsulinMediatedSubstrateUse2021]. One study used the 1990 National Institutes of Health criteria [@broskeyAssessingEnergyRequirements2017], and two studies [@segalRestingMetabolicRate1990; @robinsonPostprandialThermogenesisReduced1992] diagnosed PCOS via the presence of oligomenorrhea or amenorrheaammenorrhea alongside additional criteria including plasma androgen levels, hirsutism or polycystic ovaries on ultrasound scanning. All but one study [@broskeyAssessingEnergyRequirements2017], which used doubly labelled water, measured REE using indirect calorimetry. The specific devices reported by these studies are included in the online supplementary materials (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html)). We originally considered in our pre-registration that, given sufficient data, we would compare sub groups of women with PCOS who did and did not have accompanying insulin resistance. However, based on the metabolic health variables reported in studies with this information (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html)) and, where available, considering primary criteria of either homeostatic model assessment of insulin resistance (HOMA-IR) $\geq2.5$ or secondary criteria including fasting insulin $>12\mu \textrm{U/mL}$ or fasting glucose $\geq100\textrm{mg/dL}$, all groups of women with PCOS in the included studies would be considered to have insulin resistance. Mean age of women with PCOS in these studies ranged from `r summary_descriptives$min_age[2]` to `r summary_descriptives$max_age[2]` which was similar to the control women without PCOS ranging from `r summary_descriptives$min_age[1]` to `r summary_descriptives$max_age[1]`. Across those studies where BMI was reported or it was possible to estimate the mean BMI of women with PCOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PCOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]`.
+Studies were carried out in multiple countries: Brazil (k = `r filter(countries, country == "Brazil")$n`) ,and USA (k = `r filter(countries, country == "USA")$n` studies), Australia, Cameroon, Canada, Italy, Sweden, Turkey, UK (all k = 1 study). The four studies with noted reporting errors were carried out in Greece. A total of 11 studies used the Rotterdam criteria (or a modified version there of) for diagnosing PCOS [@robinsonPostprandialThermogenesisReduced1992; @brunerEffectsExerciseNutritional2006; @moranShorttermMealReplacements2006; @cosarRestingMetabolicRate2008; @graffDietaryGlycemicIndex2013; @pohlmeierEffectLowstarchLowdairy2014; @dohRelationshipAdiposityInsulin2016; @larssonDietaryIntakeResting2016; @graffSaturatedFatIntake2017; @rodriguesLowValidityPredictive2018; @tosiInsulinMediatedSubstrateUse2021]. One study used the 1990 National Institutes of Health criteria [@broskeyAssessingEnergyRequirements2017], and two studies [@segalRestingMetabolicRate1990; @robinsonPostprandialThermogenesisReduced1992] diagnosed PCOS via the presence of oligomenorrhea or amenorrhea alongside additional criteria including plasma androgen levels, hirsutism or polycystic ovaries on ultrasound scanning. All but one study [@broskeyAssessingEnergyRequirements2017], which used doubly labelled water, measured REE using indirect calorimetry. The specific devices reported by these studies are included in the online supplementary materials (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html)). We originally considered in our pre-registration that, given sufficient data, we would compare sub groups of women with PCOS who did and did not have accompanying insulin resistance. However, based on the metabolic health variables reported in studies with this information (see [Descriptives Table](https://html-preview.github.io/?url=https://github.com/jamessteeleii/pcos_ree_meta/raw/refs/heads/main/tables/descriptives_table.html)) and, where available, considering primary criteria of either homeostatic model assessment of insulin resistance (HOMA-IR) $\geq2.5$ or secondary criteria including fasting insulin $>12\mu \textrm{U/mL}$ or fasting glucose $\geq100\textrm{mg/dL}$, all groups of women with PCOS in the included studies would be considered to have insulin resistance. Mean age of women with PCOS in these studies ranged from `r summary_descriptives$min_age[2]` to `r summary_descriptives$max_age[2]` which was similar to the control women without PCOS ranging from `r summary_descriptives$min_age[1]` to `r summary_descriptives$max_age[1]`. Across those studies where BMI was reported or it was possible to estimate the mean BMI of women with PCOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PCOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]`.
 
 ## Mean REE Model Results
 ```{r}
@@ -415,15 +419,6 @@ main_arm_mean_effects_contrast_condition <- main_arm_mean_effects_contrast_condi
 ```
 The main model for mean REE resulted in a posterior distribution for the contrast between control and PCOS conditions with a mean point estimate of `r round(main_arm_mean_effects_contrast_condition$draw)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition$.lower)` kcal/day to `r round(main_arm_mean_effects_contrast_condition$.upper)` kcal/day suggesting there is a 95% probability that the true difference lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the control condition and PCOS condition respectively were `r round(main_arm_mean_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_mean_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[2])` kcal/day]. These results, including the full visualisation of the posterior distribution and the conditional estimates by study, can be seen in @fig-mean-REE.
 
-```{r}
-#| label: fig-mean-REE 
-#| fig-width: 10
-#| fig-height: 6.25
-#| fig-cap: Posterior distribution, mean point estimates, and 95% quantile intervals for conditional estimates by study, global grand mean estimates by condition, and the contrast between conditions for mean resting energy expenditure of control women without PCOS and women with PCOS.
-
-combined_mean_plot
-```
-
 ## Standard Deviation of REE Model Results
 ```{r}
 
@@ -443,15 +438,6 @@ main_arm_variance_effects_contrast_condition <- main_arm_variance_effects_contra
 ```
 
 The main model for the between participant standard deviation of REE resulted in a posterior distribution for the contrast ratio between control and PCOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition$draw,2)` with a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition$.lower,2)` to `r round(main_arm_variance_effects_contrast_condition$.upper,2)` suggesting there is a 95% probability that the true ratio of standard deviations lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the standard deviations of the control condition and PCOS condition respectively were `r round(main_arm_variance_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_variance_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[2])` kcal/day]. These results, including the full visualisation of the posterior distribution and the conditional estimates by study, can be seen in @fig-variance-REE.
-
-```{r}
-#| label: fig-variance-REE 
-#| fig-width: 10
-#| fig-height: 6.25
-#| fig-cap: Posterior distribution, variance point estimates, and 95% quantile intervals for conditional estimates by study, global grand variance estimates by condition, and the contrast ratio between conditions for the standard deviation of resting energy expenditure of control women without PCOS and women with PCOS.
-
-combined_variance_plot
-```
 
 ## Sensitivity Analyses
 ### Pairwise Models
@@ -482,9 +468,9 @@ For mean REE the model adjusted for BMI, also resulted in qualitatively similar 
 
 This study sought to estimate and describe the magnitude of difference in REE between women with and without PCOS. Most studies identified in the systematic review, and included in the meta-analysis, used indirect calorimetry as the primary measure of REE and assessed women with PCOS who were insulin resistant and categorised as being in overweight or obese BMI categories compared to healthy controls. Our results indicate there is only a small magnitude of difference in REE (`r round(main_arm_mean_effects_contrast_condition$draw)` kcal/day [95%QI: `r round(main_arm_mean_effects_contrast_condition$.lower)` kcal/day to `r round(main_arm_mean_effects_contrast_condition$.upper)`kcal/day]) between women with PCOS and those without. Further, there is little difference in between person variation between the groups based on the ratio of standard deviations (`r round(main_arm_variance_effects_contrast_condition$draw,2)` [95%QI: `r round(main_arm_variance_effects_contrast_condition$.lower,2)` to `r round(main_arm_variance_effects_contrast_condition$.upper,2)`]) suggesting that, despite individual differences in REE, PCOS is not systematically associated with lesser or greater individual variability. 
 
-These findings challenge the widely held belief that PCOS is inherently associated with a slower metabolism [@@teedeRecommendations2023International2023], predisposing women with PCOS to weight gain. This belief may mistakenly lead to recommendations centred on slightly more severe calorie restriction to achieve weight-loss goals, compared with recommendations for the general population, as primary management strategies for women with PCOS [@ozgensaydamWeightManagementStrategies2021]. Recognising that there may be minimal differences in REE between women with PCOS and those without can inform both clinical and public practices, potentially leading to a shift in focus away from a requirement for more severe caloric restriction as a primary method of treatment towards more comprehensive, individualised, and psychologically safe approaches to care [@teedeRecommendations2023International2023].
+These findings challenge the widely held belief that PCOS is inherently associated with a slower metabolism [@@teedeRecommendations2023International2023], predisposing women with PCOS to weight gain. This belief largely stems from a single but influential 2009 study from Georgopoulos et al. that reported a significantly reduced BMR in women with PCOS [@georgopoulosBasalMetabolicRate2009], which has been widely cited and reinforced in both academic and clinical contexts. However, as we have noted, this study along with others [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009] have numerous reporting errors which led us to drop them from our present analysis (though sensitivity analysis including them did not alter our overall conclusions). The mistaken belief that REE is lower for those with PCOS may have mistakenly lead to recommendations centred on slightly more severe calorie restriction to achieve weight-loss goals, compared with recommendations for the general population, as primary management strategies for women with PCOS [@ozgensaydamWeightManagementStrategies2021]. Recognising that there may be minimal differences in REE between women with PCOS and those without can inform both clinical and public practices, potentially leading to a shift in focus away from a requirement for more severe caloric restriction as a primary method of treatment towards more comprehensive, individualised, and psychologically safe approaches to care [@teedeRecommendations2023International2023].
 
-The current study suggests that REE may not a barrier to weight regulation in PCOS given small group-level differences between women with PCOS and those without (`r round(main_arm_variance_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[2])` kcal/day] versus `r round(main_arm_variance_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[1])` kcal/day], respectively). If anything, REE may be slightly higher in women with PCOS compared to healthy women without PCOS. BMI of women with PCOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PCOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]` and this may explain the slightly greater REE in the former group. However, for those studies where we could extract or estimate BMI, our additional exploratory models adjusted for this similarly showed little difference in REE (`r round(main_arm_mean_effects_contrast_condition_bmi$estimate)` kcal/day [95%QI: `r round(main_arm_mean_effects_contrast_condition_bmi$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_bmi$conf.high)`kcal/day]) between women with PCOS and those without. However, one of the studies included in our analysis [@tosiRestingEnergyExpenditure2024] reported that, whilst there was little difference in unadjusted REE, when REE was adjusted for fat-free mass it was lower in women with PCOS suggesting the potential importance of fat-free tissue in energy regulation. Yet, for those studies where fat-free mass was reported, our additional exploratory models adjusted for this similarly showed little difference in REE (`r round(main_arm_mean_effects_contrast_condition_fat_free_mass$estimate)` kcal/day [95%QI: `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.high)`kcal/day]) between women with PCOS and those without. As such, even adjusted for both BMI and fat-free mass, there seems to be little difference in REE between women with, and without, PCOS. Yet, a recent systematic review of mechanisms for metabolic dysfunction has reported excess androgen drives metabolic issues within adipose tissue and muscle tissue contributing to complications like obesity and insulin resistance [@sanchez-garridoMetabolicDysfunctionPolycystic2020]. Taken together, these findings highlight that factors beyond REE and typical correlates of this including BMI or fat-free mass, such as hormonal and tissue-specific metabolic effects, may play a more significant role in weight regulation challenges in women with PCOS.
+The current study suggests that REE may not a barrier to weight regulation in PCOS given small group-level differences between women with PCOS and those without (`r round(main_arm_mean_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[2])` kcal/day] versus `r round(main_arm_mean_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[1])` kcal/day], respectively). If anything, REE may be slightly higher in women with PCOS compared to healthy women without PCOS. BMI of women with PCOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PCOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]` and this may explain the slightly greater REE in the former group. However, for those studies where we could extract or estimate BMI, our additional exploratory models adjusted for this similarly showed little difference in REE (`r round(main_arm_mean_effects_contrast_condition_bmi$estimate)` kcal/day [95%QI: `r round(main_arm_mean_effects_contrast_condition_bmi$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_bmi$conf.high)`kcal/day]) between women with PCOS and those without. However, one of the studies included in our analysis [@tosiRestingEnergyExpenditure2024] reported that, whilst there was little difference in unadjusted REE, when REE was adjusted for fat-free mass it was lower in women with PCOS suggesting the potential importance of fat-free tissue in energy regulation. Yet, for those studies where fat-free mass was reported, our additional exploratory models adjusted for this similarly showed little difference in REE (`r round(main_arm_mean_effects_contrast_condition_fat_free_mass$estimate)` kcal/day [95%QI: `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.high)`kcal/day]) between women with PCOS and those without. As such, even adjusted for both BMI and fat-free mass, there seems to be little difference in REE between women with, and without, PCOS. Yet, a recent systematic review of mechanisms for metabolic dysfunction has reported excess androgen drives metabolic issues within adipose tissue and muscle tissue contributing to complications like obesity and insulin resistance [@sanchez-garridoMetabolicDysfunctionPolycystic2020]. Taken together, these findings highlight that factors beyond REE and typical correlates of this including BMI or fat-free mass, such as hormonal and tissue-specific metabolic effects, may play a more significant role in weight regulation challenges in women with PCOS.
 
 As noted, women with PCOS are more likely to engage in weight-loss attempts [@pesonenPolycysticOvarySyndrome2023] and there could be concerns that this could inadvertently further foster the already well documented disordered eating in this population [@lalonde-besterPrevalenceEtiologyEating2024; @jeanesBingeEatingBehaviours2017; @leeIncreasedRiskDisordered2017; @bernadettPrevalenceEatingDisorders2016]. The pathways linking PCOS and disordered eating are multifactorial. Biological mechanisms such as hyperandrogenism, hyperinsulinaemia, and altered ghrelin and leptin signalling can heighten hunger, carbohydrate cravings, and appetite variability [@barryImpactEatingBehavior2011]. Frequent hypoglycaemia and associated mood changes have also been observed, which can trigger compensatory eating or binge episodes [@barryImpactEatingBehavior2011]. These physiological processes interact with psychological and social stressors, including infertility concerns, conflicting nutrition advice, chronic dieting, and exposure to idealised body images on social media, which together compound vulnerability to disordered eating [@steegers-theunissenPolycysticOvarySyndrome2020]. Moreover, eating disorders themselves can disrupt endocrine function, potentially worsening PCOS symptoms and creating a self-reinforcing cycle [@cooneyIncreasedPrevalenceBinge2024; @bernadettPrevalenceEatingDisorders2016]. 
 
@@ -496,12 +482,32 @@ The current study has multiple strengths stemming from its preregistered, compre
 # Conclusion
 In conclusion, the findings from this meta-analysis indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in REE were small, insignificant, or not physiologically relevant. Additionally, variability in REE between individuals was also similar. These results suggest that a lower baseline REE is not associated with the weight-related challenges often associated with PCOS. These findings challenge the popular narrative that women with PCOS have a lower REE and may help better inform dietary interventions and nutritional support for these individuals. Future research should include more standardized REE measurement and reporting protocols, greater data transparency, consistent control and reporting of body weight or body composition, the presentation of both absolute and relative REE, and more precise characterization of PCOS phenotypes. Overall, these findings support the conclusion that PCOS is not negatively associated with REE and may help practitioners and researchers focus on individually targeted and holistic lifestyle interventions rather than negatively framed interventions based on unsupported assumptions regarding REE.
 
-# Financial Disclosures/Conflicts of Interest
-Hannah Cabré was supported by the National Institute of Diabetes and Digestive and Kidney Diseases of the National Institutes of Health under Award Number T32DK064584. James Steele provides research consultancy through his company Steele Research Limited, is contracted currently by MacroFactor and Kieser Australia through Steele Research Limited, and has also received travel expenses and honoraria for speaking from fit20 International, Exercise School Portugal, and Discover Strength.
-
-The content is solely the responsibility of the authors and does not necessarily represent the official views of the National Institutes of Health or any other funding agencies or institutions noted above.
-
 # Data Availability
 All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>.
 
 # References
+
+::: {#refs}
+:::
+
+\newpage
+
+![PRISMA 2020 flow diagram template for systematic reviews. Note that a “report” could be a journal article, preprint, conference abstract, study register entry, clinical study report, dissertation, unpublished manuscript, government report or any other document providing relevant information. The website noted was a prior narrative review on this topic by some of the authors (https://macrofactorapp.com/pcos-bmr/) which identified two studies not found in our systematic database search.](prisma.png){#fig-prisma}
+
+```{r}
+#| label: fig-mean-REE 
+#| fig-width: 10
+#| fig-height: 6.25
+#| fig-cap: Posterior distribution, mean point estimates, and 95% quantile intervals for conditional estimates by study, global grand mean estimates by condition, and the contrast between conditions for mean resting energy expenditure of control women without PCOS and women with PCOS.
+
+combined_mean_plot
+```
+
+```{r}
+#| label: fig-variance-REE 
+#| fig-width: 10
+#| fig-height: 6.25
+#| fig-cap: Posterior distribution, variance point estimates, and 95% quantile intervals for conditional estimates by study, global grand variance estimates by condition, and the contrast ratio between conditions for the standard deviation of resting energy expenditure of control women without PCOS and women with PCOS.
+
+combined_variance_plot
+```
