@@ -1,11 +1,12 @@
-# Do women with polycystic ovary syndrome (PCOS) have lower resting energy expenditure than women
-without PCOS: a systematic review and meta-analysis
+# Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis
 
 This repository contains all the code and data for a project conducting a systematic review and meta-analysis of differences in resting energy expenditure between women with, and without, Polycystic Ovary Syndrome (PCOS).
 
+Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré, H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis. medrxiv DOI: TO ADD.
+
 ## Abstract
 
-*To be completed*
+Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
 ## Reproducibility
 This repository contains the necessary files and code to reproduce the analyses, figures, and the manuscript. 
