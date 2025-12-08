@@ -2,7 +2,7 @@
 
 This repository contains all the code and data for a project conducting a systematic review and meta-analysis of differences in resting energy expenditure between women with, and without, Polycystic Ovary Syndrome (PCOS).
 
-Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré, H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis. medrxiv DOI: TO ADD.
+Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré, H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis. medrxiv DOI: [https://doi.org/10.64898/2025.12.03.25341536](https://doi.org/10.64898/2025.12.03.25341536).
 
 ## Abstract
 
