@@ -71,8 +71,6 @@ affiliations:
     name: Steele Research Limited, Eastleigh, Hampshire, UK
   - id: 7
     name: School of Health and Biomedical Sciences, Royal Melbourne Institute of Technology, Melbourne, VIC, Australia
-thanks: |
-  Corresponding author: James Steele (Email: james@steele-research.com; ORCID: 0000-0002-8003-0757)
 bibliography: 
   mylibrary.bib
 csl: american-medical-association.csl
@@ -89,6 +87,12 @@ library(tidybayes)
 targets::tar_config_set(store = here::here('_targets'))
 
 ```
+Corresponding author: (Email: james@steele-research.com; ORCID: 0000-0002-8003-0757) James Steele, Steele Research Limited, 2 Sydney Road, Eastleigh, Hampshire, SO50 6DJ, UK
+
+Keywords: Polycystic ovary syndrome, Energy Metabolism, Resting Metabolic Rate, Basal Metabolism
+
+Acknowledgements: N/A
+
 \newpage
 
 ## Financial Disclosures/Conflicts of Interest
@@ -101,7 +105,7 @@ The content is solely the responsibility of the authors and does not necessarily
 ## Abstract
 Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
-Keywords: Polycystic ovary syndrome, Energy Metabolism, Resting Metabolic Rate, Basal Metabolism
+
 
 
 \newpage
