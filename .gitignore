@@ -1,2 +1,51 @@
-.Rproj.user
+# R and RStudio session state
+.Rproj.user/
+.Rhistory
+.RData
+.Ruserdata
+.Renviron
+.httr-oauth
+
+# Project-local package libraries and installation state
+renv/library/
+renv/staging/
+renv/local/
+renv/cellar/
+renv/python/
+renv/sandbox/
+
+# targets cache and machine-specific configuration
 _targets/
+_targets.yaml.local
+
+# Quarto and knitr intermediates
+.quarto/
+**/.quarto/
+*_cache/
+*_files/
+*.utf8.md
+*.knit.md
+*.synctex.gz
+*.aux
+*.log
+*.out
+*.toc
+README.html
+
+# Local scratch, logs, and operating-system metadata
+scratch/
+tmp/
+*.tmp
+*.temp
+*.bak
+~$*
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Private or non-redistributable source material
+papers/
+data/*.xlsx
+data/*.xls
+data/*[Nn]otes*.docx
+manuscript/*[Aa]uthor*[Aa]ffirmation*
