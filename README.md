@@ -9,35 +9,51 @@ Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabr
 Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
 ## Reproducibility
-This repository contains the necessary files and code to reproduce the analyses, figures, and the manuscript. 
 
-## Usage
-To reproduce the analyses, you will need to have R (https://cran.r-project.org/) and RStudio (https://www.rstudio.com/products/rstudio/download/#download) installed on your computer.
+The repository contains the source code, canonical analysis dataset, package lockfile, and publication artifacts for the project. It does not contain local package libraries, targets caches, article PDFs, or private journal administration files.
 
-To help with reproducibility, this project uses the `renv` R package (see https://rstudio.github.io/renv/articles/renv.html). With `renv`, the state of this R project can be easily loaded as `renv` keeps track of the required R packages (including version), and (if known) the external source from which packages were retrieved (e.g., CRAN, Github). With `renv`, packages are installed to a project specific library rather than your user or system library. The `renv` package must be installed on your machine before being able to benefit from its features. The package can be installed using the following command:
+The authoritative dataset is [`data/studies_data.csv`](data/studies_data.csv). Its structure, checksum, limitations, and change protocol are documented in [`data/README.md`](data/README.md). Detailed setup, system requirements, storage policy, and verification commands are in [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md).
 
-``` r
+## Setup
+
+Use R 4.4.3, which matches `renv.lock`. Install `renv`, open `pcos_ree_meta.Rproj`, and restore the recorded packages:
+
+```r
 install.packages("renv")
+renv::restore()
 ```
 
-Once you have `renv` installed, you can get a copy of this repository on your machine by clicking the green Code button then choose Download zip. Save to your machine and extract. After extraction, double click the `pcos_ree_meta.Rproj` file in the root directory. This will automatically open RStudio. This will ensure all paths work on your system as the working directory will be set to the location of the `.Rproj` file. Upon opening, RStudio will recognize the `renv` files and you will be informed that the project library is out of sync with the lockfile. At shown in the console pane of RStudio, running `renv::restore()` will install the packages recorded in the lockfile. This could take some time depending on your machine and internet connection.
+The project also requires a matching Rtools/C++ toolchain, Quarto, XeLaTeX, Latin Modern Roman fonts, and Chrome or Chromium. The Stan models are computationally expensive, so package restoration and a full rebuild may take substantial time and disk space.
+
+Run the fast structural and data checks before fitting models:
+
+```text
+Rscript R/check_reproducibility.R
+Rscript R/check_reproducibility.R --environment
+```
 
 ## Targets analysis pipeline
 
-This project also uses a function based analysis pipeline using
-[`targets`](https://books.ropensci.org/targets/). Instead of script based pipelines the `targets` package makes use of functions applied to targets specified within the pipeline. The targets can be viewed in the `_targets.R` file, and any user defined functions are available in `R/functions.r`.
+The analysis is defined in [`_targets.R`](_targets.R), with project functions under [`R/functions/`](R/functions/). The committed `_targets.yaml` sets the ignored, project-relative `_targets/` directory as the default store. A machine-specific external store can be selected with an ignored `_targets.yaml.local` file and the `TAR_CONFIG` environment variable.
 
-You can view the existing targets pipeline by downloading the `targets_pipeline.html` file and opening it in your browser.
+Inspect the pipeline without fitting models:
 
-Useful console functions:
+```r
+targets::tar_manifest()
+targets::tar_visnetwork()
+```
 
-- `tar_edit()` opens the make file
-- `tar_make()` to run targets
-- `tar_visnetwork()` to view pipeline
+Run individual inexpensive targets with `targets::tar_make(names = ...)`. Run the complete workflow, including figures, tables, and manuscripts, only when the full analysis is intended:
 
-## Software and packages used
+```r
+targets::tar_make()
+```
 
-The [`grateful`](https://pakillo.github.io/grateful/index.html) package was used to create citations to all software and packages used in the analysis. The `grateful` report can be viewed by downloading the `grateful-report.pdf` file.
+Generated files are declared as file targets so deletion or modification invalidates the corresponding target. Publication artifacts may be versioned when deliberately updated and reviewed; development intermediates and caches remain untracked.
+
+## Software and package citations
+
+The [`grateful`](https://pakillo.github.io/grateful/index.html) report is retained in `grateful-report.pdf`. Exact R package versions are recorded in `renv.lock`.
 
 ## License
 
