@@ -5,7 +5,6 @@
 
 # Load packages required to define the pipeline:
 library(targets)
-# library(tarchetypes) # Load other packages as needed.
 
 # Set target options:
 tar_option_set(
@@ -118,11 +117,25 @@ list(
     here("data", "studies_data.csv"),
     format = "file"
   ),
+
+  tar_target(
+    data_manifest_file,
+    here("data", "README.md"),
+    format = "file"
+  ),
+
+  tar_target(
+    reproducibility_checks,
+    check_project_reproducibility(main_arm_data_file, data_manifest_file)
+  ),
   
   tar_target(
     main_arm_data,
-    prepare_data(main_arm_data_file) |>
-      filter(lab != 8) # remove Greek studies for main model
+    {
+      reproducibility_checks
+      prepare_data(main_arm_data_file) |>
+        filter(lab != 8) # remove Greek studies for main model
+    }
   ),
   
   tar_target(
@@ -139,7 +152,10 @@ list(
   
   tar_target(
     main_plus_greek_arm_data,
-    prepare_data(main_arm_data_file)
+    {
+      reproducibility_checks
+      prepare_data(main_arm_data_file)
+    }
   ),
   
   tar_target(
@@ -159,7 +175,14 @@ list(
   
   tar_target(
     descriptives_table_html,
-    convert_descriptives_table_to_html(descriptives_table)
+    convert_descriptives_table_to_html(descriptives_table),
+    format = "file"
+  ),
+
+  tar_target(
+    descriptives_table_docx,
+    convert_descriptives_table_to_docx(descriptives_table),
+    format = "file"
   ),
 
   # Fitting main analysis models
@@ -243,10 +266,13 @@ list(
   
   tar_target(
     combined_mean_plot_tiff,
-    ggsave("plots/combine_mean_plot.tiff",
-           plot = combined_mean_plot,
-           dpi = 300, device = "tiff",
-           w = 10, h = 5)
+    save_plot_tiff(
+      plot = combined_mean_plot,
+      path = file.path("plots", "combine_mean_plot.tiff"),
+      width = 10,
+      height = 5
+    ),
+    format = "file"
   ),
   
   tar_target(
@@ -274,10 +300,13 @@ list(
   
   tar_target(
     combined_variance_plot_tiff,
-    ggsave("plots/combine_variance_plot.tiff",
-           plot = combined_variance_plot,
-           dpi = 300, device = "tiff",
-           w = 10, h = 5)
+    save_plot_tiff(
+      plot = combined_variance_plot,
+      path = file.path("plots", "combine_variance_plot.tiff"),
+      width = 10,
+      height = 5
+    ),
+    format = "file"
   ),
   
   #### Pairwise sensitivity analysis ----
@@ -428,6 +457,20 @@ list(
     get_variance_contrast_condition_moderator(main_arm_variance_effects_model_fat_free_mass,
                                               main_arm_data_effects_imputed_demographics,
                                               predictor_medians)
+  ),
+
+  #### Manuscripts ----
+
+  tarchetypes::tar_quarto(
+    pre_print_pdf,
+    path = file.path("manuscript", "pre_print.qmd"),
+    quiet = FALSE
+  ),
+
+  tarchetypes::tar_quarto(
+    submission_manuscript_pdf,
+    path = file.path("manuscript", "submission_manuscript.qmd"),
+    quiet = FALSE
   )
   
 )

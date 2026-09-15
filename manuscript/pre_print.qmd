@@ -1,7 +1,7 @@
 ---
 title: |
   Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis
-date: last-modified
+date: 2025-12-03
 date-format: long
 format:
   pdf:
@@ -86,8 +86,6 @@ execute:
 library(tidyverse)
 library(flextable)
 library(tidybayes)
-
-targets::tar_config_set(store = here::here('_targets'))
 
 ```
 

@@ -4,7 +4,7 @@
     "Repositories": [
       {
         "Name": "CRAN",
-        "URL": "https://packagemanager.posit.co/cran/latest"
+        "URL": "https://packagemanager.posit.co/cran/2025-10-14"
       }
     ]
   },
@@ -5971,6 +5971,41 @@
       "Author": "Thomas Lin Pedersen [aut, cre] (ORCID: <https://orcid.org/0000-0002-5147-4711>), Jeroen Ooms [aut] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Devon Govett [aut] (Author of font-manager), Posit Software, PBC [cph, fnd] (ROR: <https://ror.org/03wc8by49>)",
       "Maintainer": "Thomas Lin Pedersen <thomas.pedersen@posit.co>",
       "Repository": "CRAN"
+    },
+    "qs": {
+      "Package": "qs",
+      "Version": "0.27.3",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c9b643f00e514841ba0ded6dc33f788b"
+    },
+    "quarto": {
+      "Package": "quarto",
+      "Version": "1.5.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c948476ae43811c74888f0d4534832a3"
+    },
+    "RApiSerialize": {
+      "Package": "RApiSerialize",
+      "Version": "0.1.4",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "363cffb978c5b0e8042623638e984574"
+    },
+    "stringfish": {
+      "Package": "stringfish",
+      "Version": "0.17.0",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "3534d75027aa5209780e7aded733983c"
+    },
+    "tarchetypes": {
+      "Package": "tarchetypes",
+      "Version": "0.13.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "7cfd918dc824c176c1eab4c9f323fdd0"
     },
     "targets": {
       "Package": "targets",

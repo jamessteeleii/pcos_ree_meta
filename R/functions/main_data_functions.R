@@ -604,7 +604,11 @@ create_descriptives_table <- function(data) {
   
 }
 
-convert_descriptives_table_to_docx <- function(table) {
+convert_descriptives_table_to_docx <- function(
+    table,
+    path = file.path("tables", "descriptives_table.docx")) {
+  path <- ensure_parent_directory(path)
+
   # Create a new Word document
   doc <- read_docx()
   
@@ -622,20 +626,28 @@ convert_descriptives_table_to_docx <- function(table) {
     body_end_section_landscape()
   
   # Save to file
-  print(doc, target = "tables/descriptives_table.docx")
+  print(doc, target = path)
+  path
 }
 
-convert_descriptives_table_to_html <- function(table) {
-  
-  # Save as image
-  save_as_html(table, path = "tables/descriptives_table.html",
+convert_descriptives_table_to_html <- function(
+    table,
+    path = file.path("tables", "descriptives_table.html")) {
+  path <- ensure_parent_directory(path)
+
+  save_as_html(table, path = path,
                title = "Descriptive characteristics of arms and participants for included studies")
-  
+  path
 }
 
-convert_descriptives_table_to_pdf <- function(table_html) {
+convert_descriptives_table_to_pdf <- function(
+    table_html,
+    path = file.path("manuscript", "descriptives_table.pdf")) {
+  path <- ensure_parent_directory(path)
+
   # Render to high-resolution PDF
-  webshot("tables/descriptives_table.html", "manuscript/descriptives_table.pdf", zoom = 2, vwidth = 2400)
+  webshot(table_html, path, zoom = 2, vwidth = 2400)
+  path
 }
 
 # Pairwise data preparation for sensitivity analysis
