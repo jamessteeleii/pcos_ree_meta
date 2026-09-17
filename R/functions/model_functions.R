@@ -6,174 +6,151 @@ rstan_setup <- function() {
   options(mc.cores = 4)
 }
 
+arm_sampling_control <- function() {
+  list(
+    adapt_delta = 0.99,
+    max_treedepth = 15
+  )
+}
+
+pairwise_mean_sampling_control <- function() {
+  list(
+    adapt_delta = 0.99,
+    max_treedepth = 15
+  )
+}
+
+pairwise_variance_sampling_control <- function() {
+  list(
+    adapt_delta = 0.9999,
+    max_treedepth = 15
+  )
+}
+
+# Keep the model formulas in one place so the no-sampling validation target and
+# the fitted models always inspect and use exactly the same specifications.
+arm_mean_formula <- function(moderator = NULL) {
+  moderator_term <- if (is.null(moderator)) {
+    ""
+  } else {
+    paste0(" + me(m_", moderator, ", se_", moderator, ")")
+  }
+
+  stats::as.formula(paste0(
+    "yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond",
+    moderator_term,
+    " + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1 | effect)"
+  ))
+}
+
+arm_variance_formula <- function(moderator = NULL) {
+  moderator_term <- if (is.null(moderator)) {
+    ""
+  } else {
+    paste0(" + me(m_", moderator, ", se_", moderator, ")")
+  }
+
+  stats::as.formula(paste0(
+    "yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond",
+    moderator_term,
+    " + me(log_yi_mean, se_log_yi_mean)",
+    " + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1 | effect)"
+  ))
+}
+
+pairwise_mean_formula <- function() {
+  yi_mean | se(sqrt(vi_mean)) ~ 1 + (1 | lab) + (1 | study)
+}
+
+pairwise_variance_formula <- function() {
+  yi_cvr | se(sqrt(vi_cvr)) ~ 1 + (1 | lab) + (1 | study)
+}
+
 # Arm based models
 ## Mean effects models
 set_prior_arm_mean_effects <- function() {
-  
-  # We take an estimate to set the prior for the CONT arms based on a meta-analysis of two large studies discussed here https://macrofactorapp.com/range-of-bmrs/
-  
-  data_prior <- tibble(
-    study = c(
-      "Mifflin, 1990", # DOI: 10.1093/ajcn/51.2.241
-      "Pavlidou, 2022" # DOI: 10.3390/metabo13020189
+  # These are the exact priors used in the registered analysis and reported in
+  # the manuscript. Define them directly so rebuilding the pipeline does not
+  # re-estimate fixed prior constants with diagnostically unstable MCMC fits.
+  c(
+    brms::set_prior(
+      "student_t(3, 1441.81371635515 , 84.5620086616271 )",
+      class = "b", coef = "Intercept"
     ),
-    n = c(247,549),
-    m = c(1349, 1533),
-    sd = c(214, 308)
-  )
-  
-  data_prior_mean_effects <- escalc(measure = "MN",
-                                   mi = m,
-                                   sdi = sd,
-                                   ni = n,
-                                   data = data_prior)
-  
-  # We fit a model to estimate with default weakly regularising priors
-  estimate_prior_mean_effects <- brm(yi | se(sqrt(vi)) ~ 1 + (1 | study),
-                                     data = data_prior_mean_effects,
-                                     chains = 4,
-                                     cores = 4,
-                                     seed = 1988,
-                                     warmup = 2000,
-                                     control = list(adapt_delta = 0.99),
-                                     iter = 8000)
-  
-  
-  estimate_prior_mean_effects <- broom.mixed::tidy(estimate_prior_mean_effects)
-  
-  # The we set the priors taking the estimates from the models (note, df set to 3 to be conservative) 
-  prior_arm_mean_effects <-
-    c(
-      # The prior on the intercept i.e., CONT arms is set from the estimate of the two studies means mentioned above
-      set_prior(paste("student_t(3,", estimate_prior_mean_effects$estimate[1],",", estimate_prior_mean_effects$std.error[1],")"),
-                class = "b", coef = "Intercept"),
-      # The prior on the random effects for intercept i.e., CONT arms is set from the estimate of the two studies variance mentioned above
-      set_prior(paste("student_t(3,", estimate_prior_mean_effects$estimate[2],",", estimate_prior_mean_effects$std.error[2],")"),
-                class = "sd", coef = "Intercept", group = "study"),
-      # The fixed effect coef reflecting the difference between CONT and PCOS is set based on a wide range of possible values
-      # This uses the min and max values of ranges reported in the two studies i.e., 2492 - 908 = 1584
-      # We then set a student t prior that permits values approximately up to this value with the majority of it's mass centred around zero
-      set_prior("student_t(3, 0, 200)", class = "b", coef = "condPCOS")
+    brms::set_prior(
+      "student_t(3, 149.8864833995 , 82.9076267864978 )",
+      class = "sd", coef = "Intercept", group = "study"
+    ),
+    brms::set_prior(
+      "student_t(3, 0, 200)",
+      class = "b", coef = "condPCOS"
     )
-  
-  return(prior_arm_mean_effects)
-  
+  )
 }
 
 fit_arm_mean_effects_model <- function(data, prior) {
-  
-  arm_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect),
+  rstan_setup()
+  formula <- arm_mean_formula()
+  validate_arm_model_data(data, outcome = "mean", label = "arm mean model")
+  validate_brms_prior(prior, formula, data, label = "arm mean model")
+
+  arm_model <- brm(formula,
                    data = data,
                    prior = prior,
                    chains = 4,
                    cores = 4,
                    seed = 1988,
                    warmup = 2000,
+                   control = arm_sampling_control(),
                    iter = 8000)
 }
 
 ## Variance effects models
 set_prior_arm_variance_effects <- function() {
-  
-  # We take an estimate to set the prior for the CONT arms based on a meta-analysis of two large studies discussed here https://macrofactorapp.com/range-of-bmrs/
-  
-  data_prior <- tibble(
-    study = c(
-      "Mifflin, 1990", # DOI: 10.1093/ajcn/51.2.241
-      "Pavlidou, 2022" # DOI: 10.3390/metabo13020189
+  # Preserve the exact registered and reported prior distributions without
+  # rerunning the two-study calibration models that produced these constants.
+  c(
+    brms::set_prior(
+      "student_t(3, 5.54405048313954 , 0.803037850697044 )",
+      class = "b", coef = "Intercept"
     ),
-    n = c(247,549),
-    m = c(1349, 1533),
-    sd = c(214, 308)
+    brms::set_prior(
+      "student_t(3, 1.08064387735468 , 1.06426381334781 )",
+      class = "sd", coef = "Intercept", group = "study"
+    ),
+    brms::set_prior(
+      "student_t(3, 0, 2.5)",
+      class = "b", coef = "melog_yi_meanse_log_yi_mean"
+    ),
+    brms::set_prior(
+      "student_t(3, 0, 5.3)",
+      class = "b", coef = "condPCOS"
+    ),
+    brms::set_prior(
+      "student_t(3, 7.28248746877373 , 0.624816107345362 )",
+      class = "meanme", coef = "melog_yi_mean"
+    ),
+    brms::set_prior(
+      "student_t(3, 0, 5)",
+      class = "sdme", coef = "melog_yi_mean"
+    )
   )
-  
-  
-  data_prior_variance_effects <- escalc(measure = "SDLN",
-                                       mi = m,
-                                       sdi = sd,
-                                       ni = n,
-                                       data = data_prior)
-  
-  # We fit a model to estimate with default weakly regularising priors
-  estimate_prior_variance_effects <- brm(yi | se(sqrt(vi)) ~ 1 + (1 | study),
-                                         data = data_prior_variance_effects,
-                                         chains = 4,
-                                         cores = 4,
-                                         seed = 1988,
-                                         warmup = 2000,
-                                         control = list(adapt_delta = 0.99),
-                                         iter = 8000)
-  
-  
-  estimate_prior_variance_effects <- broom.mixed::tidy(estimate_prior_variance_effects)
-  
-  # Re-estimate mean effects so we have a prior for the mean of the means as a covariate in the model (and its se)
-  data_prior_mean_effects <- escalc(measure = "MN",
-                                   mi = m,
-                                   sdi = sd,
-                                   ni = n,
-                                   data = data_prior)
-  
-  data_prior_mean_effects <- data_prior_mean_effects |>
-    mutate(
-      yi_floor = pmax(yi, 1e-6),
-      se_log_yi = sqrt(vi) / yi_floor,
-      log_yi = log(yi_floor)
-    )
-  
-  # We fit a model to estimate with default weakly regularising priors
-  estimate_prior_mean_effects <- brm(log_yi | se(se_log_yi) ~ 1 + (1 | study),
-                                     data = data_prior_mean_effects,
-                                     chains = 4,
-                                     cores = 4,
-                                     seed = 1988,
-                                     warmup = 2000,
-                                     control = list(adapt_delta = 0.99),
-                                     iter = 8000)
-  
-  
-  estimate_prior_mean_effects <- broom.mixed::tidy(estimate_prior_mean_effects)
-  
-  # The we set the priors taking the estimates from the models of 
-  prior_arm_variance_effects <-
-    c(
-      # The prior on the intercept i.e., CONT arms is set from the estimate of the two studies log SDs mentioned above
-      set_prior(paste("student_t(3,", estimate_prior_variance_effects$estimate[1],",", estimate_prior_variance_effects$std.error[1],")"),
-                class = "b", coef = "Intercept"),
-      # The prior on the random effects for intercept i.e., CONT arms is set from the estimate of the two studies variance mentioned above
-      set_prior(paste("student_t(3,", estimate_prior_variance_effects$estimate[2],",", estimate_prior_variance_effects$std.error[2],")"),
-                class = "sd", coef = "Intercept", group = "study"),
-      
-      # The fixed effect coef for log(mean) is typically ~1 due to mean-variance relationship being commonplace in other measures 
-      # But we set it to be centred there though with a wide scale to indicate uncertainty in this outcome specifically
-      set_prior("student_t(3, 0, 2.5)", class = "b", coef = "melog_yi_meanse_log_yi_mean"),
-      
-      # The fixed effect coef reflecting the difference between CONT and PCOS is set based on a wide range of possible values
-      # Given the rough relationship of ~1 for log(mean) on log(sd) in other data we again set it to reflect the range of diffs on the log scale
-      # This uses the min and max values of ranges reported in the two studies i.e., 2492 - 908 = 1584
-      # We then set a student t prior that permits values approximately up to this value with the majority of it's mass centred around zero
-      set_prior("student_t(3, 0, 5.3)", class = "b", coef = "condPCOS"),
-      
-      # The mean of the log(mean) measurement error has to be positive (as means are positive), as does the sd, so we set these to wide half t distributions
-      set_prior(paste("student_t(3,", estimate_prior_mean_effects$estimate[1],",", estimate_prior_mean_effects$std.error[1],")"),
-                class = "meanme", coef = "melog_yi_mean"),
-      set_prior("student_t(3, 0, 5)", class = "sdme", coef = "melog_yi_mean")
-      
-    )
-  
-  return(prior_arm_variance_effects)
-  
 }
 
 fit_arm_variance_effects_model <- function(data, prior) {
-  
-  arm_model <- brm(yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond + me(log_yi_mean, se_log_yi_mean) + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect),
+  rstan_setup()
+  formula <- arm_variance_formula()
+  validate_arm_model_data(data, outcome = "variance", label = "arm variance model")
+  validate_brms_prior(prior, formula, data, label = "arm variance model")
+
+  arm_model <- brm(formula,
                    data = data,
                    prior = prior,
                    chains = 4,
                    cores = 4,
                    seed = 1988,
                    warmup = 2000,
+                   control = arm_sampling_control(),
                    iter = 8000)
 }
 
@@ -216,11 +193,14 @@ get_mean_contrast_condition <- function(model) {
 }
 
 get_variance_preds_condition <- function(model, data) {
+  reference_values <- get_variance_reference_values(data)
+
   # pooled preds per condition
   preds <- avg_predictions(
     model,
     newdata = datagrid(
-      yi_mean = median(data$yi_mean, na.rm=TRUE),
+      log_yi_mean = reference_values$log_yi_mean,
+      se_log_yi_mean = reference_values$se_log_yi_mean,
       cond = unique(data$cond)
     ),
     by = "cond",
@@ -236,7 +216,8 @@ get_variance_preds_study_condition <- function(model, data) {
   # pooled preds per condition
   preds <- predictions(
     model,
-    newdata = data |> filter(!is.na(yi_sd)),
+    newdata = data |>
+      filter(!is.na(yi_sd), !is.na(log_yi_mean), !is.na(se_log_yi_mean)),
     re_formula = NULL,
   ) |>
     get_draws() |>
@@ -246,11 +227,14 @@ get_variance_preds_study_condition <- function(model, data) {
 }
 
 get_variance_contrast_condition <- function(model, data) {
+  reference_values <- get_variance_reference_values(data)
+
   # pooled preds per condition
   preds <- avg_comparisons(
     model,
     newdata = datagrid(
-      yi_mean = median(data$yi_mean, na.rm=TRUE)
+      log_yi_mean = reference_values$log_yi_mean,
+      se_log_yi_mean = reference_values$se_log_yi_mean
     ),
     re_formula = NA,
     variables = "cond"
@@ -259,6 +243,24 @@ get_variance_contrast_condition <- function(model, data) {
     mutate(draw = exp(draw))
   
   return(preds)
+}
+
+get_variance_reference_values <- function(data) {
+  complete_data <- data |>
+    filter(
+      !is.na(yi_mean),
+      !is.na(log_yi_mean),
+      !is.na(se_log_yi_mean)
+    )
+
+  if (nrow(complete_data) == 0) {
+    stop("Variance prediction data have no complete mean-effect reference values.", call. = FALSE)
+  }
+
+  tibble(
+    log_yi_mean = log(median(complete_data$yi_mean)),
+    se_log_yi_mean = median(complete_data$se_log_yi_mean)
+  )
 }
 
 
@@ -563,28 +565,36 @@ combine_variance_plots <- function(meta_pred_plot,
 # Pairwise models
 ## Note, we just utilise the weakly regularising default priors from brms for both pairwise models
 fit_pairwise_mean_model <- function(data) {
-  
-  pairwise_model <- brm(yi_mean | se(sqrt(vi_mean)) ~ 1 + (1 | lab) + (1 | study),
+  rstan_setup()
+  formula <- pairwise_mean_formula()
+  validate_pairwise_model_data(data, label = "pairwise mean model")
+  validate_brms_formula(formula, data, label = "pairwise mean model")
+
+  pairwise_model <- brm(formula,
                         data = data,
                         chains = 4,
                         cores = 4,
                         seed = 1988,
                         warmup = 2000,
-                        control = list(adapt_delta = 0.99),
+                        control = pairwise_mean_sampling_control(),
                         iter = 8000)
   
   return(pairwise_model)
 }
 
 fit_pairwise_variance_model <- function(data) {
-  
-  pairwise_model <- brm(yi_cvr | se(sqrt(vi_cvr)) ~ 1 + (1 | lab) + (1 | study),
+  rstan_setup()
+  formula <- pairwise_variance_formula()
+  validate_pairwise_model_data(data, label = "pairwise variance model")
+  validate_brms_formula(formula, data, label = "pairwise variance model")
+
+  pairwise_model <- brm(formula,
                         data = data,
                         chains = 4,
                         cores = 4,
                         seed = 1988,
                         warmup = 2000,
-                        control = list(adapt_delta = 0.99),
+                        control = pairwise_variance_sampling_control(),
                         iter = 8000)
   
   return(pairwise_model)
@@ -592,35 +602,40 @@ fit_pairwise_variance_model <- function(data) {
 
 # Additional models
 get_predictor_medians <- function(data) {
-  # use median BMI in controls
-  m_bmi <- data |>
+  # Use one observation per control arm to define reference moderator values.
+  control_arms <- data |>
     filter(cond == "Control") |>
     group_by(arm) |>
     slice_head(n=1) |>
-    ungroup() |>
-    summarise(m_bmi = median(m_bmi, na.rm = TRUE))
-  
-  # use median BMI in controls
-  m_fat_free_mass <- data |>
-    filter(cond == "Control") |>
-    group_by(arm) |>
-    slice_head(n=1) |>
-    ungroup() |>
-    summarise(m_fat_free_mass = median(m_fat_free_mass, na.rm = TRUE))
-  
-  predictor_medians <- tibble(
-    m_bmi = m_bmi$m_bmi,
-    m_fat_free_mass = m_fat_free_mass$m_fat_free_mass
-  )
+    ungroup()
+
+  predictor_medians <- control_arms |>
+    summarise(
+      m_bmi = median(m_bmi, na.rm = TRUE),
+      se_bmi = median(se_bmi, na.rm = TRUE),
+      m_fat_free_mass = median(m_fat_free_mass, na.rm = TRUE),
+      se_fat_free_mass = median(se_fat_free_mass, na.rm = TRUE)
+    )
   
   return(predictor_medians)
 }
   
 
 fit_arm_mean_effects_model_moderator <- function(data, prior, moderator) {
-  
-  formula <- as.formula(paste0("yi_mean | se(sqrt(vi_mean)) ~ 0 + Intercept + cond + me(m_",moderator,",se_",moderator,") +", 
-                               "(1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect)"))
+  rstan_setup()
+  formula <- arm_mean_formula(moderator)
+  validate_arm_model_data(
+    data,
+    outcome = "mean",
+    moderator = moderator,
+    label = paste(moderator, "moderator arm mean model")
+  )
+  validate_brms_prior(
+    prior,
+    formula,
+    data,
+    label = paste(moderator, "moderator arm mean model")
+  )
   
   arm_model <- brm(formula,
                    data = data,
@@ -629,13 +644,25 @@ fit_arm_mean_effects_model_moderator <- function(data, prior, moderator) {
                    cores = 4,
                    seed = 1988,
                    warmup = 2000,
+                   control = arm_sampling_control(),
                    iter = 8000)
 }
 
 fit_arm_variance_effects_model_moderator <- function(data, prior, moderator) {
-  
-  formula <- as.formula(paste0("yi_sd | se(sqrt(vi_sd)) ~ 0 + Intercept + cond + me(m_",moderator,",se_",moderator,") +", 
-  "me(log_yi_mean, se_log_yi_mean) + (1 + cond | lab) + (1 + cond | study) + (1 | arm) + (1|effect)"))
+  rstan_setup()
+  formula <- arm_variance_formula(moderator)
+  validate_arm_model_data(
+    data,
+    outcome = "variance",
+    moderator = moderator,
+    label = paste(moderator, "moderator arm variance model")
+  )
+  validate_brms_prior(
+    prior,
+    formula,
+    data,
+    label = paste(moderator, "moderator arm variance model")
+  )
   
   arm_model <- brm(formula,
                    data = data,
@@ -644,6 +671,7 @@ fit_arm_variance_effects_model_moderator <- function(data, prior, moderator) {
                    cores = 4,
                    seed = 1988,
                    warmup = 2000,
+                   control = arm_sampling_control(),
                    iter = 8000)
 }
 
@@ -654,7 +682,9 @@ get_mean_contrast_condition_moderator <- function(model, predictor_medians) {
     model,
     newdata = datagrid(
       m_bmi = predictor_medians$m_bmi,
-      m_fat_free_mass = predictor_medians$m_fat_free_mass
+      se_bmi = predictor_medians$se_bmi,
+      m_fat_free_mass = predictor_medians$m_fat_free_mass,
+      se_fat_free_mass = predictor_medians$se_fat_free_mass
     ),
     re_formula = NA,
     variables = "cond"
@@ -664,14 +694,18 @@ get_mean_contrast_condition_moderator <- function(model, predictor_medians) {
 }
 
 get_variance_contrast_condition_moderator <- function(model, data, predictor_medians) {
-  
+  reference_values <- get_variance_reference_values(data)
+
   # pooled preds per condition
   preds <- avg_comparisons(
     model,
     newdata = datagrid(
-      yi_mean = median(data$yi_mean, na.rm=TRUE),
+      log_yi_mean = reference_values$log_yi_mean,
+      se_log_yi_mean = reference_values$se_log_yi_mean,
       m_bmi = predictor_medians$m_bmi,
-      m_fat_free_mass = predictor_medians$m_fat_free_mass
+      se_bmi = predictor_medians$se_bmi,
+      m_fat_free_mass = predictor_medians$m_fat_free_mass,
+      se_fat_free_mass = predictor_medians$se_fat_free_mass
     ),
     re_formula = NA,
     variables = "cond"

@@ -87,6 +87,10 @@ library(tidyverse)
 library(flextable)
 library(tidybayes)
 
+# Do not render model-dependent results unless every fitted model passes the
+# registered convergence and HMC diagnostic checks.
+targets::tar_load(all_model_diagnostics_gate)
+
 ```
 
 # Introduction

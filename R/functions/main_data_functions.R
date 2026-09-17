@@ -114,11 +114,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_age = case_when(
         is.na(sd_age) & scenario == 1 & n_age >= 25 ~ (upper_range_age - lower_range_age) / 4,
-        is.na(sd_age) & scenario == 1 & n_age < 25  ~ (upper_range_age - lower_range_age) / (2 * qnorm((n - 0.375) / (n_age + 0.25))),
+        is.na(sd_age) & scenario == 1 & n_age < 25  ~ (upper_range_age - lower_range_age) / (2 * qnorm((n_age - 0.375) / (n_age + 0.25))),
         is.na(sd_age) & scenario == 2 ~ iqr_age / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_age) & scenario == 3 & n_age >= 25 ~ sqrt(((upper_range_age - lower_range_age)^2 / 16) + (iqr_age^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_age) & scenario == 3 & n_age < 25  ~ sqrt(((upper_range_age - lower_range_age)^2 / (4 * qnorm((n_age - 0.375) / (n_age + 0.25)))^2) +
-                                                     (iqr_age^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_age) & scenario == 3 & n_age < 25  ~ sqrt(((upper_range_age - lower_range_age) / (2 * qnorm((n_age - 0.375) / (n_age + 0.25))))^2 +
+                                                     (iqr_age / (2 * qnorm(0.75)))^2),
         .default = sd_age
       )
     ) |>
@@ -143,11 +143,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_body_mass = case_when(
         is.na(sd_body_mass) & scenario == 1 & n_body_mass >= 25 ~ (upper_range_body_mass - lower_range_body_mass) / 4,
-        is.na(sd_body_mass) & scenario == 1 & n_body_mass < 25  ~ (upper_range_body_mass - lower_range_body_mass) / (2 * qnorm((n - 0.375) / (n_body_mass + 0.25))),
+        is.na(sd_body_mass) & scenario == 1 & n_body_mass < 25  ~ (upper_range_body_mass - lower_range_body_mass) / (2 * qnorm((n_body_mass - 0.375) / (n_body_mass + 0.25))),
         is.na(sd_body_mass) & scenario == 2 ~ iqr_body_mass / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_body_mass) & scenario == 3 & n_body_mass >= 25 ~ sqrt(((upper_range_body_mass - lower_range_body_mass)^2 / 16) + (iqr_body_mass^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_body_mass) & scenario == 3 & n_body_mass < 25  ~ sqrt(((upper_range_body_mass - lower_range_body_mass)^2 / (4 * qnorm((n_body_mass - 0.375) / (n_body_mass + 0.25)))^2) +
-                                                             (iqr_body_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_body_mass) & scenario == 3 & n_body_mass < 25  ~ sqrt(((upper_range_body_mass - lower_range_body_mass) / (2 * qnorm((n_body_mass - 0.375) / (n_body_mass + 0.25))))^2 +
+                                                             (iqr_body_mass / (2 * qnorm(0.75)))^2),
         .default = sd_body_mass
       )
     ) |>
@@ -172,11 +172,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_fat_mass = case_when(
         is.na(sd_fat_mass) & scenario == 1 & n_fat_mass >= 25 ~ (upper_range_fat_mass - lower_range_fat_mass) / 4,
-        is.na(sd_fat_mass) & scenario == 1 & n_fat_mass < 25  ~ (upper_range_fat_mass - lower_range_fat_mass) / (2 * qnorm((n - 0.375) / (n_fat_mass + 0.25))),
+        is.na(sd_fat_mass) & scenario == 1 & n_fat_mass < 25  ~ (upper_range_fat_mass - lower_range_fat_mass) / (2 * qnorm((n_fat_mass - 0.375) / (n_fat_mass + 0.25))),
         is.na(sd_fat_mass) & scenario == 2 ~ iqr_fat_mass / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_fat_mass) & scenario == 3 & n_fat_mass >= 25 ~ sqrt(((upper_range_fat_mass - lower_range_fat_mass)^2 / 16) + (iqr_fat_mass^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_fat_mass) & scenario == 3 & n_fat_mass < 25  ~ sqrt(((upper_range_fat_mass - lower_range_fat_mass)^2 / (4 * qnorm((n_fat_mass - 0.375) / (n_fat_mass + 0.25)))^2) +
-                                                             (iqr_fat_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_fat_mass) & scenario == 3 & n_fat_mass < 25  ~ sqrt(((upper_range_fat_mass - lower_range_fat_mass) / (2 * qnorm((n_fat_mass - 0.375) / (n_fat_mass + 0.25))))^2 +
+                                                             (iqr_fat_mass / (2 * qnorm(0.75)))^2),
         .default = sd_fat_mass
       )
     ) |>
@@ -201,11 +201,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_fat_free_mass = case_when(
         is.na(sd_fat_free_mass) & scenario == 1 & n_fat_free_mass >= 25 ~ (upper_range_fat_free_mass - lower_range_fat_free_mass) / 4,
-        is.na(sd_fat_free_mass) & scenario == 1 & n_fat_free_mass < 25  ~ (upper_range_fat_free_mass - lower_range_fat_free_mass) / (2 * qnorm((n - 0.375) / (n_fat_free_mass + 0.25))),
+        is.na(sd_fat_free_mass) & scenario == 1 & n_fat_free_mass < 25  ~ (upper_range_fat_free_mass - lower_range_fat_free_mass) / (2 * qnorm((n_fat_free_mass - 0.375) / (n_fat_free_mass + 0.25))),
         is.na(sd_fat_free_mass) & scenario == 2 ~ iqr_fat_free_mass / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_fat_free_mass) & scenario == 3 & n_fat_free_mass >= 25 ~ sqrt(((upper_range_fat_free_mass - lower_range_fat_free_mass)^2 / 16) + (iqr_fat_free_mass^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_fat_free_mass) & scenario == 3 & n_fat_free_mass < 25  ~ sqrt(((upper_range_fat_free_mass - lower_range_fat_free_mass)^2 / (4 * qnorm((n_fat_free_mass - 0.375) / (n_fat_free_mass + 0.25)))^2) +
-                                                             (iqr_fat_free_mass^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_fat_free_mass) & scenario == 3 & n_fat_free_mass < 25  ~ sqrt(((upper_range_fat_free_mass - lower_range_fat_free_mass) / (2 * qnorm((n_fat_free_mass - 0.375) / (n_fat_free_mass + 0.25))))^2 +
+                                                             (iqr_fat_free_mass / (2 * qnorm(0.75)))^2),
         .default = sd_fat_free_mass
       )
     ) |>
@@ -230,11 +230,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_height = case_when(
         is.na(sd_height) & scenario == 1 & n_height >= 25 ~ (upper_range_height - lower_range_height) / 4,
-        is.na(sd_height) & scenario == 1 & n_height < 25  ~ (upper_range_height - lower_range_height) / (2 * qnorm((n - 0.375) / (n_height + 0.25))),
+        is.na(sd_height) & scenario == 1 & n_height < 25  ~ (upper_range_height - lower_range_height) / (2 * qnorm((n_height - 0.375) / (n_height + 0.25))),
         is.na(sd_height) & scenario == 2 ~ iqr_height / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_height) & scenario == 3 & n_height >= 25 ~ sqrt(((upper_range_height - lower_range_height)^2 / 16) + (iqr_height^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_height) & scenario == 3 & n_height < 25  ~ sqrt(((upper_range_height - lower_range_height)^2 / (4 * qnorm((n_height - 0.375) / (n_height + 0.25)))^2) +
-                                                             (iqr_height^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_height) & scenario == 3 & n_height < 25  ~ sqrt(((upper_range_height - lower_range_height) / (2 * qnorm((n_height - 0.375) / (n_height + 0.25))))^2 +
+                                                             (iqr_height / (2 * qnorm(0.75)))^2),
         .default = sd_height
       )
     ) |>
@@ -259,11 +259,11 @@ prepare_data <- function(file) {
       # SD estimates
       sd_bmi = case_when(
         is.na(sd_bmi) & scenario == 1 & n_bmi >= 25 ~ (upper_range_bmi - lower_range_bmi) / 4,
-        is.na(sd_bmi) & scenario == 1 & n_bmi < 25  ~ (upper_range_bmi - lower_range_bmi) / (2 * qnorm((n - 0.375) / (n_bmi + 0.25))),
+        is.na(sd_bmi) & scenario == 1 & n_bmi < 25  ~ (upper_range_bmi - lower_range_bmi) / (2 * qnorm((n_bmi - 0.375) / (n_bmi + 0.25))),
         is.na(sd_bmi) & scenario == 2 ~ iqr_bmi / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd_bmi) & scenario == 3 & n_bmi >= 25 ~ sqrt(((upper_range_bmi - lower_range_bmi)^2 / 16) + (iqr_bmi^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd_bmi) & scenario == 3 & n_bmi < 25  ~ sqrt(((upper_range_bmi - lower_range_bmi)^2 / (4 * qnorm((n_bmi - 0.375) / (n_bmi + 0.25)))^2) +
-                                                             (iqr_bmi^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd_bmi) & scenario == 3 & n_bmi < 25  ~ sqrt(((upper_range_bmi - lower_range_bmi) / (2 * qnorm((n_bmi - 0.375) / (n_bmi + 0.25))))^2 +
+                                                             (iqr_bmi / (2 * qnorm(0.75)))^2),
         .default = sd_bmi
       )
     ) |>
@@ -294,8 +294,8 @@ prepare_data <- function(file) {
         is.na(sd) & scenario == 1 & n < 25  ~ (upper_range - lower_range) / (2 * qnorm((n - 0.375) / (n + 0.25))),
         is.na(sd) & scenario == 2 ~ iqr / (2 * qnorm(0.75)),  # IQR / 1.349
         is.na(sd) & scenario == 3 & n >= 25 ~ sqrt(((upper_range - lower_range)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
-        is.na(sd) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
-                                                     (iqr^2 / (4 * qnorm(0.75)^2))),
+        is.na(sd) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range) / (2 * qnorm((n - 0.375) / (n + 0.25))))^2 +
+                                                     (iqr / (2 * qnorm(0.75)))^2),
         .default = sd
       )
     ) |>
@@ -322,9 +322,9 @@ prepare_data <- function(file) {
           is.na(sd_bm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / 4,
           is.na(sd_bm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_bm_adjusted - lower_range_bm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
           is.na(sd_bm_adjusted) & scenario == 2 ~ iqr_bm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
-          is.na(sd_bm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_bm_adjusted - lower_range_bm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
-          is.na(sd_bm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_bm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
-                                                                   (iqr_bm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_bm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_bm_adjusted - lower_range_bm_adjusted)^2 / 16) + (iqr_bm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_bm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range_bm_adjusted - lower_range_bm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))))^2 +
+                                                                   (iqr_bm_adjusted / (2 * qnorm(0.75)))^2),
           .default = sd_bm_adjusted
         )
       ) |>
@@ -351,9 +351,9 @@ prepare_data <- function(file) {
           is.na(sd_ffm_adjusted) & scenario == 1 & n >= 25 ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / 4,
           is.na(sd_ffm_adjusted) & scenario == 1 & n < 25  ~ (upper_range_ffm_adjusted - lower_range_ffm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))),
           is.na(sd_ffm_adjusted) & scenario == 2 ~ iqr_ffm_adjusted / (2 * qnorm(0.75)),  # IQR / 1.349
-          is.na(sd_ffm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_ffm_adjusted - lower_range_ffm_adjusted)^2 / 16) + (iqr^2 / (4 * qnorm(0.75)^2))),
-          is.na(sd_ffm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range - lower_range_ffm_adjusted)^2 / (4 * qnorm((n - 0.375) / (n + 0.25)))^2) +
-                                                                    (iqr_ffm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_ffm_adjusted) & scenario == 3 & n >= 25 ~ sqrt(((upper_range_ffm_adjusted - lower_range_ffm_adjusted)^2 / 16) + (iqr_ffm_adjusted^2 / (4 * qnorm(0.75)^2))),
+          is.na(sd_ffm_adjusted) & scenario == 3 & n < 25  ~ sqrt(((upper_range_ffm_adjusted - lower_range_ffm_adjusted) / (2 * qnorm((n - 0.375) / (n + 0.25))))^2 +
+                                                                    (iqr_ffm_adjusted / (2 * qnorm(0.75)))^2),
           .default = sd_ffm_adjusted
         )
       ) |>
@@ -405,12 +405,10 @@ impute_bmi_estimates <- function(data) {
   data <- data |>
     
     # convert height to cm for reporting
-    mutate(m_height = case_when(
-      m_height < 100 ~ m_height*100
-      ),
-      sd_height = case_when(
-        m_height < 100 ~ sd_height*100
-      )
+    mutate(
+      height_reported_in_metres = !is.na(m_height) & m_height < 3,
+      sd_height = if_else(height_reported_in_metres, sd_height * 100, sd_height),
+      m_height = if_else(height_reported_in_metres, m_height * 100, m_height)
     ) |>
     
     # impute estimates of missing weight/height/bmi and note where estimate
@@ -442,7 +440,8 @@ impute_bmi_estimates <- function(data) {
         is.na(m_bmi) & !is.na(m_body_mass) & !is.na(m_height) ~ m_body_mass/(m_height/100)^2,
         .default = m_bmi
       ),
-    )
+    ) |>
+    select(-height_reported_in_metres)
   
   return(data)
     

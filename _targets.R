@@ -33,14 +33,7 @@ tar_source("R/functions/.")
 
 # Replace the target list below with your own:
 list(
-  
-  #### Miscellaneous ----
-  
-  tar_target(
-    setup_for_rstan,
-    rstan_setup()
-  ),
-  
+
   #### Setting priors for arm-based models ----
   
   tar_target(
@@ -52,63 +45,6 @@ list(
     prior_arm_variance_effects,
     set_prior_arm_variance_effects(),
   ),
-  
-  
-  #### Example data and functions for pre-reg pipeline ----
-  
-  # Create and prepare example data for pairwise contrast and arm based models
-  tar_target(
-    example_pairwise_data,
-    create_pairwise_data_example()
-  ),
-  
-  tar_target(
-    example_pairwise_data_effects,
-    calculate_pairwise_effects_example(example_pairwise_data)
-  ),
-  
-  tar_target(
-    example_arm_data,
-    create_arm_data_example(example_pairwise_data)
-  ),
-  
-  tar_target(
-    example_arm_data_effects,
-    calculate_arm_effects_example(example_arm_data)
-  ),
-  
-  # Fitting example models
-  
-  tar_target(
-    example_arm_mean_effects_model,
-    fit_arm_mean_effects_model_example(
-      example_arm_data_effects,
-      prior_arm_mean_effects
-    )
-  ),
-  
-  tar_target(
-    example_arm_variance_effects_model,
-    fit_arm_variance_effects_model_example(
-      example_arm_data_effects,
-      prior_arm_variance_effects
-    )
-  ),
-  
-  tar_target(
-    example_pairwise_mean_effects_model,
-    fit_pairwise_mean_model_example(
-      example_pairwise_data_effects
-    )
-  ),
-  
-  tar_target(
-    example_pairwise_variance_effects_model,
-    fit_pairwise_variance_model_example(
-      example_pairwise_data_effects
-    )
-  ),
-  
   #### Main data and analysis ----
   
   # Read and prepare data for arm-based analysis
@@ -189,54 +125,86 @@ list(
   
   tar_target(
     main_arm_mean_effects_model,
-    fit_arm_mean_effects_model(
-      main_arm_data_effects,
-      prior_arm_mean_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_mean_effects_model(
+        main_arm_data_effects,
+        prior_arm_mean_effects
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_model,
-    fit_arm_variance_effects_model(
-      main_arm_data_effects,
-      prior_arm_variance_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_variance_effects_model(
+        main_arm_data_effects,
+        prior_arm_variance_effects
+      )
+    }
   ),
   
   # Get predictions and contrasts from main models
   
   tar_target(
     main_arm_mean_effects_preds_condition,
-    get_mean_preds_condition(main_arm_mean_effects_model)
+    {
+      main_arm_mean_effects_diagnostic_gate
+      get_mean_preds_condition(main_arm_mean_effects_model)
+    }
   ),
   
   tar_target(
     main_arm_mean_effects_preds_study_condition,
-    get_mean_preds_study_condition(main_arm_mean_effects_model, 
-                                   main_arm_data_effects)
+    {
+      main_arm_mean_effects_diagnostic_gate
+      get_mean_preds_study_condition(
+        main_arm_mean_effects_model,
+        main_arm_data_effects
+      )
+    }
   ),
   
   tar_target(
     main_arm_mean_effects_contrast_condition,
-    get_mean_contrast_condition(main_arm_mean_effects_model)
+    {
+      main_arm_mean_effects_diagnostic_gate
+      get_mean_contrast_condition(main_arm_mean_effects_model)
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_preds_condition,
-    get_variance_preds_condition(main_arm_variance_effects_model,
-                                 main_arm_data_effects)
+    {
+      main_arm_variance_effects_diagnostic_gate
+      get_variance_preds_condition(
+        main_arm_variance_effects_model,
+        main_arm_data_effects
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_preds_study_condition,
-    get_variance_preds_study_condition(main_arm_variance_effects_model,
-                                       main_arm_data_effects)
+    {
+      main_arm_variance_effects_diagnostic_gate
+      get_variance_preds_study_condition(
+        main_arm_variance_effects_model,
+        main_arm_data_effects
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_contrast_condition,
-    get_variance_contrast_condition(main_arm_variance_effects_model,
-                                    main_arm_data_effects)
+    {
+      main_arm_variance_effects_diagnostic_gate
+      get_variance_contrast_condition(
+        main_arm_variance_effects_model,
+        main_arm_data_effects
+      )
+    }
   ),
   
   # Create plots for main models
@@ -323,38 +291,54 @@ list(
   
   tar_target(
     pairwise_mean_effects_model,
-    fit_pairwise_mean_model(
-      pairwise_data_effects
-    )
+    {
+      model_specification_preflight
+      fit_pairwise_mean_model(
+        pairwise_data_effects
+      )
+    }
   ),
   
   tar_target(
     pairwise_variance_effects_model,
-    fit_pairwise_variance_model(
-      pairwise_data_effects
-    )
+    {
+      model_specification_preflight
+      fit_pairwise_variance_model(
+        pairwise_data_effects
+      )
+    }
   ),
   
   #### Sensitivity analysis with only baseline data ----
-  
+
+  tar_target(
+    baseline_arm_data_effects,
+    main_arm_data_effects |>
+      filter(timepoint == "baseline")
+  ),
+
   # Fitting baseline arm analysis models
   
   tar_target(
     baseline_arm_mean_effects_model,
-    fit_arm_mean_effects_model(
-      main_arm_data_effects |>
-        filter(timepoint == "baseline"), # just take baseline
-      prior_arm_mean_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_mean_effects_model(
+        baseline_arm_data_effects,
+        prior_arm_mean_effects
+      )
+    }
   ),
   
   tar_target(
     baseline_arm_variance_effects_model,
-    fit_arm_variance_effects_model(
-      main_arm_data_effects |>
-        filter(timepoint == "baseline"), # just take baseline
-      prior_arm_variance_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_variance_effects_model(
+        baseline_arm_data_effects,
+        prior_arm_variance_effects
+      )
+    }
   ),
   
   #### Sensitivity analysis including Greek lab studies ----
@@ -364,18 +348,24 @@ list(
   
   tar_target(
     main_plus_greek_arm_mean_effects_model,
-    fit_arm_mean_effects_model(
-      main_plus_greek_arm_data_effects, 
-      prior_arm_mean_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_mean_effects_model(
+        main_plus_greek_arm_data_effects,
+        prior_arm_mean_effects
+      )
+    }
   ),
   
   tar_target(
     main_plus_greek_arm_variance_effects_model,
-    fit_arm_variance_effects_model(
-      main_plus_greek_arm_data_effects,
-      prior_arm_variance_effects
-    )
+    {
+      model_specification_preflight
+      fit_arm_variance_effects_model(
+        main_plus_greek_arm_data_effects,
+        prior_arm_variance_effects
+      )
+    }
   ),
   
   #### Additional models including BMI and fat free mass
@@ -393,70 +383,426 @@ list(
     predictor_medians,
     get_predictor_medians(main_arm_data_effects_imputed_demographics)
   ),
+
+  # Validate all analysis datasets and brms formulas without compiling or sampling.
+  tar_target(
+    analysis_preflight,
+    run_analysis_preflight(
+      main_arm_data_effects,
+      baseline_arm_data_effects,
+      main_plus_greek_arm_data_effects,
+      pairwise_data_effects,
+      main_arm_data_effects_imputed_demographics
+    )
+  ),
+
+  # Validate every registered informative prior against each formula and
+  # analysis dataset without compiling or sampling a model.
+  tar_target(
+    model_specification_preflight,
+    {
+      analysis_preflight
+      run_model_specification_preflight(
+        main_arm_data_effects,
+        baseline_arm_data_effects,
+        main_plus_greek_arm_data_effects,
+        main_arm_data_effects_imputed_demographics,
+        prior_arm_mean_effects,
+        prior_arm_variance_effects
+      )
+    }
+  ),
   
   # BMI
   tar_target(
     main_arm_mean_effects_model_bmi,
-    fit_arm_mean_effects_model_moderator(
-      main_arm_data_effects_imputed_demographics,
-      prior_arm_mean_effects,
-      "bmi"
-    )
+    {
+      model_specification_preflight
+      fit_arm_mean_effects_model_moderator(
+        main_arm_data_effects_imputed_demographics,
+        prior_arm_mean_effects,
+        "bmi"
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_model_bmi,
-    fit_arm_variance_effects_model_moderator(
-      main_arm_data_effects_imputed_demographics,
-      prior_arm_variance_effects,
-      "bmi"
-    )
+    {
+      model_specification_preflight
+      fit_arm_variance_effects_model_moderator(
+        main_arm_data_effects_imputed_demographics,
+        prior_arm_variance_effects,
+        "bmi"
+      )
+    }
   ),
   
   tar_target(
     main_arm_mean_effects_contrast_condition_bmi,
-    get_mean_contrast_condition_moderator(main_arm_mean_effects_model_bmi,
-                                          predictor_medians)
+    {
+      main_arm_mean_effects_model_bmi_diagnostic_gate
+      get_mean_contrast_condition_moderator(
+        main_arm_mean_effects_model_bmi,
+        predictor_medians
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_contrast_condition_bmi,
-    get_variance_contrast_condition_moderator(main_arm_variance_effects_model_bmi,
-                                              main_arm_data_effects_imputed_demographics,
-                                        predictor_medians)
+    {
+      main_arm_variance_effects_model_bmi_diagnostic_gate
+      get_variance_contrast_condition_moderator(
+        main_arm_variance_effects_model_bmi,
+        main_arm_data_effects_imputed_demographics,
+        predictor_medians
+      )
+    }
   ),
   
   # Fat free mass
   
   tar_target(
     main_arm_mean_effects_model_fat_free_mass,
-    fit_arm_mean_effects_model_moderator(
-      main_arm_data_effects_imputed_demographics,
-      prior_arm_mean_effects,
-      "fat_free_mass"
-    )
+    {
+      model_specification_preflight
+      fit_arm_mean_effects_model_moderator(
+        main_arm_data_effects_imputed_demographics,
+        prior_arm_mean_effects,
+        "fat_free_mass"
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_model_fat_free_mass,
-    fit_arm_variance_effects_model_moderator(
-      main_arm_data_effects_imputed_demographics,
-      prior_arm_variance_effects,
-      "fat_free_mass"
-    )
+    {
+      model_specification_preflight
+      fit_arm_variance_effects_model_moderator(
+        main_arm_data_effects_imputed_demographics,
+        prior_arm_variance_effects,
+        "fat_free_mass"
+      )
+    }
   ),
   
   tar_target(
     main_arm_mean_effects_contrast_condition_fat_free_mass,
-    get_mean_contrast_condition_moderator(main_arm_mean_effects_model_fat_free_mass,
-                                          predictor_medians)
+    {
+      main_arm_mean_effects_model_fat_free_mass_diagnostic_gate
+      get_mean_contrast_condition_moderator(
+        main_arm_mean_effects_model_fat_free_mass,
+        predictor_medians
+      )
+    }
   ),
   
   tar_target(
     main_arm_variance_effects_contrast_condition_fat_free_mass,
-    get_variance_contrast_condition_moderator(main_arm_variance_effects_model_fat_free_mass,
-                                              main_arm_data_effects_imputed_demographics,
-                                              predictor_medians)
+    {
+      main_arm_variance_effects_model_fat_free_mass_diagnostic_gate
+      get_variance_contrast_condition_moderator(
+        main_arm_variance_effects_model_fat_free_mass,
+        main_arm_data_effects_imputed_demographics,
+        predictor_medians
+      )
+    }
+  ),
+
+  #### Model diagnostics ----
+
+  tar_target(
+    main_arm_mean_effects_diagnostics,
+    model_diagnostic_summary(
+      main_arm_mean_effects_model,
+      "Primary arm mean model"
+    )
+  ),
+  tar_target(
+    main_arm_mean_effects_diagnostic_gate,
+    assert_model_diagnostics(main_arm_mean_effects_diagnostics)
+  ),
+  tar_target(
+    main_arm_mean_effects_trace_plot,
+    model_trace_plot(main_arm_mean_effects_model, "Primary arm mean model")
+  ),
+  tar_target(
+    main_arm_mean_effects_pp_check,
+    model_pp_check(main_arm_mean_effects_model, "Primary arm mean model")
+  ),
+
+  tar_target(
+    main_arm_variance_effects_diagnostics,
+    model_diagnostic_summary(
+      main_arm_variance_effects_model,
+      "Primary arm variance model"
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_diagnostic_gate,
+    assert_model_diagnostics(main_arm_variance_effects_diagnostics)
+  ),
+  tar_target(
+    main_arm_variance_effects_trace_plot,
+    model_trace_plot(main_arm_variance_effects_model, "Primary arm variance model")
+  ),
+  tar_target(
+    main_arm_variance_effects_pp_check,
+    model_pp_check(main_arm_variance_effects_model, "Primary arm variance model")
+  ),
+
+  tar_target(
+    baseline_arm_mean_effects_diagnostics,
+    model_diagnostic_summary(
+      baseline_arm_mean_effects_model,
+      "Baseline arm mean model"
+    )
+  ),
+  tar_target(
+    baseline_arm_mean_effects_diagnostic_gate,
+    assert_model_diagnostics(baseline_arm_mean_effects_diagnostics)
+  ),
+  tar_target(
+    baseline_arm_mean_effects_trace_plot,
+    model_trace_plot(baseline_arm_mean_effects_model, "Baseline arm mean model")
+  ),
+  tar_target(
+    baseline_arm_mean_effects_pp_check,
+    model_pp_check(baseline_arm_mean_effects_model, "Baseline arm mean model")
+  ),
+
+  tar_target(
+    baseline_arm_variance_effects_diagnostics,
+    model_diagnostic_summary(
+      baseline_arm_variance_effects_model,
+      "Baseline arm variance model"
+    )
+  ),
+  tar_target(
+    baseline_arm_variance_effects_diagnostic_gate,
+    assert_model_diagnostics(baseline_arm_variance_effects_diagnostics)
+  ),
+  tar_target(
+    baseline_arm_variance_effects_trace_plot,
+    model_trace_plot(baseline_arm_variance_effects_model, "Baseline arm variance model")
+  ),
+  tar_target(
+    baseline_arm_variance_effects_pp_check,
+    model_pp_check(baseline_arm_variance_effects_model, "Baseline arm variance model")
+  ),
+
+  tar_target(
+    main_plus_greek_arm_mean_effects_diagnostics,
+    model_diagnostic_summary(
+      main_plus_greek_arm_mean_effects_model,
+      "Greek-study arm mean model"
+    )
+  ),
+  tar_target(
+    main_plus_greek_arm_mean_effects_diagnostic_gate,
+    assert_model_diagnostics(main_plus_greek_arm_mean_effects_diagnostics)
+  ),
+  tar_target(
+    main_plus_greek_arm_mean_effects_trace_plot,
+    model_trace_plot(
+      main_plus_greek_arm_mean_effects_model,
+      "Greek-study arm mean model"
+    )
+  ),
+  tar_target(
+    main_plus_greek_arm_mean_effects_pp_check,
+    model_pp_check(
+      main_plus_greek_arm_mean_effects_model,
+      "Greek-study arm mean model"
+    )
+  ),
+
+  tar_target(
+    main_plus_greek_arm_variance_effects_diagnostics,
+    model_diagnostic_summary(
+      main_plus_greek_arm_variance_effects_model,
+      "Greek-study arm variance model"
+    )
+  ),
+  tar_target(
+    main_plus_greek_arm_variance_effects_diagnostic_gate,
+    assert_model_diagnostics(main_plus_greek_arm_variance_effects_diagnostics)
+  ),
+  tar_target(
+    main_plus_greek_arm_variance_effects_trace_plot,
+    model_trace_plot(
+      main_plus_greek_arm_variance_effects_model,
+      "Greek-study arm variance model"
+    )
+  ),
+  tar_target(
+    main_plus_greek_arm_variance_effects_pp_check,
+    model_pp_check(
+      main_plus_greek_arm_variance_effects_model,
+      "Greek-study arm variance model"
+    )
+  ),
+
+  tar_target(
+    pairwise_mean_effects_diagnostics,
+    model_diagnostic_summary(pairwise_mean_effects_model, "Pairwise mean model")
+  ),
+  tar_target(
+    pairwise_mean_effects_diagnostic_gate,
+    assert_model_diagnostics(pairwise_mean_effects_diagnostics)
+  ),
+  tar_target(
+    pairwise_mean_effects_trace_plot,
+    model_trace_plot(pairwise_mean_effects_model, "Pairwise mean model")
+  ),
+  tar_target(
+    pairwise_mean_effects_pp_check,
+    model_pp_check(pairwise_mean_effects_model, "Pairwise mean model")
+  ),
+
+  tar_target(
+    pairwise_variance_effects_diagnostics,
+    model_diagnostic_summary(
+      pairwise_variance_effects_model,
+      "Pairwise variance model"
+    )
+  ),
+  tar_target(
+    pairwise_variance_effects_diagnostic_gate,
+    assert_model_diagnostics(pairwise_variance_effects_diagnostics)
+  ),
+  tar_target(
+    pairwise_variance_effects_trace_plot,
+    model_trace_plot(pairwise_variance_effects_model, "Pairwise variance model")
+  ),
+  tar_target(
+    pairwise_variance_effects_pp_check,
+    model_pp_check(pairwise_variance_effects_model, "Pairwise variance model")
+  ),
+
+  tar_target(
+    main_arm_mean_effects_model_bmi_diagnostics,
+    model_diagnostic_summary(
+      main_arm_mean_effects_model_bmi,
+      "BMI-adjusted arm mean model"
+    )
+  ),
+  tar_target(
+    main_arm_mean_effects_model_bmi_diagnostic_gate,
+    assert_model_diagnostics(main_arm_mean_effects_model_bmi_diagnostics)
+  ),
+  tar_target(
+    main_arm_mean_effects_model_bmi_trace_plot,
+    model_trace_plot(main_arm_mean_effects_model_bmi, "BMI-adjusted arm mean model")
+  ),
+  tar_target(
+    main_arm_mean_effects_model_bmi_pp_check,
+    model_pp_check(main_arm_mean_effects_model_bmi, "BMI-adjusted arm mean model")
+  ),
+
+  tar_target(
+    main_arm_variance_effects_model_bmi_diagnostics,
+    model_diagnostic_summary(
+      main_arm_variance_effects_model_bmi,
+      "BMI-adjusted arm variance model"
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_model_bmi_diagnostic_gate,
+    assert_model_diagnostics(main_arm_variance_effects_model_bmi_diagnostics)
+  ),
+  tar_target(
+    main_arm_variance_effects_model_bmi_trace_plot,
+    model_trace_plot(
+      main_arm_variance_effects_model_bmi,
+      "BMI-adjusted arm variance model"
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_model_bmi_pp_check,
+    model_pp_check(
+      main_arm_variance_effects_model_bmi,
+      "BMI-adjusted arm variance model"
+    )
+  ),
+
+  tar_target(
+    main_arm_mean_effects_model_fat_free_mass_diagnostics,
+    model_diagnostic_summary(
+      main_arm_mean_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm mean model"
+    )
+  ),
+  tar_target(
+    main_arm_mean_effects_model_fat_free_mass_diagnostic_gate,
+    assert_model_diagnostics(
+      main_arm_mean_effects_model_fat_free_mass_diagnostics
+    )
+  ),
+  tar_target(
+    main_arm_mean_effects_model_fat_free_mass_trace_plot,
+    model_trace_plot(
+      main_arm_mean_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm mean model"
+    )
+  ),
+  tar_target(
+    main_arm_mean_effects_model_fat_free_mass_pp_check,
+    model_pp_check(
+      main_arm_mean_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm mean model"
+    )
+  ),
+
+  tar_target(
+    main_arm_variance_effects_model_fat_free_mass_diagnostics,
+    model_diagnostic_summary(
+      main_arm_variance_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm variance model"
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_model_fat_free_mass_diagnostic_gate,
+    assert_model_diagnostics(
+      main_arm_variance_effects_model_fat_free_mass_diagnostics
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_model_fat_free_mass_trace_plot,
+    model_trace_plot(
+      main_arm_variance_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm variance model"
+    )
+  ),
+  tar_target(
+    main_arm_variance_effects_model_fat_free_mass_pp_check,
+    model_pp_check(
+      main_arm_variance_effects_model_fat_free_mass,
+      "Fat-free-mass-adjusted arm variance model"
+    )
+  ),
+
+  tar_target(
+    all_model_diagnostics,
+    dplyr::bind_rows(
+      main_arm_mean_effects_diagnostics,
+      main_arm_variance_effects_diagnostics,
+      baseline_arm_mean_effects_diagnostics,
+      baseline_arm_variance_effects_diagnostics,
+      main_plus_greek_arm_mean_effects_diagnostics,
+      main_plus_greek_arm_variance_effects_diagnostics,
+      pairwise_mean_effects_diagnostics,
+      pairwise_variance_effects_diagnostics,
+      main_arm_mean_effects_model_bmi_diagnostics,
+      main_arm_variance_effects_model_bmi_diagnostics,
+      main_arm_mean_effects_model_fat_free_mass_diagnostics,
+      main_arm_variance_effects_model_fat_free_mass_diagnostics
+    )
+  ),
+  tar_target(
+    all_model_diagnostics_gate,
+    assert_model_diagnostics(all_model_diagnostics)
   ),
 
   #### Manuscripts ----
