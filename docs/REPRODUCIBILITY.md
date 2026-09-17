@@ -49,6 +49,26 @@ targets::tar_manifest()
 targets::tar_visnetwork()
 ```
 
+Prepare all primary, secondary, and sensitivity-analysis datasets and validate their required fields and `brms` formulas without compilation or sampling:
+
+```r
+targets::tar_make(names = analysis_preflight)
+```
+
+Validate the exact registered informative priors against each arm-model specification, without compilation or sampling:
+
+```r
+targets::tar_make(names = model_specification_preflight)
+```
+
+Each fitted model has separate `_diagnostics`, `_trace_plot`, `_pp_check`, and `_diagnostic_gate` targets. Downstream estimates are blocked unless the corresponding gate passes. Once every requested model has been fitted, inspect and enforce the combined diagnostics with:
+
+```r
+targets::tar_make(names = all_model_diagnostics)
+targets::tar_read(all_model_diagnostics)
+targets::tar_make(names = all_model_diagnostics_gate)
+```
+
 Run individual inexpensive targets with `targets::tar_make(names = ...)`. Run the full pipeline only when the analysis and system toolchain are ready:
 
 ```r

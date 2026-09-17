@@ -43,6 +43,26 @@ targets::tar_manifest()
 targets::tar_visnetwork()
 ```
 
+Prepare every analysis dataset and validate its structure and `brms` formula without compiling or sampling a model:
+
+```r
+targets::tar_make(names = analysis_preflight)
+```
+
+Validate the exact registered prior specifications against every arm-model formula, also without compiling or sampling:
+
+```r
+targets::tar_make(names = model_specification_preflight)
+```
+
+Fit models explicitly, then run their corresponding `_diagnostics`, `_trace_plot`, and `_pp_check` targets. Model-dependent estimates and manuscripts are gated: they cannot run until the relevant diagnostics report zero divergences, zero maximum-treedepth hits, R-hat no greater than 1.01, adequate bulk and tail effective sample sizes, and acceptable E-BFMI. After every model has been fitted, verify the combined gate with:
+
+```r
+targets::tar_make(names = all_model_diagnostics)
+targets::tar_read(all_model_diagnostics)
+targets::tar_make(names = all_model_diagnostics_gate)
+```
+
 Run individual inexpensive targets with `targets::tar_make(names = ...)`. Run the complete workflow, including figures, tables, and manuscripts, only when the full analysis is intended:
 
 ```r
