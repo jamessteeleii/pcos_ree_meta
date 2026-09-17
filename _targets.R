@@ -206,6 +206,34 @@ list(
       )
     }
   ),
+
+  # Summaries reported in both manuscripts. These use posterior means and
+  # equal-tailed 95% quantile intervals on the reported scale.
+  tar_target(
+    main_arm_mean_effects_summary_condition,
+    summarise_posterior_draws(
+      main_arm_mean_effects_preds_condition,
+      by = "cond"
+    )
+  ),
+
+  tar_target(
+    main_arm_mean_effects_summary_contrast,
+    summarise_posterior_draws(main_arm_mean_effects_contrast_condition)
+  ),
+
+  tar_target(
+    main_arm_variance_effects_summary_condition,
+    summarise_posterior_draws(
+      main_arm_variance_effects_preds_condition,
+      by = "cond"
+    )
+  ),
+
+  tar_target(
+    main_arm_variance_effects_summary_contrast,
+    summarise_posterior_draws(main_arm_variance_effects_contrast_condition)
+  ),
   
   # Create plots for main models
   
@@ -508,6 +536,112 @@ list(
         predictor_medians
       )
     }
+  ),
+
+  #### Reported sensitivity-analysis summaries ----
+
+  tar_target(
+    pairwise_mean_effects_summary,
+    {
+      pairwise_mean_effects_diagnostic_gate
+      summarise_fixed_effect(
+        pairwise_mean_effects_model,
+        coefficient = "Intercept",
+        estimand = "PCOS - Control mean REE difference"
+      )
+    }
+  ),
+
+  tar_target(
+    pairwise_variance_effects_summary,
+    {
+      pairwise_variance_effects_diagnostic_gate
+      summarise_fixed_effect(
+        pairwise_variance_effects_model,
+        coefficient = "Intercept",
+        estimand = "PCOS:Control coefficient-of-variation ratio",
+        exponentiate = TRUE
+      )
+    }
+  ),
+
+  tar_target(
+    baseline_arm_mean_effects_summary,
+    {
+      baseline_arm_mean_effects_diagnostic_gate
+      summarise_fixed_effect(
+        baseline_arm_mean_effects_model,
+        coefficient = "condPCOS",
+        estimand = "PCOS - Control mean REE difference"
+      )
+    }
+  ),
+
+  tar_target(
+    baseline_arm_variance_effects_summary,
+    {
+      baseline_arm_variance_effects_diagnostic_gate
+      summarise_fixed_effect(
+        baseline_arm_variance_effects_model,
+        coefficient = "condPCOS",
+        estimand = "PCOS:Control standard-deviation ratio",
+        exponentiate = TRUE
+      )
+    }
+  ),
+
+  tar_target(
+    main_plus_greek_arm_mean_effects_summary,
+    {
+      main_plus_greek_arm_mean_effects_diagnostic_gate
+      summarise_fixed_effect(
+        main_plus_greek_arm_mean_effects_model,
+        coefficient = "condPCOS",
+        estimand = "PCOS - Control mean REE difference"
+      )
+    }
+  ),
+
+  tar_target(
+    main_plus_greek_arm_variance_effects_summary,
+    {
+      main_plus_greek_arm_variance_effects_diagnostic_gate
+      summarise_fixed_effect(
+        main_plus_greek_arm_variance_effects_model,
+        coefficient = "condPCOS",
+        estimand = "PCOS:Control standard-deviation ratio",
+        exponentiate = TRUE
+      )
+    }
+  ),
+
+  # Stop manuscript rendering if summaries are non-finite, ratios are on the
+  # wrong scale, conditions are reordered, or study predictions are duplicated.
+  tar_target(
+    postprocessing_validation,
+    run_postprocessing_validation(
+      main_arm_mean_effects_summary_condition,
+      main_arm_variance_effects_summary_condition,
+      difference_summaries = list(
+        main_arm_mean_effects_summary_contrast,
+        pairwise_mean_effects_summary,
+        baseline_arm_mean_effects_summary,
+        main_plus_greek_arm_mean_effects_summary,
+        main_arm_mean_effects_contrast_condition_bmi,
+        main_arm_mean_effects_contrast_condition_fat_free_mass
+      ),
+      ratio_summaries = list(
+        main_arm_variance_effects_summary_contrast,
+        pairwise_variance_effects_summary,
+        baseline_arm_variance_effects_summary,
+        main_plus_greek_arm_variance_effects_summary,
+        main_arm_variance_effects_contrast_condition_bmi,
+        main_arm_variance_effects_contrast_condition_fat_free_mass
+      ),
+      mean_study_predictions = main_arm_mean_effects_preds_study_condition,
+      variance_study_predictions = main_arm_variance_effects_preds_study_condition,
+      main_data = main_arm_data_effects
+    )
   ),
 
   #### Model diagnostics ----

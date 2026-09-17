@@ -69,6 +69,13 @@ targets::tar_read(all_model_diagnostics)
 targets::tar_make(names = all_model_diagnostics_gate)
 ```
 
+Once the model gate passes, rebuild and inspect the post-processing validation target. This checks posterior-summary scales and condition order and confirms that study-level predictions contain one value per posterior draw and study-condition:
+
+```r
+targets::tar_make(names = postprocessing_validation)
+targets::tar_read(postprocessing_validation)
+```
+
 Run individual inexpensive targets with `targets::tar_make(names = ...)`. Run the full pipeline only when the analysis and system toolchain are ready:
 
 ```r

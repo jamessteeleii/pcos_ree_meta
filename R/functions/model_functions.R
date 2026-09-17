@@ -156,91 +156,168 @@ fit_arm_variance_effects_model <- function(data, prior) {
 
 ## Get predictions and contrasts
 
-get_mean_preds_condition <- function(model) {
-  # pooled preds per condition
-  preds <- avg_predictions(
+posterior_epred_draws <- function(model, newdata, group_columns, re_formula) {
+  missing_groups <- setdiff(group_columns, names(newdata))
+  if (length(missing_groups)) {
+    stop(
+      "Prediction data are missing grouping columns: ",
+      paste(missing_groups, collapse = ", "),
+      call. = FALSE
+    )
+  }
+
+  expected <- brms::posterior_epred(
     model,
-    by = "cond",
-    re_formula = NA
+    newdata = newdata,
+    re_formula = re_formula
+  )
+
+  metadata <- newdata |>
+    dplyr::select(dplyr::all_of(group_columns)) |>
+    dplyr::mutate(.prediction_row = dplyr::row_number())
+
+  tibble::tibble(
+    drawid = rep(seq_len(nrow(expected)), times = ncol(expected)),
+    .prediction_row = rep(seq_len(ncol(expected)), each = nrow(expected)),
+    draw = as.vector(expected)
   ) |>
-    get_draws()
+    dplyr::left_join(metadata, by = ".prediction_row") |>
+    dplyr::select(-.prediction_row)
+}
+
+condition_coefficient_draws <- function(model, exponentiate = FALSE) {
+  posterior_draws <- posterior::as_draws_df(
+    model,
+    variable = c("b_Intercept", "b_condPCOS")
+  )
+  required <- c("b_Intercept", "b_condPCOS")
+  if (!all(required %in% names(posterior_draws))) {
+    stop(
+      "Model does not contain the expected condition coefficients.",
+      call. = FALSE
+    )
+  }
+
+  control <- posterior_draws$b_Intercept
+  pcos <- control + posterior_draws$b_condPCOS
+  if (isTRUE(exponentiate)) {
+    control <- exp(control)
+    pcos <- exp(pcos)
+  }
+
+  dplyr::bind_rows(
+    tibble::tibble(
+      drawid = posterior_draws$.draw,
+      draw = control,
+      cond = "Control"
+    ),
+    tibble::tibble(
+      drawid = posterior_draws$.draw,
+      draw = pcos,
+      cond = "PCOS"
+    )
+  )
+}
+
+condition_contrast_draws <- function(model, exponentiate = FALSE) {
+  posterior_draws <- posterior::as_draws_df(
+    model,
+    variable = "b_condPCOS"
+  )
+  if (!"b_condPCOS" %in% names(posterior_draws)) {
+    stop("Model does not contain coefficient b_condPCOS.", call. = FALSE)
+  }
+
+  contrast <- posterior_draws$b_condPCOS
+  if (isTRUE(exponentiate)) {
+    contrast <- exp(contrast)
+  }
+
+  tibble::tibble(
+    drawid = posterior_draws$.draw,
+    draw = contrast,
+    term = "cond",
+    contrast = "PCOS - Control"
+  )
+}
+
+get_mean_preds_condition <- function(model) {
+  # With no condition interactions, these are the exact population-level
+  # condition means implied by the model coefficients.
+  preds <- condition_coefficient_draws(model)
   
   return(preds)
 }
 
 get_mean_preds_study_condition <- function(model, data) {
-  # pooled preds per condition
-  preds <- predictions(
+  # Some studies contribute multiple arms or time points. Average row-level
+  # predictions within study-condition for each draw before plotting.
+  prediction_data <- data |> filter(!is.na(yi_mean))
+  preds <- posterior_epred_draws(
     model,
-    newdata = data |> filter(!is.na(yi_mean)),
-    re_formula = NULL,
+    newdata = prediction_data,
+    group_columns = c("study", "authors", "year", "cond"),
+    re_formula = NULL
   ) |>
-    get_draws()
+    group_by(drawid, study, authors, year, cond) |>
+    summarise(draw = mean(draw), .groups = "drop")
   
   return(preds)
 }
 
 get_mean_contrast_condition <- function(model) {
-  # pooled preds per condition
-  preds <- avg_comparisons(
-    model,
-    re_formula = NA,
-    variables = "cond"
-  ) |>
-    get_draws()
+  # The population-level PCOS-control contrast is b_condPCOS.
+  preds <- condition_contrast_draws(model)
   
   return(preds)
 }
 
 get_variance_preds_condition <- function(model, data) {
   reference_values <- get_variance_reference_values(data)
-
-  # pooled preds per condition
-  preds <- avg_predictions(
-    model,
-    newdata = datagrid(
+  prediction_data <- data |>
+    filter(!is.na(yi_sd), !is.na(log_yi_mean), !is.na(se_log_yi_mean)) |>
+    slice(rep(1, 2)) |>
+    mutate(
       log_yi_mean = reference_values$log_yi_mean,
       se_log_yi_mean = reference_values$se_log_yi_mean,
-      cond = unique(data$cond)
-    ),
-    by = "cond",
+      cond = c("Control", "PCOS")
+    )
+
+  # Population-level predictions at the registered mean-effect reference
+  # values. posterior_epred() avoids optional marginaleffects dependencies.
+  preds <- posterior_epred_draws(
+    model,
+    newdata = prediction_data,
+    group_columns = "cond",
     re_formula = NA
   ) |>
-    get_draws() |>
     mutate(draw = exp(draw))
   
   return(preds)
 }
 
 get_variance_preds_study_condition <- function(model, data) {
-  # pooled preds per condition
-  preds <- predictions(
+  # Retain fitted random effects but return one estimate per
+  # study-condition and posterior draw.
+  prediction_data <- data |>
+    filter(!is.na(yi_sd), !is.na(log_yi_mean), !is.na(se_log_yi_mean))
+  preds <- posterior_epred_draws(
     model,
-    newdata = data |>
-      filter(!is.na(yi_sd), !is.na(log_yi_mean), !is.na(se_log_yi_mean)),
-    re_formula = NULL,
+    newdata = prediction_data,
+    group_columns = c("study", "authors", "year", "cond"),
+    re_formula = NULL
   ) |>
-    get_draws() |>
-    mutate(draw = exp(draw))
+    group_by(drawid, study, authors, year, cond) |>
+    summarise(draw = exp(mean(draw)), .groups = "drop")
   
   return(preds)
 }
 
 get_variance_contrast_condition <- function(model, data) {
-  reference_values <- get_variance_reference_values(data)
-
-  # pooled preds per condition
-  preds <- avg_comparisons(
-    model,
-    newdata = datagrid(
-      log_yi_mean = reference_values$log_yi_mean,
-      se_log_yi_mean = reference_values$se_log_yi_mean
-    ),
-    re_formula = NA,
-    variables = "cond"
-  ) |>
-    get_draws() |>
-    mutate(draw = exp(draw))
+  # With no condition interactions, exponentiating b_condPCOS gives the exact
+  # PCOS:control standard-deviation ratio for every posterior draw.
+  get_variance_reference_values(data)
+  preds <- condition_contrast_draws(model, exponentiate = TRUE)
   
   return(preds)
 }
@@ -338,7 +415,7 @@ plot_study_mean_pred <- function(preds, data) {
     # Add individual study data
     geom_point(
       data = data |> 
-        filter(!is.na(yi_sd)) |>
+        filter(!is.na(yi_mean)) |>
         mutate(study_label = paste(authors, year)),
       aes(x = yi_mean, y = study_label, color = cond),
       size = 0.25,
@@ -676,19 +753,16 @@ fit_arm_variance_effects_model_moderator <- function(data, prior, moderator) {
 }
 
 get_mean_contrast_condition_moderator <- function(model, predictor_medians) {
-  
-  # pooled preds per condition
-  preds <- avg_comparisons(
+  # With no condition-by-moderator interaction, the adjusted condition
+  # contrast is exactly the condPCOS population-level coefficient. Extracting
+  # it directly avoids adding Monte Carlo noise from separately simulated
+  # measurement-error covariates in counterfactual predictions.
+  preds <- summarise_fixed_effect(
     model,
-    newdata = datagrid(
-      m_bmi = predictor_medians$m_bmi,
-      se_bmi = predictor_medians$se_bmi,
-      m_fat_free_mass = predictor_medians$m_fat_free_mass,
-      se_fat_free_mass = predictor_medians$se_fat_free_mass
-    ),
-    re_formula = NA,
-    variables = "cond"
-  ) 
+    coefficient = "condPCOS",
+    estimand = "PCOS - Control mean REE difference"
+  ) |>
+    bind_cols(predictor_medians)
   
   return(preds)
 }
@@ -696,20 +770,15 @@ get_mean_contrast_condition_moderator <- function(model, predictor_medians) {
 get_variance_contrast_condition_moderator <- function(model, data, predictor_medians) {
   reference_values <- get_variance_reference_values(data)
 
-  # pooled preds per condition
-  preds <- avg_comparisons(
+  # As above, the log standard-deviation contrast is exactly b_condPCOS.
+  # Transform each draw before taking the posterior mean and interval.
+  preds <- summarise_fixed_effect(
     model,
-    newdata = datagrid(
-      log_yi_mean = reference_values$log_yi_mean,
-      se_log_yi_mean = reference_values$se_log_yi_mean,
-      m_bmi = predictor_medians$m_bmi,
-      se_bmi = predictor_medians$se_bmi,
-      m_fat_free_mass = predictor_medians$m_fat_free_mass,
-      se_fat_free_mass = predictor_medians$se_fat_free_mass
-    ),
-    re_formula = NA,
-    variables = "cond"
-  ) 
+    coefficient = "condPCOS",
+    estimand = "PCOS:Control standard-deviation ratio",
+    exponentiate = TRUE
+  ) |>
+    bind_cols(predictor_medians, reference_values)
   
   return(preds)
 }

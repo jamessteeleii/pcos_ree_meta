@@ -6,7 +6,7 @@ Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabr
 
 ## Abstract
 
-Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
+Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 31 kcal/day [95% quantile interval: -44 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.32]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
 ## Reproducibility
 
@@ -61,6 +61,13 @@ Fit models explicitly, then run their corresponding `_diagnostics`, `_trace_plot
 targets::tar_make(names = all_model_diagnostics)
 targets::tar_read(all_model_diagnostics)
 targets::tar_make(names = all_model_diagnostics_gate)
+```
+
+After the model gate passes, rebuild and inspect the post-processing validation target. It checks posterior-summary scales and condition order and verifies that study-level predictions contain exactly one value per posterior draw and study-condition:
+
+```r
+targets::tar_make(names = postprocessing_validation)
+targets::tar_read(postprocessing_validation)
 ```
 
 Run individual inexpensive targets with `targets::tar_make(names = ...)`. Run the complete workflow, including figures, tables, and manuscripts, only when the full analysis is intended:

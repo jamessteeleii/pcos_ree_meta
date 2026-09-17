@@ -31,6 +31,8 @@ _targets.yaml.local
 *.out
 *.toc
 README.html
+manuscript/pre_print.tex
+manuscript/submission_manuscript.tex
 
 # Local scratch, logs, and operating-system metadata
 scratch/

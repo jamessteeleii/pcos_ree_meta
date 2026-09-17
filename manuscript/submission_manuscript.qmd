@@ -87,6 +87,7 @@ library(tidybayes)
 # Do not render model-dependent results unless every fitted model passes the
 # registered convergence and HMC diagnostic checks.
 targets::tar_load(all_model_diagnostics_gate)
+targets::tar_load(postprocessing_validation)
 
 ```
 Corresponding author: (Email: james@steele-research.com; ORCID: 0000-0002-8003-0757) James Steele, Steele Research Limited, 2 Sydney Road, Eastleigh, Hampshire, SO50 6DJ, UK
@@ -107,7 +108,7 @@ The content is solely the responsibility of the authors and does not necessarily
 \newpage
 
 ## Abstract
-Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 30 kcal/day [95% quantile interval: -47 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.33]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
+Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 31 kcal/day [95% quantile interval: -44 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.32]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
 
 
@@ -167,7 +168,7 @@ Given these issues we decided to extract the results from these studies as repor
 
 Statistical analysis of the data extracted was be performed in R, (v 4.3.3; R Core Team, https://www.r-project.org/) and RStudio (v 2023.06.1; Posit, https://posit.co/). All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] which can be seen here: <https://github.com/jamessteeleii/pcos_ree_meta/blob/main/grateful-report.pdf>. The statistical analysis plan was linked in our pre-registration (PROSPERO: [CRD42024601434](https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434)) and available at the accompanying GitHub repository. Any deviations from the pre-registration are noted below.
 
-Given our research question our analysis was aimed at parameter estimation [@cummingNewStatisticsWhy2014] within a Bayesian meta-analytic framework [@kruschkeBayesianNewStatistics2018]. For all analyses model parameter estimates and their precision, along with conclusions based upon them, are interpreted continuously and probabilistically, considering data quality, plausibility of effect, and previous literature, all within the context of each model. The `renv` package [@usheyRenvProjectEnvironments2023] was used for package version reproducibility and a function based analysis pipeline using the `targets` package [@landauTargetsDynamicFunctionOriented2023] was employed (the analysis pipeline can be viewed by downloading the R Project and running the function `targets::tar_visnetwork()`). Effect sizes and their variances were all calculated using the `metafor` packages `escalc()` function [@viechtbauerMetaforMetaAnalysisPackage2023]. The main package `brms` [@burknerBrmsBayesianRegression2023] was used in fitting all the Bayesian meta-analysis models. Prior and posterior draws were taken using `marginaleffects` [@arel-bundockMarginaleffectsPredictionsComparisons2023] and `tidybayes` [@kayTidybayesTidyData2023] packages. All visualisations are created using `ggplot2` [@wickhamGgplot2CreateElegant2023], `tidybayes`, and the `patchwork` [@pedersenPatchworkComposerPlots2023] packages.
+Given our research question our analysis was aimed at parameter estimation [@cummingNewStatisticsWhy2014] within a Bayesian meta-analytic framework [@kruschkeBayesianNewStatistics2018]. For all analyses model parameter estimates and their precision, along with conclusions based upon them, are interpreted continuously and probabilistically, considering data quality, plausibility of effect, and previous literature, all within the context of each model. The `renv` package [@usheyRenvProjectEnvironments2023] was used for package version reproducibility and a function based analysis pipeline using the `targets` package [@landauTargetsDynamicFunctionOriented2023] was employed (the analysis pipeline can be viewed by downloading the R Project and running the function `targets::tar_visnetwork()`). Effect sizes and their variances were all calculated using the `metafor` packages `escalc()` function [@viechtbauerMetaforMetaAnalysisPackage2023]. The main package `brms` [@burknerBrmsBayesianRegression2023] was used in fitting all the Bayesian meta-analysis models, and posterior predictions and coefficient draws were obtained directly from the fitted models. All visualisations are created using `ggplot2` [@wickhamGgplot2CreateElegant2023], `tidybayes` [@kayTidybayesTidyData2023], and the `patchwork` [@pedersenPatchworkComposerPlots2023] packages.
 
 ### Main Pre-registered Models
 
@@ -343,6 +344,8 @@ $$
 
 where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PCOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard deviation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
 
+For reporting, posterior draws from the log coefficient-of-variation ratio were exponentiated before calculating the posterior mean and 95% quantile interval.
+
 #### Additional sensitivity analyses
 As noted in the section above, *"Studies with possible reporting errors"*, we opted to conduct analysis with and without the inclusion of four studies with possible reporting errors we could not resolve [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009]. Thus the main models described above were run with and without these studies, the main results are presented without them and the sensitivity results with them are reported separately below. 
 
@@ -354,7 +357,7 @@ targets::tar_load(c(main_arm_mean_effects_contrast_condition_bmi, main_arm_varia
 
 ```
 
-Lastly, given the role of body mass and, in particular, highly metabolically active tissue on REE we included models adjusted for these group level characteristics where studies reported them. These models were essentially extensions of the main models noted above for BMI and fat-free mass where each was modelled with it's corresponding sampling error similarly to how the log mean REE was modelled in the models for standard deviation of REE i.e., the mean BMI or fat-free mass estimates were modelled as estimated with measurement error. When extracting posterior distributions for the contrasts between conditions in these models both BMI and fat-free mass where adjusted to the median values seen in the control conditions i.e., BMI = `r main_arm_mean_effects_contrast_condition_bmi$m_bmi` kg/$\textrm{m}^2$ and fat-free mass = `r main_arm_mean_effects_contrast_condition_fat_free_mass$m_fat_free_mass` kg.
+Lastly, given the role of body mass and, in particular, highly metabolically active tissue on REE we included models adjusted for these group level characteristics where studies reported them. These models were essentially extensions of the main models noted above for BMI and fat-free mass where each was modelled with its corresponding sampling error similarly to how the log mean REE was modelled in the models for standard deviation of REE i.e., the mean BMI or fat-free mass estimates were modelled as estimated with measurement error. We used the median values seen in the control conditions as the reference values i.e., BMI = `r main_arm_mean_effects_contrast_condition_bmi$m_bmi` kg/$\textrm{m}^2$ and fat-free mass = `r main_arm_mean_effects_contrast_condition_fat_free_mass$m_fat_free_mass` kg. Because these models did not include condition-by-moderator interactions, the adjusted between-condition contrast corresponds directly to $\beta_1$ and is invariant to the chosen reference value.
 
 # Results
 ## Systematic Review
@@ -412,17 +415,15 @@ Studies were carried out in multiple countries: Brazil (k = `r filter(countries,
 ```{r}
 
 targets::tar_load(
-  c(main_arm_mean_effects_preds_condition,
-    main_arm_mean_effects_contrast_condition,
+  c(main_arm_mean_effects_summary_condition,
+    main_arm_mean_effects_summary_contrast,
     combined_mean_plot)
 )
 
-main_arm_mean_effects_preds_condition <- main_arm_mean_effects_preds_condition |>
-    group_by(cond) |>
-    mean_qi(draw)
-
-main_arm_mean_effects_contrast_condition <- main_arm_mean_effects_contrast_condition |>
-    mean_qi(draw)
+main_arm_mean_effects_preds_condition <- main_arm_mean_effects_summary_condition |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+main_arm_mean_effects_contrast_condition <- main_arm_mean_effects_summary_contrast |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
 
 ```
 The main model for mean REE resulted in a posterior distribution for the contrast between control and PCOS conditions with a mean point estimate of `r round(main_arm_mean_effects_contrast_condition$draw)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition$.lower)` kcal/day to `r round(main_arm_mean_effects_contrast_condition$.upper)` kcal/day suggesting there is a 95% probability that the true difference lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the control condition and PCOS condition respectively were `r round(main_arm_mean_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_mean_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[2])` kcal/day]. These results, including the full visualisation of the posterior distribution and the conditional estimates by study, can be seen in @fig-mean-REE.
@@ -431,17 +432,15 @@ The main model for mean REE resulted in a posterior distribution for the contras
 ```{r}
 
 targets::tar_load(
-  c(main_arm_variance_effects_preds_condition,
-    main_arm_variance_effects_contrast_condition,
+  c(main_arm_variance_effects_summary_condition,
+    main_arm_variance_effects_summary_contrast,
     combined_variance_plot)
 )
 
-main_arm_variance_effects_preds_condition <- main_arm_variance_effects_preds_condition |>
-    group_by(cond) |>
-    mean_qi(draw)
-
-main_arm_variance_effects_contrast_condition <- main_arm_variance_effects_contrast_condition |>
-    mean_qi(draw)
+main_arm_variance_effects_preds_condition <- main_arm_variance_effects_summary_condition |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+main_arm_variance_effects_contrast_condition <- main_arm_variance_effects_summary_contrast |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
 
 ```
 
@@ -450,27 +449,27 @@ The main model for the between participant standard deviation of REE resulted in
 ## Sensitivity Analyses
 ### Pairwise Models
 ```{r}
-targets::tar_load(c(pairwise_mean_effects_model, pairwise_variance_effects_model))
+targets::tar_load(c(pairwise_mean_effects_summary, pairwise_variance_effects_summary))
 
 ```
-For mean REE the pairwise model resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(pairwise_mean_effects_model)[1])` kcal/day with a 95% quantile interval ranging from `r round(brms::fixef(pairwise_mean_effects_model)[3])` kcal/day to `r round(brms::fixef(pairwise_mean_effects_model)[4])` kcal/day. This was similar for the standard deviation of REE with the pairwise model resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(pairwise_variance_effects_model)[1]),2)` and a 95% quantile interval ranging from `r round(exp(brms::fixef(pairwise_variance_effects_model)[3]),2)` to `r round(exp(brms::fixef(pairwise_variance_effects_model)[4]),2)`.
+For mean REE the pairwise model resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(pairwise_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(pairwise_mean_effects_summary$conf.low)` kcal/day to `r round(pairwise_mean_effects_summary$conf.high)` kcal/day. This was similar for relative variability in REE, with the pairwise model resulting in a coefficient-of-variation ratio between the PCOS and control conditions with a mean point estimate of `r round(pairwise_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(pairwise_variance_effects_summary$conf.low,2)` to `r round(pairwise_variance_effects_summary$conf.high,2)`.
 
 ### Models including studies with possible reporting issues
 ```{r}
-targets::tar_load(c(main_plus_greek_arm_mean_effects_model, main_plus_greek_arm_variance_effects_model))
+targets::tar_load(c(main_plus_greek_arm_mean_effects_summary, main_plus_greek_arm_variance_effects_summary))
 
 ```
-For mean REE the model including the studies noted with possible reporting issues that were not resolved [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009] still resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,1])` kcal/day with a 95% quantile interval ranging from `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,3])` kcal/day to `r round(brms::fixef(main_plus_greek_arm_mean_effects_model)[2,4])` kcal/day. This was similar for the standard deviation of REE with the model including these studies resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,1]),2)` and a 95% quantile interval ranging from `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,3]),2)` to `r round(exp(brms::fixef(main_plus_greek_arm_variance_effects_model)[2,4]),2)`.
+For mean REE the model including the studies noted with possible reporting issues that were not resolved [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009] still resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(main_plus_greek_arm_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_plus_greek_arm_mean_effects_summary$conf.low)` kcal/day to `r round(main_plus_greek_arm_mean_effects_summary$conf.high)` kcal/day. This was similar for the standard deviation of REE with the model including these studies resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(main_plus_greek_arm_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(main_plus_greek_arm_variance_effects_summary$conf.low,2)` to `r round(main_plus_greek_arm_variance_effects_summary$conf.high,2)`.
 
-### Basline REE Measurement Models
+### Baseline REE Measurement Models
 ```{r}
-targets::tar_load(c(baseline_arm_mean_effects_model, baseline_arm_variance_effects_model))
+targets::tar_load(c(baseline_arm_mean_effects_summary, baseline_arm_variance_effects_summary))
 
 ```
-For mean REE the model which included only baseline REE measurements from studies involving interventions [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014], in addition to other cross-sectional studies, also resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(brms::fixef(baseline_arm_mean_effects_model)[2,1])` kcal/day with a 95% quantile interval ranging from `r round(brms::fixef(baseline_arm_mean_effects_model)[2,3])` kcal/day to `r round(brms::fixef(baseline_arm_mean_effects_model)[2,4])` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,1]),2)` and a 95% quantile interval ranging from `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,3]),2)` to `r round(exp(brms::fixef(baseline_arm_variance_effects_model)[2,4]),2)`.
+For mean REE the model which included only baseline REE measurements from studies involving interventions [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014], in addition to other cross-sectional studies, also resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(baseline_arm_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(baseline_arm_mean_effects_summary$conf.low)` kcal/day to `r round(baseline_arm_mean_effects_summary$conf.high)` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(baseline_arm_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(baseline_arm_variance_effects_summary$conf.low,2)` to `r round(baseline_arm_variance_effects_summary$conf.high,2)`.
 
 ### BMI and Fat-Free Mass Adjusted Models
-For mean REE the model adjusted for BMI, also resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_bmi$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_bmi$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_bmi$conf.high)` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(exp(main_arm_variance_effects_contrast_condition_bmi$estimate),2)` and a 95% quantile interval ranging from `r round(exp(main_arm_variance_effects_contrast_condition_bmi$conf.low),2)` to `r round(exp(main_arm_variance_effects_contrast_condition_bmi$conf.high),2)`. This was similar for fat-free mass adjusted models too showing little difference in mean REE between control and PCOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.high)` kcal/day and a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(exp(main_arm_variance_effects_contrast_condition_fat_free_mass$estimate),2)` and a 95% quantile interval ranging from `r round(exp(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.low),2)` to `r round(exp(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.high),2)`.
+For mean REE the model adjusted for BMI, also resulted in qualitatively similar inferences suggesting little difference between control and PCOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_bmi$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_bmi$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_bmi$conf.high)` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition_bmi$estimate,2)` and a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition_bmi$conf.low,2)` to `r round(main_arm_variance_effects_contrast_condition_bmi$conf.high,2)`. This was similar for fat-free mass adjusted models too showing little difference in mean REE between control and PCOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.high)` kcal/day and a contrast ratio between the control and PCOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$estimate,2)` and a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.low,2)` to `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.high,2)`.
 
 # Discussion
 
