@@ -1,0 +1,32 @@
+project:
+  type: website
+  output-dir: ../docs
+  execute-dir: project
+  render:
+    - index.qmd
+    - grateful-report.Rmd
+    - supplementary_technical_analysis_results.qmd
+    - supplementary_bibliometric_impact.qmd
+
+website:
+  title: "PMOS resting energy expenditure meta-analysis"
+  site-url: "https://jamessteeleii.github.io/pcos_ree_meta/"
+  repo-url: "https://github.com/jamessteeleii/pcos_ree_meta"
+  repo-actions: [source]
+  navbar:
+    left:
+      - text: "Supplementary technical analysis"
+        href: supplementary_technical_analysis_results.qmd
+      - text: "Bibliometric impact analysis"
+        href: supplementary_bibliometric_impact.qmd
+      - text: "Descriptive characteristics"
+        href: https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html
+      - text: "Software citations"
+        href: grateful-report.Rmd
+
+format:
+  html:
+    theme: cosmo
+    toc: true
+    embed-resources: true
+    link-external-newwindow: true

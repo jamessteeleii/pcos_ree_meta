@@ -343,7 +343,16 @@ get_variance_reference_values <- function(data) {
 
 ## Create plots
 
+use_pmos_plot_labels <- function(data) {
+  data |>
+    mutate(
+      cond = recode(as.character(cond), PCOS = "PMOS")
+    )
+}
+
 plot_meta_mean_pred <- function(preds) {
+  preds <- use_pmos_plot_labels(preds)
+
   # Meta pred plot
   meta_labels <- preds |>
     group_by(cond) |>
@@ -378,6 +387,8 @@ plot_meta_mean_pred <- function(preds) {
 }
 
 plot_study_mean_pred <- function(preds, data) {
+  preds <- use_pmos_plot_labels(preds)
+  data <- use_pmos_plot_labels(data)
   
   study_pred <- preds |>
     mutate(
@@ -461,7 +472,7 @@ plot_mean_contrast <- function(contrasts) {
     scale_x_continuous(labels = ~sub("-", "\u2212", .x)) +
     labs(
       x = "Resting Energy Expenditure Contrast (difference in kcal)",
-      title = "Contrasts Between Conditions (PCOS - Control)"
+      title = "Contrasts Between Conditions (PMOS - Control)"
     ) +
     theme_bw() +
     theme(axis.text.y = element_blank(),
@@ -492,6 +503,8 @@ combine_mean_plots <- function(meta_pred_plot,
 
 
 plot_meta_variance_pred <- function(preds) {
+  preds <- use_pmos_plot_labels(preds)
+
   # Meta pred plot
   meta_labels <- preds |>
     group_by(cond) |>
@@ -526,6 +539,8 @@ plot_meta_variance_pred <- function(preds) {
 }
 
 plot_study_variance_pred <- function(preds, data) {
+  preds <- use_pmos_plot_labels(preds)
+  data <- use_pmos_plot_labels(data)
   
   study_pred <- preds |>
     mutate(
@@ -609,7 +624,7 @@ plot_variance_contrast <- function(contrasts) {
     scale_x_continuous(labels = ~sub("-", "\u2212", .x)) +
     labs(
       x = "Resting Energy Expenditure Contrast (ratio of standard deviations)",
-      title = "Contrasts Between Conditions (PCOS:Control)"
+      title = "Contrasts Between Conditions (PMOS:Control)"
     ) +
     theme_bw() +
     theme(axis.text.y = element_blank(),

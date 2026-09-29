@@ -1,0 +1,39 @@
+---
+title: "`grateful` citation report"
+bibliography: grateful-refs.bib
+#csl: null.csl
+---
+
+## R packages used
+
+|Package         |Version |Citation                                                                            |
+|:---------------|:-------|:-----------------------------------------------------------------------------------|
+|base            |4.4.3   |@base                                                                               |
+|bayesplot       |1.14.0  |@bayesplot2019; @bayesplot2025                                                      |
+|brms            |2.23.0  |@brms2017; @brms2018; @brms2021                                                     |
+|digest          |0.6.37  |@digest                                                                             |
+|flextable       |0.9.10  |@flextable                                                                          |
+|glue            |1.8.0   |@glue                                                                               |
+|here            |1.0.2   |@here                                                                               |
+|knitr           |1.50    |@knitr2014; @knitr2015; @knitr2025                                                  |
+|marginaleffects |0.30.0  |@marginaleffects                                                                    |
+|metafor         |4.8.0   |@metafor                                                                            |
+|officer         |0.7.0   |@officer                                                                            |
+|patchwork       |1.3.2   |@patchwork                                                                          |
+|posterior       |1.6.1   |@posterior2021b; @posterior2022d; @posterior2024c; @posterior2024e; @posterior2025a |
+|quarto          |1.5.1   |@quarto                                                                             |
+|renv            |1.1.5   |@renv                                                                               |
+|rmarkdown       |2.30    |@rmarkdown2018; @rmarkdown2020; @rmarkdown2025                                      |
+|rstan           |2.32.7  |@rstan                                                                              |
+|scales          |1.4.0   |@scales                                                                             |
+|tarchetypes     |0.13.2  |@tarchetypes                                                                        |
+|targets         |1.11.4  |@targets                                                                            |
+|tidybayes       |3.0.7   |@tidybayes                                                                          |
+|tidyverse       |2.0.0   |@tidyverse                                                                          |
+|webshot2        |0.1.2   |@webshot2                                                                           |
+
+**You can paste this paragraph directly in your report:**
+
+We used R version 4.4.3 [@base] and the following R packages: bayesplot v. 1.14.0 [@bayesplot2019; @bayesplot2025], brms v. 2.23.0 [@brms2017; @brms2018; @brms2021], digest v. 0.6.37 [@digest], flextable v. 0.9.10 [@flextable], glue v. 1.8.0 [@glue], here v. 1.0.2 [@here], knitr v. 1.50 [@knitr2014; @knitr2015; @knitr2025], marginaleffects v. 0.30.0 [@marginaleffects], metafor v. 4.8.0 [@metafor], officer v. 0.7.0 [@officer], patchwork v. 1.3.2 [@patchwork], posterior v. 1.6.1 [@posterior2021b; @posterior2022d; @posterior2024c; @posterior2024e; @posterior2025a], quarto v. 1.5.1 [@quarto], renv v. 1.1.5 [@renv], rmarkdown v. 2.30 [@rmarkdown2018; @rmarkdown2020; @rmarkdown2025], rstan v. 2.32.7 [@rstan], scales v. 1.4.0 [@scales], tarchetypes v. 0.13.2 [@tarchetypes], targets v. 1.11.4 [@targets], tidybayes v. 3.0.7 [@tidybayes], tidyverse v. 2.0.0 [@tidyverse], webshot2 v. 0.1.2 [@webshot2].
+
+## Package citations

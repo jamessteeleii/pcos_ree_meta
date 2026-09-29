@@ -1,0 +1,243 @@
+---
+title: "Supplementary Bibliometric and Public-Discourse Footprint"
+subtitle: "Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome (PMOS; previously PCOS)"
+author: "Kirwan et al."
+date: 2026-09-22
+date-format: long
+lang: en-GB
+format:
+  html:
+    toc: true
+    embed-resources: true
+    link-external-newwindow: true
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+```{r}
+library(tidyverse)
+
+project_root <- if (file.exists(file.path("data", "bibliometric_footprint_snapshot.csv"))) {
+  "."
+} else {
+  ".."
+}
+
+source(file.path(project_root, "R", "functions", "bibliometric_functions.R"))
+
+bibliometric_snapshot <- read_bibliometric_snapshot(
+  file.path(project_root, "data", "bibliometric_footprint_snapshot.csv")
+)
+bibliometric_web_mentions <- read_bibliometric_web_mentions(
+  file.path(project_root, "data", "bibliometric_web_mentions.csv")
+)
+bibliometric_web_content_groups <- read_bibliometric_web_content_groups(
+  file.path(project_root, "data", "bibliometric_web_content_groups.csv")
+)
+bibliometric_altmetric_snapshot <- read_bibliometric_altmetric_snapshot(
+  file.path(project_root, "data", "bibliometric_altmetric_snapshot.csv")
+)
+bibliometric_validation <- validate_bibliometric_snapshot(
+  bibliometric_snapshot,
+  bibliometric_web_mentions,
+  bibliometric_web_content_groups,
+  bibliometric_altmetric_snapshot
+)
+bibliometric_summary <- create_bibliometric_summary(
+  bibliometric_snapshot,
+  bibliometric_web_mentions,
+  bibliometric_web_content_groups,
+  bibliometric_altmetric_snapshot
+)
+bibliometric_web_mentions_grouped <- apply_bibliometric_content_groups(
+  bibliometric_web_mentions,
+  bibliometric_web_content_groups
+)
+
+stopifnot(all(bibliometric_validation$passed))
+
+georgopoulos <- bibliometric_summary |>
+  filter(study_id == 9) |>
+  slice(1)
+
+indexed <- bibliometric_summary |>
+  filter(!is.na(openalex_citations))
+
+georgopoulos_rate_rank <- indexed |>
+  arrange(desc(citations_per_year)) |>
+  mutate(rate_rank = row_number()) |>
+  filter(study_id == 9) |>
+  pull(rate_rank)
+
+georgopoulos_citation_rank <- indexed |>
+  arrange(desc(openalex_citations)) |>
+  mutate(citation_rank = min_rank(desc(openalex_citations))) |>
+  filter(study_id == 9) |>
+  pull(citation_rank)
+
+median_rate <- median(indexed$citations_per_year)
+total_citations <- sum(indexed$openalex_citations)
+total_verified_pages <- sum(bibliometric_summary$verified_public_web_total)
+total_unique_web_items <- sum(bibliometric_summary$verified_unique_public_items)
+altmetric_records <- bibliometric_summary |>
+  filter(altmetric_status == "record_found")
+median_altmetric_score <- median(altmetric_records$attention_score)
+georgopoulos_altmetric_rank <- altmetric_records |>
+  arrange(desc(attention_score)) |>
+  mutate(altmetric_rank = row_number()) |>
+  filter(study_id == 9) |>
+  pull(altmetric_rank)
+total_altmetric_reddit_users <- sum(altmetric_records$reddit_users)
+```
+
+# Purpose and scope
+
+Following the June 2026 global consensus terminology update, the current manuscript uses polyendocrine metabolic ovarian syndrome (PMOS). This historical bibliometric and public-discourse analysis deliberately retains PCOS because it examines publications, indexing, quotations, and public discussion produced under that terminology; changing those source descriptions would obscure what was actually disseminated and searched.
+
+This supplement describes the scholarly, extended-scholarly, grey-literature, and publicly visible web footprint of the 17 studies eligible for the systematic review. It was prepared to examine whether the frequently repeated claim that polycystic ovary syndrome (PCOS) is associated with substantially lower resting energy expenditure (REE) can be linked to a distinctive pattern of dissemination around particular studies.
+
+The analysis is descriptive. Citation and hyperlink counts do not establish that a paper *caused* a belief, and search-engine results do not provide an exhaustive census of public discussion. They can, however, establish whether a paper is relatively prominent, whether its numerical findings have travelled beyond academic articles, and how those findings are framed when they are repeated.
+
+# Methods
+
+## Scholarly and extended-scholarly footprint
+
+OpenAlex records were resolved by DOI and checked against title, author, and publication metadata. The snapshot was retrieved on 21 September 2026. `openalex_citations` is the number of works recorded by OpenAlex as citing the focal work. Lifetime citations per year were calculated from the OpenAlex first-publication date to the retrieval date. OpenAlex field-weighted citation impact (FWCI) and citation-normalised percentile are reported where available.
+
+Citing works were grouped using the OpenAlex work-type classification. Journal articles and reviews were retained separately. Book chapters and books were treated as extended scholarly dissemination. Dissertations, preprints, paratexts, and residual non-journal records were grouped as grey literature for this descriptive audit. Because the work-level citation count and a live filtered query can differ slightly as the citation graph is recomputed, the report retains both the work-level count and the number of citing records that could be classified by type.
+
+## Public web and social discussion
+
+Targeted searches used each study's exact title and DOI, supplemented for REE-focused studies by author-title combinations and distinctive numerical phrases. Reddit searches were restricted by domain and included the exact title, DOI, author name, and distinctive reported values where relevant. A source was counted only when the page itself could be verified as referring directly to the study through a link, title/author reference, or distinctive numerical signature. General statements about PCOS and metabolism without a traceable study reference were excluded.
+
+The public-web counts are therefore conservative counts of verified pages found, not platform-wide totals. Deleted or private posts, unindexed pages, closed social networks, podcasts without transcripts, and link shorteners may be missed. Pages were also grouped into unique content items when an exact or explicitly documented relationship showed that one page was a repost or social share of another. All page URLs remain in the evidence table, but each grouped item contributes only once to the deduplicated totals.
+
+Altmetric Details Pages were queried by DOI, or by PubMed ID when no DOI was available, on 22 September 2026. Attention Scores, last-mention dates, source counts, Dimensions citations, and Mendeley reader counts were transcribed from the free Details Pages. An exact-title search was used for the remaining record without a persistent identifier. A missing score was retained as missing: it indicates either that Altmetric explicitly reported no mentions or that the study could not be resolved, rather than a score of zero.
+
+Altmetric source totals are platform-reported counts. They can represent users or source accounts rather than unique posts or pages and cannot be deduplicated against one another. They are therefore presented separately from the manually verified and deduplicated public-web audit.
+
+The dated study snapshot, Altmetric snapshot, page-level evidence, and repost/share decisions are supplied in four pipeline-validated CSV files.
+
+# Numerical summary
+
+Sixteen of the 17 eligible studies were indexed by OpenAlex. Together they had `r format(total_citations, big.mark = ",")` citations in the dated snapshot, with a median lifetime rate of `r sprintf("%.2f", median_rate)` citations per year. Altmetric assigned Attention Scores to `r nrow(altmetric_records)` studies; the median among scored studies was `r sprintf("%.1f", median_altmetric_score)`. The web audit verified `r total_verified_pages` public pages or Reddit threads, representing `r total_unique_web_items` unique content items after grouping reposts and direct social shares. Georgopoulos et al. accounted for `r georgopoulos$verified_unique_public_items` of these unique items (`r scales::percent(georgopoulos$verified_unique_public_items / total_unique_web_items, accuracy = 0.1)`).
+
+```{r}
+summary_table <- bibliometric_summary |>
+  arrange(desc(citations_per_year)) |>
+  transmute(
+    Study = author_year,
+    Citations = openalex_citations,
+    `Cit./year` = citations_per_year,
+    FWCI = fwci,
+    Chapters = citing_book_chapters,
+    Grey = grey_literature_records,
+    AAS = attention_score,
+    `Altmetric Reddit` = reddit_users,
+    Mendeley = mendeley_readers,
+    `Unique items` = verified_unique_public_items
+  )
+
+summary_table_html <- knitr::kable(
+  summary_table,
+  format = "html",
+  align = c("l", rep("r", 9)),
+  digits = 2,
+  caption = "Scholarly and wider-footprint indicators for all eligible studies. AAS is the Altmetric Attention Score; Altmetric Reddit is the platform-reported number of Redditors, not a deduplicated post count. The Greek studies were sensitivity-only records. Missing values are not zeros.",
+  table.attr = "class=\"table table-striped table-hover table-sm\""
+)
+knitr::asis_output(
+  paste("<div class=\"table-responsive\">", summary_table_html, "</div>", sep = "\n")
+)
+```
+
+Georgopoulos et al. had `r georgopoulos$openalex_citations` citations and `r sprintf("%.2f", georgopoulos$citations_per_year)` citations per year. It was tied at rank `r georgopoulos_citation_rank` for lifetime citations and ranked `r georgopoulos_rate_rank`th by citation rate. Its FWCI of `r sprintf("%.2f", georgopoulos$fwci)` indicates substantially more citations than expected for a work of the same year, type, and subfield.
+
+```{r}
+plot_data <- bibliometric_summary |>
+  filter(!is.na(citations_per_year), !is.na(attention_score)) |>
+  mutate(
+    focal = if_else(study_id == 9, "Georgopoulos et al.", "Other eligible studies")
+  )
+
+ggplot(plot_data, aes(citations_per_year, attention_score, colour = focal)) +
+  geom_point(size = 3, alpha = 0.85) +
+  geom_text(
+    data = filter(plot_data, study_id == 9),
+    aes(label = "Georgopoulos et al."),
+    nudge_y = 1.2,
+    show.legend = FALSE
+  ) +
+  scale_colour_manual(values = c("Georgopoulos et al." = "#B2182B", "Other eligible studies" = "#777777")) +
+  labs(
+    x = "Lifetime OpenAlex citations per year",
+    y = "Altmetric Attention Score",
+    colour = NULL,
+    caption = "Attention Scores are descriptive, time-varying indicators and should not be interpreted as study quality."
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "bottom")
+```
+
+# Georgopoulos et al. as a dissemination outlier
+
+Georgopoulos et al. was not the most highly cited included study in absolute or annualised terms. Its distinctive feature was the translation of its result into public-facing numerical claims. The targeted search verified `r georgopoulos$verified_reddit_threads` Reddit pages and `r georgopoulos$verified_other_web_pages` other public webpages directly referencing the study. These `r georgopoulos$verified_public_web_total` pages represented `r georgopoulos$verified_unique_public_items` unique content items after grouping two social repost/share pairs. Most repeated the contrast between 1,868 kcal/day in controls and 1,116 kcal/day in insulin-resistant women with PCOS.
+
+The independent Altmetric snapshot supports the same descriptive conclusion. Georgopoulos et al. had the highest Attention Score among the included studies (`r georgopoulos$attention_score`; rank `r georgopoulos_altmetric_rank`), compared with 46 for the next-highest study. Altmetric reported 230 Redditors, 5 YouTube creators, 10 X users, 1 news outlet, 1 blog, and 1 Facebook page. The 230 Redditors represented `r scales::percent(georgopoulos$reddit_users / total_altmetric_reddit_users, accuracy = 0.1)` of the Reddit users reported across resolved included studies. These are platform counts rather than unique posts; the manually reviewed count of 25 unique public content items remains the more conservative measure of traceable dissemination.
+
+This concentration was not uniform across every indicator. Georgopoulos et al. had 79 Mendeley readers, fewer than several other included studies, and its news coverage was lower than that of Pohlmeier et al. and Larsson et al. The clearest asymmetry was therefore in public and especially Reddit attention, rather than in scholarly readership alone.
+
+This numerical signature was repeatedly used to explain weight-loss difficulty, justify very low estimated calorie requirements, challenge simplified "calories in, calories out" advice, or validate personal experiences. Several discussions explicitly connected the finding with anxiety about consuming 1,200 kcal/day or less. This is stronger evidence of public-discourse influence than a scholarly citation count alone.
+
+Corrective discussion was also visible. The MacroFactor scientific review (notably authored by two of the present articles authors) directly questioned the Georgopoulos result. Its Reddit repost was retained as a separate page in the audit trail but counted within the same unique content item. Later, independent Reddit discussions either challenged the paper or amended earlier supportive posts after encountering that review. This shows that the study's public influence is continuing but contested.
+
+OpenAlex classified `r georgopoulos$citing_book_chapters` citing book chapters, `r georgopoulos$citing_dissertations` dissertation, `r georgopoulos$citing_preprints` preprints, and `r georgopoulos$citing_paratexts` paratext record for Georgopoulos et al. The identified book chapters included clinical or lifestyle-management chapters on PCOS, providing a plausible route by which the finding entered secondary professional narratives.
+
+By contrast, targeted searches for the other eligible studies did not identify direct Reddit discussion tied to their exact title, DOI, or authors. One professional Society for Endocrinology feature was verified as repeating the Robinson et al. finding of reduced postprandial thermogenesis. Public discussion therefore appears strongly asymmetric: the extreme resting-expenditure values from Georgopoulos were substantially more portable than null findings or less dramatic estimates in the comparison literature.
+
+# Verified public-web evidence
+
+```{r}
+evidence_table <- bibliometric_web_mentions_grouped |>
+  left_join(
+    select(bibliometric_summary, study_id, author_year),
+    by = "study_id"
+  ) |>
+  arrange(study_id, publication_date, evidence_id) |>
+  mutate(
+    Source = paste0("<a href=\"", url, "\">", title, "</a>"),
+    Framing = str_replace_all(framing, "_", " "),
+    Platform = case_when(
+      relationship == "secondary_social_repost" ~ paste0(platform, " (repost)"),
+      relationship == "secondary_social_share" ~ paste0(platform, " (share)"),
+      relationship == "canonical_source" ~ paste0(platform, " (original)"),
+      TRUE ~ platform
+    )
+  ) |>
+  transmute(
+    Study = author_year,
+    Platform = platform,
+    Framing,
+    Source
+  )
+
+evidence_table_html <- knitr::kable(
+  evidence_table,
+  format = "html",
+  align = "llll",
+  escape = FALSE,
+  caption = "Verified public-web and social-discussion pages. Reposts and direct shares remain listed but contribute only once to unique-item totals.",
+  table.attr = "class=\"table table-striped table-hover table-sm\""
+)
+knitr::asis_output(
+  paste("<div class=\"table-responsive\">", evidence_table_html, "</div>", sep = "\n")
+)
+```
+
+# Interpretation
+
+The combined evidence supports describing Georgopoulos et al. as an influential and unusually amplified article and finding within the PCOS energy-expenditure literature. It is relatively highly cited, appears in book chapters and grey literature, has the highest Altmetric Attention Score among the included studies, and is uniquely prominent in the verified public discussion. The memorable 1,116 versus 1,868 kcal/day contrast appears to have functioned as a transmissible narrative object, often detached from the paper's methodological and reporting limitations. The evidence does **not** demonstrate that the belief in lower REE originated with this paper, nor does it quantify the prevalence of that belief among clinicians or people with PCOS.
+
+**Limitations.** Metrics are dynamic and source coverage is not exhaustive. Altmetric Reddit counts users, not unique posts. Mentions indicate dissemination, not endorsement, accuracy, readership, clinical influence, or causation.

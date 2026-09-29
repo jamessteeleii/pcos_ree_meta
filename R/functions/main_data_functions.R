@@ -631,7 +631,7 @@ convert_descriptives_table_to_docx <- function(
 
 convert_descriptives_table_to_html <- function(
     table,
-    path = file.path("tables", "descriptives_table.html")) {
+    path = file.path("docs", "descriptives_table.html")) {
   path <- ensure_parent_directory(path)
 
   save_as_html(table, path = path,

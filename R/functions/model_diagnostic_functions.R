@@ -154,7 +154,13 @@ model_trace_plot <- function(model, label) {
   bayesplot::mcmc_trace(
     draws,
     pars = parameters,
-    facet_args = list(ncol = 1, strip.position = "left")
+    facet_args = list(
+      ncol = 1,
+      strip.position = "left",
+      labeller = ggplot2::labeller(
+        .default = function(x) sub("PCOS", "PMOS", x, fixed = TRUE)
+      )
+    )
   ) +
     ggplot2::labs(title = paste(label, "trace plots"))
 }

@@ -60,6 +60,78 @@ list(
     format = "file"
   ),
 
+  # Bibliometric analysis
+  tar_target(
+    bibliometric_snapshot_file,
+    here("data", "bibliometric_footprint_snapshot.csv"),
+    format = "file"
+  ),
+
+  tar_target(
+    bibliometric_web_mentions_file,
+    here("data", "bibliometric_web_mentions.csv"),
+    format = "file"
+  ),
+
+  tar_target(
+    bibliometric_web_content_groups_file,
+    here("data", "bibliometric_web_content_groups.csv"),
+    format = "file"
+  ),
+
+  tar_target(
+    bibliometric_altmetric_snapshot_file,
+    here("data", "bibliometric_altmetric_snapshot.csv"),
+    format = "file"
+  ),
+
+  tar_target(
+    bibliometric_snapshot,
+    read_bibliometric_snapshot(bibliometric_snapshot_file)
+  ),
+
+  tar_target(
+    bibliometric_web_mentions,
+    read_bibliometric_web_mentions(bibliometric_web_mentions_file)
+  ),
+
+  tar_target(
+    bibliometric_web_content_groups,
+    read_bibliometric_web_content_groups(
+      bibliometric_web_content_groups_file
+    )
+  ),
+
+  tar_target(
+    bibliometric_altmetric_snapshot,
+    read_bibliometric_altmetric_snapshot(
+      bibliometric_altmetric_snapshot_file
+    )
+  ),
+
+  tar_target(
+    bibliometric_validation,
+    validate_bibliometric_snapshot(
+      bibliometric_snapshot,
+      bibliometric_web_mentions,
+      bibliometric_web_content_groups,
+      bibliometric_altmetric_snapshot
+    )
+  ),
+
+  tar_target(
+    bibliometric_summary,
+    {
+      bibliometric_validation
+      create_bibliometric_summary(
+        bibliometric_snapshot,
+        bibliometric_web_mentions,
+        bibliometric_web_content_groups,
+        bibliometric_altmetric_snapshot
+      )
+    }
+  ),
+
   tar_target(
     reproducibility_checks,
     check_project_reproducibility(main_arm_data_file, data_manifest_file)
@@ -951,8 +1023,68 @@ list(
     submission_manuscript_pdf,
     path = file.path("manuscript", "submission_manuscript.qmd"),
     quiet = FALSE
+  ),
+
+  tar_target(
+    grateful_report_sources,
+    {
+      report_file <- grateful::cite_packages(
+        output = "file",
+        out.dir = here("supplementary"),
+        out.format = "Rmd",
+        out.file = "grateful-report",
+        bib.file = "grateful-refs",
+        path = here()
+      )
+      source_files <- c(
+        report_file,
+        here("supplementary", "grateful-refs.bib")
+      )
+      for (source_file in source_files) {
+        lines <- readLines(source_file, encoding = "UTF-8", warn = FALSE)
+        lines <- sub("[[:blank:]]+$", "", lines)
+        while (length(lines) && !nzchar(tail(lines, 1L))) {
+          lines <- head(lines, -1L)
+        }
+        writeLines(lines, source_file, useBytes = TRUE)
+      }
+      source_files
+    },
+    format = "file"
+  ),
+
+  tarchetypes::tar_quarto(
+    grateful_report_html,
+    path = file.path("supplementary", "grateful-report.Rmd"),
+    extra_files = grateful_report_sources,
+    quiet = FALSE
+  ),
+
+  tar_target(
+    supplementary_bibliometric_impact_source,
+    here("supplementary", "supplementary_bibliometric_impact.qmd"),
+    format = "file"
+  ),
+
+  tar_target(
+    supplementary_bibliometric_impact_html,
+    {
+      bibliometric_validation
+      render_bibliometric_supplement(
+        supplementary_bibliometric_impact_source,
+        bibliometric_snapshot_file,
+        bibliometric_web_mentions_file,
+        bibliometric_web_content_groups_file,
+        bibliometric_altmetric_snapshot_file,
+        here(
+          "docs",
+          "supplementary_bibliometric_impact.html"
+        )
+      )
+    },
+    format = "file"
   )
-  
+
 )
 
 

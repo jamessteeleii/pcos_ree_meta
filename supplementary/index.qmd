@@ -1,0 +1,14 @@
+---
+title: "Supplementary materials"
+subtitle: "Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome: a systematic review and meta-analysis"
+author: "Kirwan et al."
+---
+
+This site contains the online supplementary materials accompanying the systematic review and meta-analysis.
+
+- [Supplementary Technical Analysis and Results](supplementary_technical_analysis_results.qmd)
+- [Supplementary Bibliometric and Public-Discourse Footprint](supplementary_bibliometric_impact.qmd)
+- [Descriptive Characteristics of Included Study Arms and Participants](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)
+- [`grateful` software citation report](grateful-report.Rmd)
+
+The original preregistered statistical analysis plan remains available separately in the [project repository](https://github.com/jamessteeleii/pcos_ree_meta/blob/main/analysis_plan.pdf). Its accompanying [historical software citation report](https://github.com/jamessteeleii/pcos_ree_meta/blob/main/grateful-report.pdf) records the environment used for that plan; the report on this site is generated from the current locked environment.

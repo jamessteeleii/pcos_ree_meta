@@ -196,7 +196,6 @@ check_project_structure <- function(root = ".") {
   expect_true(!length(missing_files), paste("Missing project files:", paste(missing_files, collapse = ", ")))
 
   forbidden_files <- c(
-    ".Rhistory",
     file.path("data", "studies_data.xlsx"),
     file.path("data", "Extraction notes.docx"),
     file.path("manuscript", "JCEM author affirmation.docx"),
@@ -225,7 +224,7 @@ check_project_structure <- function(root = ".") {
       grepl('"R"\\s*:\\s*\\{\\s*"Version"\\s*:\\s*"4\\.4\\.3"', lock, perl = TRUE),
       "renv.lock must declare R 4.4.3."
     )
-    locked_packages <- c("targets", "qs", "tarchetypes", "quarto")
+    locked_packages <- c("targets", "qs", "tarchetypes", "quarto", "grateful")
     missing_packages <- locked_packages[!vapply(
       locked_packages,
       function(package) grepl(paste0('"', package, '"\\s*:'), lock, perl = TRUE),
@@ -278,7 +277,7 @@ check_project_structure <- function(root = ".") {
     )
   }
 
-  bibliography <- file.path(root, "manuscript", "mylibrary.bib")
+  bibliography <- file.path(root, "manuscript", "references.bib")
   qmd_files <- list.files(file.path(root, "manuscript"), pattern = "\\.qmd$", full.names = TRUE)
   if (file.exists(bibliography) && length(qmd_files)) {
     bibliography_keys <- extract_bibliography_keys(bibliography)
@@ -286,7 +285,15 @@ check_project_structure <- function(root = ".") {
     missing_citations <- setdiff(citation_keys, bibliography_keys)
     expect_true(
       !length(missing_citations),
-      paste("Citation keys missing from manuscript/mylibrary.bib:", paste(missing_citations, collapse = ", "))
+      paste("Citation keys missing from manuscript/references.bib:", paste(missing_citations, collapse = ", "))
+    )
+    bibliography_text <- paste(
+      readLines(bibliography, encoding = "UTF-8", warn = FALSE),
+      collapse = "\n"
+    )
+    expect_true(
+      !grepl("(?im)^\\s*file\\s*=", bibliography_text, perl = TRUE),
+      "manuscript/references.bib contains local file attachments."
     )
   }
 
@@ -303,7 +310,7 @@ check_local_environment <- function(root = ".") {
   required_packages <- c(
     "targets", "qs", "tarchetypes", "quarto", "tidyverse", "here", "metafor",
     "brms", "marginaleffects", "tidybayes", "patchwork", "flextable",
-    "officer", "webshot2"
+    "officer", "webshot2", "grateful"
   )
   missing_packages <- required_packages[!vapply(required_packages, requireNamespace, logical(1), quietly = TRUE)]
   if (length(missing_packages)) {
@@ -321,7 +328,7 @@ check_local_environment <- function(root = ".") {
   }
 
   if (requireNamespace("webshot2", quietly = TRUE)) {
-    chrome <- tryCatch(webshot2::find_chrome(), error = function(error) "")
+    chrome <- tryCatch(chromote::find_chrome(), error = function(error) "")
     if (!nzchar(chrome)) {
       problems <- c(problems, "Chrome or Chromium was not found for webshot2.")
     }

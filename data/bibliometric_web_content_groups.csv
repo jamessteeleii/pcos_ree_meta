@@ -1,0 +1,5 @@
+evidence_id,content_group_id,relationship,count_as_unique_item,rationale
+web008,perla_health_article,secondary_social_share,FALSE,Reddit post shares the Perla Health article rather than constituting a separate source article
+web018,perla_health_article,canonical_source,TRUE,Original Perla Health article
+web014,macrofactor_pcos_bmr_review,secondary_social_repost,FALSE,Reddit post republishes or shares the MacroFactor scientific review
+web026,macrofactor_pcos_bmr_review,canonical_source,TRUE,Original MacroFactor scientific review

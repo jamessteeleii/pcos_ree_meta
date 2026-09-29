@@ -1,0 +1,368 @@
+---
+title: "Supplementary Technical Analysis and Results"
+subtitle: "Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome: a systematic review and meta-analysis"
+author: "Kirwan et al."
+date: today
+date-format: long
+lang: en-GB
+format:
+  html:
+    toc: true
+    embed-resources: true
+    link-external-newwindow: true
+bibliography: ../manuscript/references.bib
+csl: ../manuscript/american-medical-association.csl
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+This supplementary document provides the complete statistical model specifications, prior distributions, post-processing procedures, and full primary, sensitivity, and exploratory results supporting the main manuscript. It also records the updated literature search through September 2026 and the resulting study flow.
+
+Following the June 2026 global consensus terminology update, this current supplementary analysis uses polyendocrine metabolic ovarian syndrome (PMOS; previously polycystic ovary syndrome, PCOS). PCOS is retained only where it describes the terminology used in the historical literature, source material, and database search strategy; the terminology update did not change the included data or analyses.
+
+```{r}
+library(tidyverse)
+library(flextable)
+library(tidybayes)
+
+targets_store <- if (dir.exists("_targets")) "_targets" else file.path("..", "_targets")
+
+# Do not render model-dependent results unless every fitted model passes the
+# registered convergence and HMC diagnostic checks.
+targets::tar_load(all_model_diagnostics_gate, store = targets_store)
+targets::tar_load(postprocessing_validation, store = targets_store)
+```
+
+# Statistical Analysis
+
+Statistical analysis of the extracted data was performed in R (v 4.4.3; R Core Team, https://www.r-project.org/) and RStudio (v 2023.06.1; Posit, https://posit.co/). All code utilised for data preparation, transformations, analyses, plotting, and reporting are available in the corresponding GitHub repository <https://github.com/jamessteeleii/pcos_ree_meta>. We cite all software and packages used in the analysis pipeline using the `grateful` package [@rodriguez-sanchezGratefulFacilitateCitation2023] in the [online software citation report](https://jamessteeleii.github.io/pcos_ree_meta/grateful-report.html). The statistical analysis plan was linked in our pre-registration (PROSPERO: [CRD42024601434](https://www.crd.york.ac.uk/PROSPERO/view/CRD42024601434)) and available at the accompanying GitHub repository. Any deviations from the pre-registration are noted below.
+
+Given our research question our analysis was aimed at parameter estimation [@cummingNewStatisticsWhy2014] within a Bayesian meta-analytic framework [@kruschkeBayesianNewStatistics2018]. For all analyses model parameter estimates and their precision, along with conclusions based upon them, are interpreted continuously and probabilistically, considering data quality, plausibility of effect, and previous literature, all within the context of each model. The `renv` package [@usheyRenvProjectEnvironments2023] was used for package version reproducibility and a function based analysis pipeline using the `targets` package [@landauTargetsDynamicFunctionOriented2023] was employed (the analysis pipeline can be viewed by downloading the R Project and running the function `targets::tar_visnetwork()`). Effect sizes and their variances were all calculated using the `metafor` packages `escalc()` function [@viechtbauerMetaforMetaAnalysisPackage2023]. The main package `brms` [@burknerBrmsBayesianRegression2023] was used in fitting all the Bayesian meta-analysis models, and posterior predictions and coefficient draws were obtained directly from the fitted models. All visualisations are created using `ggplot2` [@wickhamGgplot2CreateElegant2023], `tidybayes` [@kayTidybayesTidyData2023], and the `patchwork` [@pedersenPatchworkComposerPlots2023] packages.
+
+## Main Pre-registered Models
+
+We adopted an arm-based multiple condition comparison (i.e., network) type model given that the studies included had arms of women with PMOS both with, and without, a non-PMOS control arm [@hongBayesianMissingData2016], and also in some cases multiple observations of REE in the different arms included in the study (for example, where an intervention was conducted and pre- and post-intervention REE was reported). In typical contrast-based meta-analyses data is limited to the effect sizes for paired contrasts between arms and thus studies that include both arms (i.e., relative effects between non-PMOS control vs PMOS arms); however, in arm-based analyses the data are the absolute effects within each arm and information is borrowed across studies to enable both within condition absolute, and between condition relative contrasts to be estimated. We made use of historical information regarding REE in healthy control women without PMOS by setting informative priors based on meta-analysis of large scale studies reporting normative data for REE in this population. This was included to provide indirect control information  where it was missing from particular studies. The use of historical priors like this is an efficient tool to incorporate historical information about a particular population in a conservative manner in meta-analyses [@weberApplyingMetaAnalyticPredictivePriors2021]. From this model we focus on reporting the global grand mean estimate for the fixed between condition relative contrast for non-PMOS control vs PMOS arms as our primary estimand of interest (i.e., $\beta_1$ in both mean and standard deviation models). We examined both raw mean REE (i.e., the absolute mean REE in kcals per day for each arm) in addition to the between person standard deviation in REE (i.e., the absolute standard deviation in REE in kcals per day for each arm). Both models were multilevel in that they included nested random intercepts for both study and arm within study. In addition, and in deviation from our pre-registration, we also included lab as a random intercept as in some cases we had multiple studies from the same lab or research group. Lastly, the inclusion of a random intercept for each effect size was accidentally omitted from our pre-registration, and so this is also included in the model.
+
+### Mean REE Model
+
+The main model for mean REE with $\textrm{cond}$ representing the condition (either control or PMOS) was as follows:
+$$
+\scriptsize
+\begin{aligned}
+\hat{\theta}_{ijkl} &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_[ijkl]
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[10pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{1,\mathrm{lab}[i]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{lab}}
+\right),
+\quad
+\Sigma_{\mathrm{lab}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{1,\mathrm{study}[j]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{study}}
+\right),
+\quad
+\Sigma_{\mathrm{study}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L}
+\end{aligned}
+$$
+
+where $\hat{\theta}_{ijkl}$ is the $l\textrm{th}$ mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ mean REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PMOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices.
+
+The priors for this model were as follows:
+
+$$
+\small
+\begin{aligned}
+\beta_0 &\sim \text{Student-}t(3,\, 1441.81,\, 84.56) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 200) \\[12pt]
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 149.89,\, 82.91) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 112.4) \\[12pt]
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{aligned}
+$$
+where the prior for $\beta_{0}$, which corresponded to the model intercept and mean REE in the control condition, was set based on meta-analysis of the mean REEs for women from two large studies of healthy people [@mifflinNewPredictiveEquation1990; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PMOS conditions was set based on a wide range of possible values considering the minimum and and maximum values of the ranges reported in the two studies noted (i.e., 2492 - 908 = 1584). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
+
+### Standard Deviation of REE Model
+
+The main model for the standard deviation of REE with $\textrm{cond}$ representing the condition (either control or PMOS) was as follows:
+
+$$
+\scriptsize
+\begin{aligned}
+\log(\hat{\theta}_{ijkl}) &\sim \mathcal{N}(\mu_{ijkl}, \sigma^2_{ijkl}) \\[6pt]
+\mu_{ijkl} &= \beta_0 + \beta_1\,\text{cond}_{[ijkl]}
+       + \beta_2\,\tilde{m}_{[ijkl]}
+       + \alpha_{0,\mathrm{lab}[i]} + \alpha_{1,\mathrm{lab}[i]}\,\text{cond}
+       + \alpha_{0,\mathrm{study}[j]} + \alpha_{1,\mathrm{study}[j]}\,\text{cond}
+       + \alpha_{0,\mathrm{arm}[k]}
+       + \alpha_{0,\mathrm{effect}[l]} \\[8pt]
+m &= \log(y_{i,\mathrm{mean,[ijkl]}}) \\[3pt]
+\tilde{m} &\sim \mathcal{N}(m,\, \sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2) \\[10pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{lab}[i]} \\[4pt]
+\alpha_{1,\mathrm{lab}[i]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{lab}}
+\right),
+\quad
+\Sigma_{\mathrm{lab}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{lab}} & \rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} \\[4pt]
+\rho_{\mathrm{lab}}\,\sigma_{0,\mathrm{lab}}\,\sigma_{1,\mathrm{lab}} & \sigma^2_{1,\mathrm{lab}}
+\end{pmatrix}
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\begin{pmatrix}
+\alpha_{0,\mathrm{study}[j]} \\[4pt]
+\alpha_{1,\mathrm{study}[j]}
+\end{pmatrix}
+&\sim
+\mathcal{N}\!\left(
+\begin{pmatrix} 0 \\[4pt] 0 \end{pmatrix},
+\Sigma_{\mathrm{study}}
+\right),
+\quad
+\Sigma_{\mathrm{study}} =
+\begin{pmatrix}
+\sigma^2_{0,\mathrm{study}} & \rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} \\[4pt]
+\rho_{\mathrm{study}}\,\sigma_{0,\mathrm{study}}\,\sigma_{1,\mathrm{study}} & \sigma^2_{1,\mathrm{study}}
+\end{pmatrix}
+\text{, for study j = 1,} \dots \text{,J} \\[12pt]
+\alpha_{0,\mathrm{arm}[k]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{arm}})
+\text{, for arm k = 1,} \dots \text{,K} \\[12pt]
+\alpha_{0,\mathrm{effect}[l]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{effect}})
+\text{, for effect l = 1,} \dots \text{,L}
+\end{aligned}
+$$
+
+where $\log(\hat{\theta}_{ijkl})$ is the $l\textrm{th}$ natural logarithm of the standard deviation of REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study, $k\textrm{th}$ arm, and $l\textrm{th}$ standard deviation of REE estimate are $\alpha_{0,lab[i]}$, $\alpha_{0,study[j]}$, $\alpha_{0,arm[k]}$, and $\alpha_{0,effect[l]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$, $\sigma^2_{0,arm[k]}$, and $\sigma^2_{0,effect[l]}$. The parameter $\beta_0$ represents the fixed effect estimate of standard deviation of REE for control conditions and $\beta_1$ the fixed effect estimate for the offset from this for the PMOS conditions (i.e., the difference between conditions). The estimated offset was allowed to vary across both labs and studies each reflected by $\alpha_{1,lab[i]}$ and $\alpha_{1,study[j]}$ respectively, and these effects were also modelled as correlated with the corresponding random intercepts with covariance $\Sigma_{lab}$ and $\Sigma_{study}$, and $\mathrm{corr}_{\mathrm{lab}}$ and $\mathrm{corr}_{\mathrm{study}}$ correlation matrices. Finally, $\beta_{2}$ represents the fixed effect of the natural logarithm of the corresponding mean REE estimate $\tilde{m}$ which is modelled as estimated with measurement error i.e., $m$ represents the point estimate for the $l\textrm{th}$ natural logarithm of the mean REE estimate from the $k\textrm{th}$ arm, for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma_{\log(y_{i,\mathrm{mean,[ijkl]}})}^2$ is the corresponding sampling error for that estimate.
+
+The priors for this model were as follows:
+$$
+\small
+\begin{aligned}
+\beta_0 &\sim \text{Student-}t(3,\, 5.54,\, 0.80) \\[4pt]
+\beta_1 &\sim \text{Student-}t(3,\, 0,\, 5.3) \\[4pt]
+\beta_2 &\sim \text{Student-}t(3,\, 0,\, 2.5) \\[12pt]
+\text{mean}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 7.28,\, 0.62) \\[4pt]
+\text{sd}(\tilde{m}) &\sim \text{Half-student-}t(3,\, 0,\, 5) \\[12pt]
+\sigma^2_{0,\mathrm{study}} &\sim \text{Half-student-}t(3,\, 1.08,\, 1.06) \\[4pt]
+\sigma^2_{0,\mathrm{lab}},\, \sigma^2_{1,\mathrm{lab}},\,
+\sigma^2_{1,\mathrm{study}},\, \sigma^2_{0,\mathrm{arm}}, \sigma^2_{0,\mathrm{effect}} &\sim \text{Half-student-}t(3,\, 0,\, 2.5) \\[12pt]
+\mathrm{corr}_{\mathrm{lab}} &\sim \mathrm{LKJ}(1) \\[4pt]
+\mathrm{corr}_{\mathrm{study}} &\sim \mathrm{LKJ}(1)
+\end{aligned}
+$$
+
+where the prior for $\beta_{0}$, which corresponded to the model intercept and standard deviation of REE in the control condition, was again set based on meta-analysis of the standard deviation of REEs for women from two large studies of healthy people [@mifflinNewPredictiveEquation1990; @pavlidouRevisedHarrisBenedict2023] though set with a conservative degrees of freedom for the $\textrm{Student-}t$ distribution.The random intercept $\sigma^2_{0,study}$ was set similarly to this. The prior for the fixed effect $\beta_{1}$, reflecting the difference between control and PMOS conditions was set based on a wide range of possible values. Given that in many cases of variables in the field there is an approximate relationship of ~1 for the natural logarithm of the standard deviation conditioned upon the natural logarithm of the mean [@steeleMetaanalysisVariationSport2023a] we set this prior to reflect the range of differences on the on the log scale (i.e., $\log(1584)$). We then set a prior that permits values approximately across this range of values with the majority of it's mass centred around zero. The prior for the fixed effect $\beta_{2}$, reflecting the relationship between the natural logarithm of the mean REE with the natural logarithm of the standard deviation of REE, was set it to be weakly informative centred on zero with a wide scale to indicate uncertainty in this outcome specifically despite the typical relationship close to ~1. Priors for the measurement error of the natural logarithm of the mean REE estimate $\tilde{m}$ were again based upon meta-analysis of the aforementioned studies, though measurement error has to be positive, as does the corresponding standard deviation of this error, so we set these to conservative wide $\textrm{half-student-}t$ distributions. The remaining random effects were set based on the default weakly regularising priors for `brms` and scaled to the expected response values using a $\textrm{half-student-}t$ distribution with 3 degrees of freedom and $\mu=0$, and both correlation matrices $\textrm{corr}_{lab}$ and $\textrm{corr}_{study}$ were set with an $\textrm{LKJcorr(1)}$ distribution.
+
+### Post-processing of models
+For both models we examined trace plots along with $\hat{R}$ values to examine whether chains have converged, and posterior predictive checks for each model to understand the model implied distributions. From each model we  took draws from the posterior distributions for the conditional absolute estimates for each condition (i.e., controls and PMOS) by study incorporating random effects, the global grand mean absolute estimates for each condition ignoring random effects, and the global grand mean between condition relative contrast for controls vs PMOS conditions ignoring random effects. The between condition relative contrast for controls vs PMOS conditions corresponded to $\beta{1}$ in each model and was our primary estimand of interest; for the mean REE model this corresponded to the absolute difference in mean REE, and for the standard deviation of REE model this corresponded to the natural logarithm of the ratio of standard deviations of REE which was exponentiated (note, all log standard deviation of REE model estimates were exponentiated back to the original scale to aid interpretibility). We present the full probability density functions for posterior visually, and also to calculate mean and 95% quantile intervals (QI: i.e., 'credible' or 'compatibility' intervals) for each estimate providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
+
+
+## Sensitivity analyses
+### Pairwise contrast based models
+
+By way of pre-registered sensitivity analysis we also conducted pairwise contrast based models where we limited the included effects to those extracted from studies including only a directly comparable control and PMOS arm at baseline. These models were both as follows:
+
+$$
+\small
+\begin{aligned}
+\hat{\theta}_{ij} &\sim \mathcal{N}(\mu_{ij}, \sigma^2_{ij}) \\[6pt]
+\mu_{ij} &= \beta_0
+       + \alpha_{0,\mathrm{lab}[i]}
+       + \alpha_{0,\mathrm{study}[j]} \\[10pt]
+\alpha_{0,\mathrm{lab}[i]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{lab}})
+\text{, for lab i = 1,} \dots \text{,I} \\[12pt]
+\alpha_{0,\mathrm{study}[j]} &\sim \mathcal{N}(0, \sigma^2_{0,\mathrm{study}})
+\text{, for study j = 1,} \dots \text{,J}
+\end{aligned}
+$$
+
+where $\hat{\theta}_{ijkl}$ is the pairwise effect size, either the mean difference in REE or the log coefficient of variation ratio (calculated as PMOS vs control), for the $j\textrm{th}$ study, conducted by the $i\textrm{th}$ lab and $\sigma^2_{ijkl}$ is the corresponding sampling error for that effect size estimate. The random intercepts for the $i\textrm{th}$ lab, $j\textrm{th}$ study are $\alpha_{0,lab[i]}$ and $\alpha_{0,study[j]}$ respectively each with standard deviation of $\sigma^2_{0,lab[i]}$, $\sigma^2_{0,study[j]}$. The parameter $\beta_0$ represents the fixed effect estimate of the pairwise effect size i.e., the pooled estimate of the contrast between conditions. The priors for $\beta_{0}$ in these models were set as default weakly regularising which is set on an intercept that results when internally centering all population-level predictors around zero to improve sampling efficiency and scaled to the expected response values using a $\textrm{student-}t$ distribution; for the mean difference in REE this was $\textrm{student-}t(3,\ 5.5,\ 50.2)$ and for the log coefficient of variance ratio this was $\textrm{student-}t(3,\ -0.1,\ 2.5)$. The random effects were set similarly scaled to the expected response values but using a $\textrm{half-student-}t$ distribution centred on zero. From these models we calculated the mean and 95% quantile intervals (i.e., 'credible' or 'compatibility' intervals) for the $\beta_0$ (comparable to the $\beta_1$ from the corresponding mean and standard deviation of REE arm-based models) for each effect size providing the most probable value of the parameter in addition to the range from 2.5% to 97.5% percentiles given our priors and data.
+
+For reporting, posterior draws from the log coefficient-of-variation ratio were exponentiated before calculating the posterior mean and 95% quantile interval.
+
+### Additional sensitivity analyses
+As noted in the section above, *"Studies with possible reporting errors"*, we opted to conduct analysis with and without the inclusion of four studies with possible reporting errors we could not resolve [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009]. Thus the main models described above were run with and without these studies, the main results are presented without them and the sensitivity results with them are reported separately below.
+
+As a further sensitivity analysis, given the inclusion of some studies with interventions in women with PMOS reporting REE at multiple timepoints such as mid- and post-intervention [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014] but lacking of control women without PMOS, we opted to also conduct sensitivity analysis excluding these and only examining their baseline results in addition to the cross-sectional studies. As such, the main models described above were run without the follow-up (i.e., mid- or post-intervention timepoints) from these studies and only using the baseline results in addition to other cross-sectional studies.
+
+```{r}
+targets::tar_load(c(main_arm_mean_effects_contrast_condition_bmi, main_arm_variance_effects_contrast_condition_bmi,
+                    main_arm_mean_effects_contrast_condition_fat_free_mass,main_arm_variance_effects_contrast_condition_fat_free_mass),
+                  store = targets_store)
+
+```
+
+Lastly, given the role of body mass and, in particular, highly metabolically active tissue on REE we included models adjusted for these group level characteristics where studies reported them. These models were essentially extensions of the main models noted above for BMI and fat-free mass where each was modelled with its corresponding sampling error similarly to how the log mean REE was modelled in the models for standard deviation of REE i.e., the mean BMI or fat-free mass estimates were modelled as estimated with measurement error. We used the median values seen in the control conditions as the reference values i.e., BMI = `r main_arm_mean_effects_contrast_condition_bmi$m_bmi` kg/$\textrm{m}^2$ and fat-free mass = `r main_arm_mean_effects_contrast_condition_fat_free_mass$m_fat_free_mass` kg. Because these models did not include condition-by-moderator interactions, the adjusted between-condition contrast corresponds directly to $\beta_1$ and is invariant to the chosen reference value.
+
+# Results
+## Systematic Review
+```{r}
+targets::tar_load(c(
+  c(main_arm_data_imputed_demographics,
+    main_plus_greek_arm_data_imputed_demographics)
+), store = targets_store)
+
+main_arm_data_imputed_demographics_baseline <- main_arm_data_imputed_demographics |>
+  filter(timepoint == "baseline")
+
+no_conditions <- main_arm_data_imputed_demographics_baseline |>
+  group_by(cond) |>
+  count()
+
+no_participants <- main_arm_data_imputed_demographics_baseline |>
+  group_by(cond) |>
+  summarise(
+    min_n = min(n),
+    median_n = median(n),
+    max_n = max(n),
+    total_n = sum(n)
+  )
+
+```
+
+The searches were updated for the period January 2025 through September 2026. The global consensus adopting "Polyendocrine Metabolic Ovarian Syndrome" (PMOS) was published only in June 2026, during the final months of the update [@teedePolyendocrineMetabolicOvarian2026]. For continuity with the original strategy and the terminology under which the historical literature was indexed, the updated strategy retained PCOS terminology. The update identified 69 records (PubMed, n = 38; Web of Science, n = 13; MEDLINE/EBSCO, n = 18). After removal of eight duplicate records, including records already captured by the original search, 61 records underwent title screening. Fifty-nine were excluded at title screening and the remaining two were excluded after abstract screening. No reports proceeded to full-text retrieval and no additional eligible studies were identified. The study set and all statistical analyses reported in this supplement were therefore unchanged.
+
+The numbers in this section exclude the four studies previously noted with possible reporting issues that were unresolved. These studies are, however, summarised in full in the descriptive characteristics table in the online supplementary materials (see [Descriptives Table](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)), where some of the possible reporting errors can be seen in the standard deviations reported or calculated (e.g., the standard deviation calculated for body mass of women with PMOS in Saltamavros et al. [-@saltamavrosAlpha2Beta2007]). The PRISMA flow diagram (@fig-prisma) includes all eligible studies, including the four with possible reporting errors, and the updated search.
+
+![Updated PRISMA 2020 flow diagram for the systematic review. The updated database search covered January 2025 through September 2026 and identified no additional eligible studies. A “report” may be a journal article, preprint, conference abstract, study register entry, clinical study report, dissertation, unpublished manuscript, government report, or another document providing relevant information. The website in the original-search pathway was a prior narrative review by members of the author group (https://macrofactorapp.com/pcos-bmr/) that identified two studies not found in the systematic database search.](../manuscript/prisma.png){#fig-prisma}
+
+Our systematic review identified `r length(unique(main_arm_data_imputed_demographics$study))` studies from `r length(unique(main_arm_data_imputed_demographics$lab))` lab/research groups including `r length(unique(main_arm_data_imputed_demographics$arm))` arms (Control arms = `r no_conditions$n[1]`, PMOS arms = `r no_conditions$n[2]`) and a total of `r sum(no_participants$total_n)` participants (Controls: minimum n = `r no_participants$min_n[1]`, median n = `r no_participants$median_n[1]`, maximum n = `r no_participants$max_n[1]`; PMOS: minimum n = `r no_participants$min_n[2]`, median n = `r no_participants$median_n[2]`, maximum n = `r no_participants$max_n[2]`). Descriptive characteristics of the arms and participants in these studies are reported fully in the online supplementary materials (see [Descriptives Table](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)).
+
+```{r}
+
+summary_descriptives <- main_arm_data_imputed_demographics_baseline |>
+  group_by(cond) |>
+  summarise(
+    min_age = round(min(m_age, na.rm = TRUE)),
+    max_age = round(max(m_age, na.rm = TRUE)),
+    min_bmi = round(min(m_bmi, na.rm = TRUE),1),
+    max_bmi = round(max(m_bmi, na.rm = TRUE),1)
+  )
+
+countries <- main_plus_greek_arm_data_imputed_demographics |>
+  group_by(study) |>
+  slice_head(n=1) |>
+  ungroup() |>
+  group_by(country) |>
+  count()
+
+```
+
+Studies were carried out in multiple countries: Brazil (k = `r filter(countries, country == "Brazil")$n`) ,and USA (k = `r filter(countries, country == "USA")$n` studies), Australia, Cameroon, Canada, Italy, Sweden, Turkey, UK (all k = 1 study). The four studies with noted reporting errors were carried out in Greece. A total of 11 studies used the Rotterdam criteria (or a modified version there of) for diagnosing PMOS [@robinsonPostprandialThermogenesisReduced1992; @brunerEffectsExerciseNutritional2006; @moranShorttermMealReplacements2006; @cosarRestingMetabolicRate2008; @graffDietaryGlycemicIndex2013; @pohlmeierEffectLowstarchLowdairy2014; @dohRelationshipAdiposityInsulin2016; @larssonDietaryIntakeResting2016; @graffSaturatedFatIntake2017; @rodriguesLowValidityPredictive2018; @tosiInsulinMediatedSubstrateUse2021]. One study used the 1990 National Institutes of Health criteria [@broskeyAssessingEnergyRequirements2017], and two studies [@segalRestingMetabolicRate1990; @robinsonPostprandialThermogenesisReduced1992] diagnosed PMOS via the presence of oligomenorrhea or amenorrhea alongside additional criteria including plasma androgen levels, hirsutism or polycystic ovaries on ultrasound scanning. All but one study [@broskeyAssessingEnergyRequirements2017], which used doubly labelled water, measured REE using indirect calorimetry. The specific devices reported by these studies are included in the online supplementary materials (see [Descriptives Table](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)). We originally considered in our pre-registration that, given sufficient data, we would compare sub groups of women with PMOS who did and did not have accompanying insulin resistance. However, based on the metabolic health variables reported in studies with this information (see [Descriptives Table](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)) and, where available, considering primary criteria of either homeostatic model assessment of insulin resistance (HOMA-IR) $\geq2.5$ or secondary criteria including fasting insulin $>12\mu \textrm{U/mL}$ or fasting glucose $\geq100\textrm{mg/dL}$, all groups of women with PMOS in the included studies would be considered to have insulin resistance. Mean age of women with PMOS in these studies ranged from `r summary_descriptives$min_age[2]` to `r summary_descriptives$max_age[2]` which was similar to the control women without PMOS ranging from `r summary_descriptives$min_age[1]` to `r summary_descriptives$max_age[1]`. Across those studies where BMI was reported or it was possible to estimate the mean BMI of women with PMOS ranged from `r summary_descriptives$min_bmi[2]` to `r summary_descriptives$max_bmi[2]` was typically greater than women without PMOS which ranged `r summary_descriptives$min_bmi[1]` to `r summary_descriptives$max_bmi[1]`.
+
+## Mean REE Model Results
+```{r}
+
+targets::tar_load(
+  c(main_arm_mean_effects_summary_condition,
+    main_arm_mean_effects_summary_contrast,
+    combined_mean_plot),
+  store = targets_store
+)
+
+main_arm_mean_effects_preds_condition <- main_arm_mean_effects_summary_condition |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+main_arm_mean_effects_contrast_condition <- main_arm_mean_effects_summary_contrast |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+
+```
+The main model for mean REE resulted in a posterior distribution for the contrast between control and PMOS conditions with a mean point estimate of `r round(main_arm_mean_effects_contrast_condition$draw)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition$.lower)` kcal/day to `r round(main_arm_mean_effects_contrast_condition$.upper)` kcal/day suggesting there is a 95% probability that the true difference lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the control condition and PMOS condition respectively were `r round(main_arm_mean_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_mean_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_mean_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_mean_effects_preds_condition$.upper[2])` kcal/day]. These results, including the full visualisation of the posterior distribution and the conditional estimates by study, can be seen in @fig-mean-REE.
+
+```{r}
+#| label: fig-mean-REE
+#| fig-width: 10
+#| fig-height: 6.25
+#| fig-cap: Posterior distribution, mean point estimates, and 95% quantile intervals for conditional estimates by study, global grand mean estimates by condition, and the contrast between conditions for mean resting energy expenditure of control women without PMOS and women with PMOS.
+
+combined_mean_plot
+```
+
+## Standard Deviation of REE Model Results
+```{r}
+
+targets::tar_load(
+  c(main_arm_variance_effects_summary_condition,
+    main_arm_variance_effects_summary_contrast,
+    combined_variance_plot),
+  store = targets_store
+)
+
+main_arm_variance_effects_preds_condition <- main_arm_variance_effects_summary_condition |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+main_arm_variance_effects_contrast_condition <- main_arm_variance_effects_summary_contrast |>
+  rename(draw = estimate, .lower = conf.low, .upper = conf.high)
+
+```
+
+The main model for the between participant standard deviation of REE resulted in a posterior distribution for the contrast ratio between control and PMOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition$draw,2)` with a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition$.lower,2)` to `r round(main_arm_variance_effects_contrast_condition$.upper,2)` suggesting there is a 95% probability that the true ratio of standard deviations lies between these values given our priors and the data from included studies. The corresponding conditional estimates for the standard deviations of the control condition and PMOS condition respectively were `r round(main_arm_variance_effects_preds_condition$draw[1])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[1])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[1])` kcal/day] and `r round(main_arm_variance_effects_preds_condition$draw[2])` kcal/day [95%QI:`r round(main_arm_variance_effects_preds_condition$.lower[2])` kcal/day to `r round(main_arm_variance_effects_preds_condition$.upper[2])` kcal/day]. These results, including the full visualisation of the posterior distribution and the conditional estimates by study, can be seen in @fig-variance-REE.
+
+```{r}
+#| label: fig-variance-REE
+#| fig-width: 10
+#| fig-height: 6.25
+#| fig-cap: Posterior distribution, variance point estimates, and 95% quantile intervals for conditional estimates by study, global grand variance estimates by condition, and the contrast ratio between conditions for the standard deviation of resting energy expenditure of control women without PMOS and women with PMOS.
+
+combined_variance_plot
+```
+
+## Sensitivity Analyses
+### Pairwise Models
+```{r}
+targets::tar_load(c(pairwise_mean_effects_summary, pairwise_variance_effects_summary), store = targets_store)
+
+```
+For mean REE the pairwise model resulted in qualitatively similar inferences suggesting little difference between control and PMOS conditions with mean point estimate of `r round(pairwise_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(pairwise_mean_effects_summary$conf.low)` kcal/day to `r round(pairwise_mean_effects_summary$conf.high)` kcal/day. This was similar for relative variability in REE, with the pairwise model resulting in a coefficient-of-variation ratio between the PMOS and control conditions with a mean point estimate of `r round(pairwise_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(pairwise_variance_effects_summary$conf.low,2)` to `r round(pairwise_variance_effects_summary$conf.high,2)`.
+
+### Models including studies with possible reporting issues
+```{r}
+targets::tar_load(c(main_plus_greek_arm_mean_effects_summary, main_plus_greek_arm_variance_effects_summary), store = targets_store)
+
+```
+For mean REE the model including the studies noted with possible reporting issues that were not resolved [@kritikouA2BV3Adrenergic2006; @saltamavrosAlpha2Beta2007; @koikaAssociationPro12AlaPolymorphism2009; @georgopoulosBasalMetabolicRate2009] still resulted in qualitatively similar inferences suggesting little difference between control and PMOS conditions with mean point estimate of `r round(main_plus_greek_arm_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_plus_greek_arm_mean_effects_summary$conf.low)` kcal/day to `r round(main_plus_greek_arm_mean_effects_summary$conf.high)` kcal/day. This was similar for the standard deviation of REE with the model including these studies resulting in a contrast ratio between the control and PMOS conditions with a mean point estimate of `r round(main_plus_greek_arm_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(main_plus_greek_arm_variance_effects_summary$conf.low,2)` to `r round(main_plus_greek_arm_variance_effects_summary$conf.high,2)`.
+
+### Baseline REE Measurement Models
+```{r}
+targets::tar_load(c(baseline_arm_mean_effects_summary, baseline_arm_variance_effects_summary), store = targets_store)
+
+```
+For mean REE the model which included only baseline REE measurements from studies involving interventions [@moranShorttermMealReplacements2006; @brunerEffectsExerciseNutritional2006; @pohlmeierEffectLowstarchLowdairy2014], in addition to other cross-sectional studies, also resulted in qualitatively similar inferences suggesting little difference between control and PMOS conditions with mean point estimate of `r round(baseline_arm_mean_effects_summary$estimate)` kcal/day with a 95% quantile interval ranging from `r round(baseline_arm_mean_effects_summary$conf.low)` kcal/day to `r round(baseline_arm_mean_effects_summary$conf.high)` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PMOS conditions with a mean point estimate of `r round(baseline_arm_variance_effects_summary$estimate,2)` and a 95% quantile interval ranging from `r round(baseline_arm_variance_effects_summary$conf.low,2)` to `r round(baseline_arm_variance_effects_summary$conf.high,2)`.
+
+### BMI and Fat-Free Mass Adjusted Models
+For mean REE the model adjusted for BMI, also resulted in qualitatively similar inferences suggesting little difference between control and PMOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_bmi$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_bmi$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_bmi$conf.high)` kcal/day. This was also the case for the standard deviation of REE with this model resulting in a contrast ratio between the control and PMOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition_bmi$estimate,2)` and a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition_bmi$conf.low,2)` to `r round(main_arm_variance_effects_contrast_condition_bmi$conf.high,2)`. This was similar for fat-free mass adjusted models too showing little difference in mean REE between control and PMOS conditions with mean point estimate of `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$estimate)` kcal/day with a 95% quantile interval ranging from `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.low)` kcal/day to `r round(main_arm_mean_effects_contrast_condition_fat_free_mass$conf.high)` kcal/day and a contrast ratio between the control and PMOS conditions with a mean point estimate of `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$estimate,2)` and a 95% quantile interval ranging from `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.low,2)` to `r round(main_arm_variance_effects_contrast_condition_fat_free_mass$conf.high,2)`.
