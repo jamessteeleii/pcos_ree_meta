@@ -1,12 +1,14 @@
-# Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis
+# Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome: a systematic review and meta-analysis
 
-This repository contains all the code and data for a project conducting a systematic review and meta-analysis of differences in resting energy expenditure between women with, and without, Polycystic Ovary Syndrome (PCOS).
+This repository contains all the code and data for a systematic review and meta-analysis of differences in resting energy expenditure between women with and without polyendocrine metabolic ovarian syndrome (PMOS; previously polycystic ovary syndrome, PCOS).
 
 Preprint, please cite as: Kirwan, R., Peele, L., Nuckols, G., Kohlhoff, G., Cabré, H., Olenick, A., and Steele, J. (2025). Resting energy expenditure of women with and without polycystic ovary syndrome: a systematic review and meta-analysis. medrxiv DOI: [https://doi.org/10.64898/2025.12.03.25341536](https://doi.org/10.64898/2025.12.03.25341536).
 
+Following the June 2026 global consensus terminology update, the revised manuscript and current project documentation use PMOS. The original preprint title, preregistered analysis plan, historical literature, and search terminology retain PCOS where that was the terminology used at the time.
+
 ## Abstract
 
-Context: Polycystic ovary syndrome (PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PCOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PCOS. Data Sources: A systematic search was conducted using PubMed, Medline and Web of Science databases of published research from January 1990 to January 2025. Study Selection: Studies that measured REE in women living with PCOS, both with and without control arms of women without PCOS, were included. Data Extraction: Bibliometric, demographic, and REE data was extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between person variation in REE, between women with and without PCOS. Mean REE differed between groups by 31 kcal/day [95% quantile interval: -44 to 113 kcal/day] and the contrast ratio for between person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.32]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PCOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
+Context: Polyendocrine metabolic ovarian syndrome (PMOS; previously polycystic ovarian syndrome i.e., PCOS) is common in reproductive-age women, who often have higher BMI classification. This is assumed to stem from lower resting energy expenditure (REE), influencing lifestyle intervention guidelines. However, evidence for reduced REE in women with PMOS compared with those without is inconsistent. Objective: To systematically search and meta-analyse the existing literature to estimate and describe the difference in REE between women with and without PMOS. Data Sources: PubMed, MEDLINE/EBSCO, and Web of Science were searched for published research from January 1990 through May 2025, and the searches were updated through September 2026. The update identified no additional eligible studies. Study Selection: Studies that measured REE in women living with PMOS, both with and without control arms of women without PMOS, were included. Data Extraction: Bibliometric, demographic, and REE data were extracted by one investigator and checked in triplicate. Data Synthesis: Thirteen studies were included in a Bayesian arm-based multiple condition comparison (i.e., network) type meta-analysis model with informative priors to compare both mean REE, and between-person variation in REE, between women with and without PMOS. Mean REE differed between groups by 31 kcal/day [95% quantile interval: -44 to 113 kcal/day] and the contrast ratio for between-person standard deviations was 0.98 [95% quantile interval: 0.71 to 1.32]. Conclusions: These findings indicate that REE does not meaningfully differ between women with and without PMOS. Group-level differences in resting energy expenditure are small, insignificant, or not physiologically relevant.
 
 ## Reproducibility
 
@@ -80,7 +82,16 @@ Generated files are declared as file targets so deletion or modification invalid
 
 ## Software and package citations
 
-The [`grateful`](https://pakillo.github.io/grateful/index.html) report is retained in `grateful-report.pdf`. Exact R package versions are recorded in `renv.lock`.
+The online supplementary materials are published through GitHub Pages:
+
+- [Supplementary Technical Analysis and Results](https://jamessteeleii.github.io/pcos_ree_meta/supplementary_technical_analysis_results.html)
+- [Supplementary Bibliometric and Public-Discourse Footprint](https://jamessteeleii.github.io/pcos_ree_meta/supplementary_bibliometric_impact.html)
+- [Descriptive Characteristics of Included Study Arms and Participants](https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html)
+- [`grateful` software citation report](https://jamessteeleii.github.io/pcos_ree_meta/grateful-report.html)
+
+The current online software citation report is generated from the locked project environment by the `grateful_report_sources` and `grateful_report_html` targets. Exact R package versions are recorded in `renv.lock`. The original preregistered statistical analysis plan remains available as `analysis_plan.pdf`, and its accompanying historical software citation report is preserved as `grateful-report.pdf`; both retain the software versions and terminology used at preregistration.
+
+The Pages sources are in `supplementary/` and render to `docs/`. Regenerate the current software citation report with `targets::tar_make(names = grateful_report_html)`, then render the complete site with `quarto render supplementary`. GitHub Pages should be configured to deploy the `main` branch's `/docs` folder. The model-dependent technical report requires the validated local targets store; rendering the site does not fit models.
 
 ## License
 

@@ -86,4 +86,13 @@ targets::tar_make()
 
 Plots, tables, and manuscripts created by the workflow are file targets, so deleting or modifying a generated file invalidates its target. Development intermediates stay ignored. Publication artifacts may be committed only when intentionally updated and reviewed; immutable public versions should be attached to a tagged release or deposited in an archival repository.
 
+The online supplementary site is defined by `supplementary/_quarto.yml` and renders to `docs/`:
+
+```text
+targets::tar_make(names = grateful_report_html)
+quarto render supplementary
+```
+
+The `grateful_report_sources` target runs `grateful::cite_packages()` against the project and current locked environment, and `grateful_report_html` renders the resulting report. The site includes the technical analysis and results, bibliometric impact analysis, descriptive characteristics table, and current software citation report. GitHub Pages deploys the committed `docs/` directory. The technical report reads already validated targets from the local store and does not fit models during rendering. The root `grateful-report.pdf` is retained separately as the historical software report accompanying the preregistered analysis plan.
+
 The historical Git database still contains previously committed caches, article PDFs, and private forms. This phase intentionally does not rewrite history. Anyone publishing or transferring the repository should account for that historical content separately.
