@@ -2,7 +2,7 @@
 title: "Data Synthesis Plan (Meta-Analysis)"
 format: pdf
 bibliography: 
-  mylibrary.bib
+  manuscript/references.bib
 csl: apa.csl
 ---
 
