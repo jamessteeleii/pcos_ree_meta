@@ -454,6 +454,7 @@ create_descriptives_table <- function(data) {
     mutate(across(where(is.numeric), \(x) round(x, 2))) |>
     mutate(
       authors = paste0(authors, " (", year, ")"),
+      cond = if_else(cond == "PCOS", "PMOS", cond),
       Age = if_else(
         is.na(m_age) & is.na(sd_age),
         "",
@@ -591,7 +592,7 @@ create_descriptives_table <- function(data) {
       ),
       value = as_paragraph(
         c(
-          "PCOS = polycystic ovary syndrome; BMI = body mass index; OGTT = oral glucose tolerance test; HOMA-IR = homeostatic model assessment of insulin resistance",
+          "PMOS = polyendocrine metabolic ovarian syndrome; BMI = body mass index; OGTT = oral glucose tolerance test; HOMA-IR = homeostatic model assessment of insulin resistance",
           "Values are Mean (SD) unless otherwise specified; note, some have been calculated/estimated from corresponding standard error, range, iqr, median, and sample size (see data and code)",
           "Indicates that this mean was estimated from the corresponding means for body mass/height/BMI"
         )

@@ -61,7 +61,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We thank the reviewer for highlighting that the analytical aims were not sufficiently clear in the original manuscript. Although the modelling was designed to accommodate and maximise important features of the available evidence, for example including studies without a control group and multiple observations contributed by some studies as opposed to limiting ourselves to only paired comparison studies, we agree that the amount and placement of the technical detail made it difficult for a clinical reader to identify the analyses that directly addressed the primary question. We have substantially reorganised and simplified the Statistical Analysis and Results sections, explicitly distinguishing the primary, secondary, sensitivity, and exploratory analyses. The full model specifications and complete results as per the previously reported format have been retained in a new supplementary document so that technical transparency is preserved without interrupting the main clinical narrative. Detailed responses are provided under Comments R1.10--R1.12 and R1.15.
 
-\textbf{Manuscript change:} The revised manuscript now contains a short analytical overview, identifies the difference in mean REE as the primary estimand and between-person variability as secondary, and presents the primary, sensitivity, and exploratory estimates in a compact summary table. The equations, prior specifications, computational details, complete estimates, and posterior visualisations have been moved to the new \emph{Supplementary Technical Analysis and Results}. [Pages 10 and 13--14, lines 205--228 and 248--256.]
+\textbf{Manuscript change:} The revised manuscript now contains a short analytical overview, identifies the difference in mean REE as the primary estimand and between-person variability as secondary, and presents the primary, sensitivity, and exploratory estimates in a compact summary table. The equations, prior specifications, computational details, complete estimates, and posterior visualisations have been moved to the new \emph{Supplementary Technical Analysis and Results}. [Pages 10 and 13--14, lines 206--229 and 251--259.]
 
 \end{authorresponse}
 
@@ -75,7 +75,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We agree and have updated the searches in PubMed, MEDLINE/EBSCO, and Web of Science through September 2026. This also resolves the date inconsistency: the initial search covered January 1990 through May 2025, and the update covered the deliberately overlapping period January 2025 through September 2026. The global consensus adopting "Polyendocrine Metabolic Ovarian Syndrome" (PMOS) was published only in June 2026, during the final months of the updated search period \textsuperscript{1}. For continuity with the original strategy and the terminology under which the historical literature was indexed, the updated strategy retained PCOS terminology and did not add PMOS. We now explain this timing and decision explicitly. The update returned 69 records (PubMed, n = 38; Web of Science, n = 13; MEDLINE/EBSCO, n = 18). After eight duplicate or previously identified records were removed, 61 records underwent title screening. Fifty-nine were excluded at title screening and the remaining two were excluded after abstract screening. No reports proceeded to full-text retrieval and no additional eligible studies were identified. The included-study set, statistical analyses, and conclusions were therefore unchanged. The PRISMA flow diagram has been updated to reflect this updated search.
 
-\textbf{Manuscript change:} We revised the Abstract Data Sources and Search Strategy to distinguish the initial and updated search periods, state the final search date and terminology used, and report the complete screening outcome. The updated PRISMA flow diagram and Results confirm that no additional studies were included. [Pages 3, 6, and 11, lines 41--43, 107--122, and 231--237; Figure 1.]
+\textbf{Manuscript change:} We revised the Abstract Data Sources and Search Strategy to distinguish the initial and updated search periods, state the final search date and terminology used, and report the complete screening outcome. The updated PRISMA flow diagram and Results confirm that no additional studies were included. [Pages 3, 6, and 11, lines 42--44, 108--123, and 232--238; Figure 1.]
 
 \end{authorresponse}
 
@@ -87,7 +87,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We thank the reviewer for this suggestion and have revised the wording for clarity.
 
-\textbf{Manuscript change:} "[reported REE measured using any valid method, such as direct or indirect calorimetry or doubly labelled water]" [Page 7, lines 131--132.]
+\textbf{Manuscript change:} "[reported REE measured using any valid method, such as direct or indirect calorimetry or doubly labelled water]" [Page 7, lines 132--133.]
 
 \end{authorresponse}
 
@@ -99,7 +99,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We thank the reviewer for noting this lack of clarity and have amended the manuscript to explain what was performed.
 
-\textbf{Manuscript change:} "[...checked in triplicate (i.e., were separately checked against the included studies three times by the investigator)]" [Page 8, lines 164--165.]
+\textbf{Manuscript change:} "[...checked in triplicate (i.e., were separately checked against the included studies three times by the investigator)]" [Page 8, lines 165--166.]
 
 \end{authorresponse}
 
@@ -111,7 +111,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We have clarified how the extraction template was developed.
 
-\textbf{Manuscript change:} "[No formal piloting of data extraction was performed but, given the number of identified studies was not overwhelmingly large, the process of triplicate extraction was used to develop and refine the Excel spreadsheet used for data extraction.]" [Page 8, lines 165--167.]
+\textbf{Manuscript change:} "[No formal piloting of data extraction was performed but, given the number of identified studies was not overwhelmingly large, the process of triplicate extraction was used to develop and refine the Excel spreadsheet used for data extraction.]" [Page 8, lines 166--168.]
 
 \end{authorresponse}
 
@@ -133,7 +133,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We agree that PubMed and MEDLINE have substantial overlap and should not be presented as completely independent sources of coverage. We did not add Embase or CINAHL. Instead, we updated the searches in the three originally specified sources, PubMed, MEDLINE/EBSCO, and Web of Science, for the deliberately overlapping period January 2025 through September 2026. This update returned 69 records (PubMed, n = 38; Web of Science, n = 13; MEDLINE/EBSCO, n = 18). Eight duplicate records, including records already captured by the original search, were removed. Of the 61 records screened by title, 59 were excluded; the remaining two were excluded after abstract screening. No reports proceeded to full-text retrieval and no additional eligible studies were identified. The included-study set, analyses, and conclusions were therefore unchanged. We have also added the overlap between PubMed and MEDLINE and the absence of Embase or CINAHL as an explicit limitation.
 
-\textbf{Manuscript change:} We revised the Abstract Data Sources, Search Strategy, opening Results paragraph, PRISMA flow diagram and caption, and Discussion limitations to report the updated search, its screening results, and the unchanged evidence base. [Pages 3, 6, 11, and 18, lines 41--43, 107--122, 231--237, and 355--358; Figure 1.]
+\textbf{Manuscript change:} We revised the Abstract Data Sources, Search Strategy, opening Results paragraph, PRISMA flow diagram and caption, and Discussion limitations to report the updated search, its screening results, and the unchanged evidence base. [Pages 3, 6, 11, and 18, lines 42--44, 108--123, 232--238, and 358--361; Figure 1.]
 
 \end{authorresponse}
 
@@ -145,7 +145,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} Yes. We have clarified that, in addition to corresponding with the Greek research group and with Pohlmeier et al. about unadjusted REE values, we contacted corresponding authors whenever clarification or missing data were required.
 
-\textbf{Manuscript change:} "[Where there were any ambiguities or missing data that were required for our analysis, corresponding authors of the included articles were contacted to clarify or provide this information.]" [Page 8, lines 167--169.]
+\textbf{Manuscript change:} "[Where there were any ambiguities or missing data that were required for our analysis, corresponding authors of the included articles were contacted to clarify or provide this information.]" [Page 8, lines 168--170.]
 
 \end{authorresponse}
 
@@ -158,7 +158,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} We agree that formal assessment of the limitations of the included evidence is typically important for evidence syntheses. However, a formal study quality or risk-of-bias assessment using an existing tool was not undertaken because the review was designed to answer a descriptive rather than causal question: namely, to estimate and compare resting energy expenditure in women with and without PMOS. The included studies contributed group-level REE means and measures of variability, including cross-sectional observations, single-arm observations and measurements obtained at different timepoints within intervention studies; intervention-effect estimates were not synthesised. Commonly used risk-of-bias tools for randomized trials and non-randomized intervention or exposure effects are typically causal in nature and do not correspond closely to the estimand in this review. Applying these tools retrospectively would require judging causal domains that were not relevant to the analysis and could produce potentially misleading overall classifications. Although a bespoke or adapted appraisal could have been developed, conducting and validating such an assessment independently in duplicate was not feasible within the resources available for this revision. We nevertheless recognise that this does not remove the possibility that limitations in participant selection, PMOS classification, REE measurement or reporting affected the estimates. We addressed these issues by restricting eligibility to studies using objective, accepted REE measurement methods; extracting diagnostic and measurement procedures; documenting inconsistencies at study level; contacting authors where clarification was required; excluding four studies with unresolved reporting concerns from the primary analysis; and examining their inclusion in a sensitivity analysis. Additional sensitivity analyses restricted intervention studies to baseline observations and examined adjustment for BMI and fat-free mass. These procedures should not be interpreted as a substitute for a formal risk-of-bias assessment, and we have added its absence as a limitation and tempered the interpretation of the findings accordingly.
 
-\textbf{Manuscript change:} "[Additionally, a formal risk-of-bias assessment was not undertaken. The available studies contributed heterogeneous forms of descriptive evidence, including cross-sectional comparisons, single-arm observations and repeated measurements from intervention studies, whereas commonly used risk-of-bias tools principally assess causal intervention or exposure effects. We therefore addressed limitations directly relevant to the descriptive REE estimates through detailed examination of diagnostic and measurement methods, explicit documentation of reporting inconsistencies and sensitivity analyses excluding studies with unresolved data concerns and post-baseline intervention measurements. These procedures are not equivalent to a formal risk-of-bias assessment, however, and residual bias arising from participant selection, measurement, missing information or selective reporting cannot be excluded.]" [Pages 17--18, lines 346--355.]
+\textbf{Manuscript change:} "[Additionally, a formal risk-of-bias assessment was not undertaken. The available studies contributed heterogeneous forms of descriptive evidence, including cross-sectional comparisons, single-arm observations and repeated measurements from intervention studies, whereas commonly used risk-of-bias tools principally assess causal intervention or exposure effects. We therefore addressed limitations directly relevant to the descriptive REE estimates through detailed examination of diagnostic and measurement methods, explicit documentation of reporting inconsistencies and sensitivity analyses excluding studies with unresolved data concerns and post-baseline intervention measurements. These procedures are not equivalent to a formal risk-of-bias assessment, however, and residual bias arising from participant selection, measurement, missing information or selective reporting cannot be excluded.]" [Pages 17--18, lines 349--358.]
 
 \end{authorresponse}
 
@@ -170,7 +170,7 @@ The combined audit resulted in only minor numerical changes and did not alter an
 
 \textbf{Author response:} The Methods describe how REE values adjusted for body mass and/or fat-free mass were converted to unadjusted values. We have also added "only" to clarify that this conversion was required for one study.
 
-\textbf{Manuscript change:} "[In \textcolor{red}{only} one case \textsuperscript{36} REE was reported relative to body mass and the unadjusted values were no longer available (confirmed by the authors). In this case, we used the mean body mass to estimate unadjusted REE.]" [Page 9, lines 185--187.]
+\textbf{Manuscript change:} "[In \textcolor{red}{only} one case \textsuperscript{36} REE was reported relative to body mass and the unadjusted values were no longer available (confirmed by the authors). In this case, we used the mean body mass to estimate unadjusted REE.]" [Page 9, lines 186--188.]
 
 \end{authorresponse}
 
@@ -188,7 +188,7 @@ We have also separated the analyses according to their role. The pairwise analys
 
 These changes have not altered the substantive conclusions, but we agree that they make the relationship between the clinical question, the primary analysis, and the robustness analyses considerably clearer.
 
-\textbf{Manuscript change:} We replaced the former technical model descriptions in the main manuscript with a concise "Analytical overview" and linked directly to the new \emph{Supplementary Technical Analysis and Results}. [Page 10, lines 205--228.]
+\textbf{Manuscript change:} We replaced the former technical model descriptions in the main manuscript with a concise "Analytical overview" and linked directly to the new \emph{Supplementary Technical Analysis and Results}. [Page 10, lines 206--229.]
 
 \end{authorresponse}
 
@@ -200,7 +200,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree that the direct pairwise analysis is particularly intuitive for the primary clinical question and have given it greater prominence in the revised manuscript for comparison. It is now presented immediately alongside the primary arm-based estimate in the summary table and is described explicitly in the main Results. However, we retained the arm-based analysis as primary because this hierarchy was pre-registered and because it permits all eligible evidence to contribute, including studies without their own control group, to the descriptive estimate. However, the similar estimate from the pairwise analysis provides an important and readily interpretable demonstration that the overall conclusion does not depend on the inclusion of single-arm evidence or historical control information.
 
-\textbf{Manuscript change:} The direct pairwise estimate is now displayed alongside the primary estimate in the new summary table and discussed in the shortened main Results. [Pages 13--14, lines 248--256.]
+\textbf{Manuscript change:} The direct pairwise estimate is now displayed alongside the primary estimate in the new summary table and discussed in the shortened main Results. [Pages 13--14, lines 251--259.]
 
 \end{authorresponse}
 
@@ -212,7 +212,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree that the status of this analysis was not sufficiently clear. We have now identified comparison of between-person variability in REE explicitly as a secondary aim and have correspondingly de-emphasised its presentation relative to the primary analysis of mean REE.
 
-\textbf{Manuscript change:} ``Our primary aim was to estimate the difference in mean REE between women with and without PMOS. A secondary aim was to compare between-person variability in REE between the groups.'' [Page 5, lines 95--97.]
+\textbf{Manuscript change:} ``Our primary aim was to estimate the difference in mean REE between women with and without PMOS. A secondary aim was to compare between-person variability in REE between the groups.'' [Page 5, lines 96--98.]
 
 \end{authorresponse}
 
@@ -226,7 +226,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree and have removed the opening ``Note.'' We now describe the flow from eligible studies to the studies included in each synthesis and distinguish studies included in the descriptive review from those included in the primary and sensitivity meta-analyses.
 
-\textbf{Manuscript change:} The opening Results paragraph now states that the review identified 17 eligible studies, that the updated search through September 2026 identified no additional eligible studies, that four studies with unresolved reporting concerns were retained in the descriptive review but omitted from the 13-study primary analysis, and that those four studies were reinstated in a sensitivity analysis. [Page 11, lines 231--237.]
+\textbf{Manuscript change:} The opening Results paragraph now states that the review identified 17 eligible studies, that the updated search through September 2026 identified no additional eligible studies, that four studies with unresolved reporting concerns were retained in the descriptive review but omitted from the 13-study primary analysis, and that those four studies were reinstated in a sensitivity analysis. [Page 11, lines 232--238.]
 
 \end{authorresponse}
 
@@ -238,7 +238,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree and have removed the number of laboratory/research groups from the narrative description of the included studies. The original wording was intended to provide context for the studies with reporting concerns that came from the same research group, but this information was not necessary in the summary.
 
-\textbf{Manuscript change:} The results section has been updated to reflect this. [Pages 11--12, lines 238--241.]
+\textbf{Manuscript change:} The results section has been updated to reflect this. [Pages 11--12, lines 239--242.]
 
 \end{authorresponse}
 
@@ -250,7 +250,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree and have substantially shortened the Results. Explanatory material concerning model construction and interpretation has been moved to the Statistical Analysis overview or the new technical supplement. The main Results now report the primary mean-REE estimate and secondary variability estimate directly, give the pre-registered direct pairwise comparison greater prominence particularly for comparison with the primary analysis, and state concisely that the additional sensitivity and exploratory analyses did not materially alter the conclusion. We have also added a summary table that displays the posterior mean and equal-tailed 95\% quantile interval for every primary, sensitivity, and exploratory analysis. Ratio estimands were transformed draw by draw before summarisation, and the table distinguishes the standard-deviation ratios from the coefficient-of-variation ratio used in the pairwise variability model.
 
-\textbf{Manuscript change:} A new table, "Summary of primary, sensitivity, and exploratory analyses" has been added to the main Results; the complete narrative results and posterior visualisations are now provided in the \emph{Supplementary Technical Analysis and Results}. [Pages 13--14, lines 248--256.]
+\textbf{Manuscript change:} A new table, "Summary of primary, sensitivity, and exploratory analyses" has been added to the main Results; the complete narrative results and posterior visualisations are now provided in the \emph{Supplementary Technical Analysis and Results}. [Pages 13--14, lines 251--259.]
 
 \end{authorresponse}
 
@@ -264,7 +264,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree that this is perhaps too prominent in the main body of the discussion itself. However, our initial impression has been that this study has been particularly influential and as such we have conducted an extended bibliometric analysis to examine its discussion and dissemination across both scholarly and public contexts which supports these impressions. We now have moved mention of this to a footnote accompanying the discussion in which we link directly to this supplementary analysis for the reader to examine.
 
-\textbf{Manuscript change:} "We conducted a \href{https://jamessteeleii.github.io/pcos\_ree\_meta/supplementary\_bibliometric\_impact.html}{supplementary bibliometric analysis} with ChatGPT/Codex (GPT-5.6 Sol version) to explore the scholarly, extended scholarly, grey-literature, and public dissemination and discourse of the studies included in our review in order to understand descriptively how prominent certain articles and findings have been. The findings of this supplementary analysis do indicate that, whilst not the most highly cited in scholarly works, the 2009 study from Georgopoulos et al. that reported a significantly reduced BMR in women with PMOS \textsuperscript{14} has been widely cited and reinforced in both academic and particularly public contexts." [Page 14, line 267 and footnote 2.]
+\textbf{Manuscript change:} "We conducted a \href{https://jamessteeleii.github.io/pcos\_ree\_meta/supplementary\_bibliometric\_impact.html}{supplementary bibliometric analysis} with ChatGPT/Codex (GPT-5.6 Sol version) to explore the scholarly, extended scholarly, grey-literature, and public dissemination and discourse of the studies included in our review in order to understand descriptively how prominent certain articles and findings have been. The findings of this supplementary analysis do indicate that, whilst not the most highly cited in scholarly works, the 2009 study from Georgopoulos et al. that reported a significantly reduced BMR in women with PMOS \textsuperscript{14} has been widely cited and reinforced in both academic and particularly public contexts." [Page 14, line 270 and footnote 2.]
 
 \end{authorresponse}
 
@@ -277,7 +277,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree that our original wording extended beyond the outcome assessed. We have revised the Discussion to limit the inference to REE and have adopted the reviewer's suggested interpretation.
 
-\textbf{Manuscript change:} "The available evidence does not support substantially lower REE as an explanation for weight-related differences observed in women with PMOS." [Page 15, lines 275--276.]
+\textbf{Manuscript change:} "The available evidence does not support substantially lower REE as an explanation for weight-related differences observed in women with PMOS." [Page 15, lines 278--279.]
 
 \end{authorresponse}
 
@@ -290,7 +290,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We agree and have expanded the limitations to describe the characteristics of the included participants and the resulting limits on generalisability.
 
-\textbf{Manuscript change:} "[Finally, the women with PMOS included in the available studies were generally young, had higher BMI than control participants, and the groups with sufficient metabolic information were considered insulin resistant. The findings may therefore not necessarily apply equally to lean or insulin-sensitive PMOS phenotypes.]" [Page 18, lines 358--361.]
+\textbf{Manuscript change:} "[Finally, the women with PMOS included in the available studies were generally young, had higher BMI than control participants, and the groups with sufficient metabolic information were considered insulin resistant. The findings may therefore not necessarily apply equally to lean or insulin-sensitive PMOS phenotypes.]" [Page 18, lines 361--364.]
 
 \end{authorresponse}
 
@@ -320,7 +320,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We do not think that further speculation about the cause of the outlying result would be justified because the reporting discrepancies could not be resolved and the original data were unavailable. The documented issues include implausible standard deviations implied by reported standard errors, discrepant sample sizes, unavailable control data in related reports, and an adjustment procedure that could not be reconstructed. Correspondence with the senior author did not resolve these discrepancies because the person responsible for the data and results was no longer contactable. We have therefore limited the manuscript to documenting the identified problems and the resulting uncertainty. In response to Reviewer 1, we have also moved the discussion of this article's influence to a footnote that links directly to the supplementary bibliometric analysis.
 
-\textbf{Manuscript change:} "We conducted a \href{https://jamessteeleii.github.io/pcos\_ree\_meta/supplementary\_bibliometric\_impact.html}{supplementary bibliometric analysis} with ChatGPT/Codex (GPT-5.6 Sol version) to explore the scholarly, extended scholarly, grey-literature, and public dissemination and discourse of the studies included in our review in order to understand descriptively how prominent certain articles and findings have been. The findings of this supplementary analysis do indicate that, whilst not the most highly cited in scholarly works, the 2009 study from Georgopoulos et al. that reported a significantly reduced BMR in women with PMOS \textsuperscript{14} has been widely cited and reinforced in both academic and particularly public contexts." [Page 14, line 267 and footnote 2.]
+\textbf{Manuscript change:} "We conducted a \href{https://jamessteeleii.github.io/pcos\_ree\_meta/supplementary\_bibliometric\_impact.html}{supplementary bibliometric analysis} with ChatGPT/Codex (GPT-5.6 Sol version) to explore the scholarly, extended scholarly, grey-literature, and public dissemination and discourse of the studies included in our review in order to understand descriptively how prominent certain articles and findings have been. The findings of this supplementary analysis do indicate that, whilst not the most highly cited in scholarly works, the 2009 study from Georgopoulos et al. that reported a significantly reduced BMR in women with PMOS \textsuperscript{14} has been widely cited and reinforced in both academic and particularly public contexts." [Page 14, line 270 and footnote 2.]
 
 \end{authorresponse}
 
@@ -332,7 +332,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} The pairwise sensitivity analyses used weakly regularising default priors and did not incorporate historical control information. Their similar estimates indicate that the historical priors in the primary arm-based models did not materially determine the posterior estimates or the overall conclusion. We now state this in both the summarised analysis section and the Strengths and Limitations section.
 
-\textbf{Manuscript change:} "Furthermore, our pairwise sensitivity model used weakly regularising default priors and produced a similar estimate, suggesting that the conclusions were not driven by the historical priors." [Page 17, lines 339--341.]
+\textbf{Manuscript change:} "Furthermore, our pairwise sensitivity model used weakly regularising default priors and produced a similar estimate, suggesting that the conclusions were not driven by the historical priors." [Page 17, lines 342--344.]
 
 \end{authorresponse}
 
@@ -347,7 +347,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We thank the reviewer for this helpful suggestion and have added a brief practical example to clarify what a weight-neutral approach may involve.
 
-\textbf{Manuscript change:} "[A weight-neutral dietary approach emphasises promoting cardiometabolic health by focusing on adding or emphasising healthful foods instead of restricting intake or targeting weight loss explicitly. Instead of pursuing energy deficits, setting specific energy intake goals, eliminating food groups such as dairy, gluten, or carbohydrates, or labelling foods as ‘good’ or ‘bad’ for PMOS or weight loss, a clinician or dietitian might guide individuals to plan meals rich in protein, fibre, fruits, vegetables, legumes, and unsaturated fats, aligned with Mediterranean or DASH diet principles. This strategy should be tailored to individual preferences and avoid unnecessarily eliminating foods, which could reinforce restrictive behaviours, especially in populations at risk for disordered eating. Monitoring might include blood lipids, cholesterol, glucose, insulin, blood pressure, or menstrual cycle regularity, rather than focusing solely on body weight \textsuperscript{27,49}.]" [Page 16, lines 317--325.]
+\textbf{Manuscript change:} "[A weight-neutral dietary approach emphasises promoting cardiometabolic health by focusing on adding or emphasising healthful foods instead of restricting intake or targeting weight loss explicitly. Instead of pursuing energy deficits, setting specific energy intake goals, eliminating food groups such as dairy, gluten, or carbohydrates, or labelling foods as ‘good’ or ‘bad’ for PMOS or weight loss, a clinician or dietitian might guide individuals to plan meals rich in protein, fibre, fruits, vegetables, legumes, and unsaturated fats, aligned with Mediterranean or DASH diet principles. This strategy should be tailored to individual preferences and avoid unnecessarily eliminating foods, which could reinforce restrictive behaviours, especially in populations at risk for disordered eating. Monitoring might include blood lipids, cholesterol, glucose, insulin, blood pressure, or menstrual cycle regularity, rather than focusing solely on body weight \textsuperscript{27,49}.]" [Page 16, lines 320--328.]
 
 \end{authorresponse}
 
@@ -359,7 +359,7 @@ These changes have not altered the substantive conclusions, but we agree that th
 
 \textbf{Author response:} We thank the reviewer for identifying this error. We corrected the citation and proofread the revised manuscript for typographical and formatting errors.
 
-\textbf{Manuscript change:} The citation is now rendered correctly. [Page 15, line 274.]
+\textbf{Manuscript change:} The citation is now rendered correctly. [Page 15, line 277.]
 
 \end{authorresponse}
 
