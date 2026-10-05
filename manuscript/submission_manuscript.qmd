@@ -1,7 +1,7 @@
 ---
 title: |
   Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome: a systematic review and meta-analysis
-date: 2026-09-29
+date: 2026-10-05
 date-format: long
 format:
   pdf:
