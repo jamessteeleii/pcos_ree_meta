@@ -9,7 +9,7 @@ $endif$
 \date{$date$}
 
 $for(by-author)$
-\author$if(it.metadata.affil-id)$[$it.metadata.affil-id$]$endif${$it.name.literal$}
+\author$if(it.metadata.affil-id)$[$for(it.metadata.affil-id)$$it$$sep$,$endfor$]$endif${$it.name.literal$}
 $endfor$
 
 $if(by-affiliation)$
