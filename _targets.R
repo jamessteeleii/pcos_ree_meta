@@ -180,10 +180,19 @@ list(
     descriptives_table,
     create_descriptives_table(main_plus_greek_arm_data_imputed_demographics)
   ),
+
+  tar_target(
+    descriptives_table_source,
+    here("supplementary", "descriptives_table.qmd"),
+    format = "file"
+  ),
   
   tar_target(
     descriptives_table_html,
-    convert_descriptives_table_to_html(descriptives_table),
+    convert_descriptives_table_to_html(
+      descriptives_table,
+      source = descriptives_table_source
+    ),
     format = "file"
   ),
 
@@ -1016,12 +1025,16 @@ list(
   tarchetypes::tar_quarto(
     pre_print_pdf,
     path = file.path("manuscript", "pre_print.qmd"),
+    working_directory = "manuscript",
+    extra_files = file.path("manuscript", "title.tex"),
     quiet = FALSE
   ),
 
   tarchetypes::tar_quarto(
     submission_manuscript_pdf,
     path = file.path("manuscript", "submission_manuscript.qmd"),
+    working_directory = "manuscript",
+    extra_files = file.path("manuscript", "title.tex"),
     quiet = FALSE
   ),
 
@@ -1053,11 +1066,24 @@ list(
     format = "file"
   ),
 
-  tarchetypes::tar_quarto(
+  tar_target(
     grateful_report_html,
-    path = file.path("supplementary", "grateful-report.Rmd"),
-    extra_files = grateful_report_sources,
-    quiet = FALSE
+    {
+      grateful_report_sources
+      quarto::quarto_render(
+        input = here("supplementary", "grateful-report.Rmd"),
+        output_format = "html",
+        output_file = "grateful-report.html",
+        execute_dir = here(),
+        quiet = FALSE
+      )
+      output <- here("docs", "grateful-report.html")
+      if (!file.exists(output)) {
+        stop("Could not publish the software citation report.", call. = FALSE)
+      }
+      output
+    },
+    format = "file"
   ),
 
   tar_target(

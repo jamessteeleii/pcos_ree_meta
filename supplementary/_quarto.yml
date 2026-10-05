@@ -7,6 +7,7 @@ project:
     - grateful-report.Rmd
     - supplementary_technical_analysis_results.qmd
     - supplementary_bibliometric_impact.qmd
+    - descriptives_table.qmd
 
 website:
   title: "PMOS resting energy expenditure meta-analysis"
@@ -20,7 +21,7 @@ website:
       - text: "Bibliometric impact analysis"
         href: supplementary_bibliometric_impact.qmd
       - text: "Descriptive characteristics"
-        href: https://jamessteeleii.github.io/pcos_ree_meta/descriptives_table.html
+        href: descriptives_table.qmd
       - text: "Software citations"
         href: grateful-report.Rmd
 

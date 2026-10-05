@@ -1,0 +1,66 @@
+---
+title: "Descriptive Characteristics of Included Study Arms and Participants"
+subtitle: "Resting energy expenditure of women with and without polyendocrine metabolic ovarian syndrome: a systematic review and meta-analysis"
+author: "Kirwan et al."
+date: today
+date-format: long
+lang: en-GB
+format:
+  html:
+    toc: false
+    embed-resources: true
+    link-external-newwindow: true
+    html-math-method: plain
+params:
+  table_file: null
+execute:
+  echo: false
+  message: false
+  warning: false
+---
+
+```{r}
+if (!is.null(params$table_file) && file.exists(params$table_file)) {
+  descriptives_table <- readRDS(params$table_file)
+} else {
+  targets_store <- if (dir.exists("_targets")) "_targets" else file.path("..", "_targets")
+  descriptives_table <- targets::tar_read(
+    descriptives_table,
+    store = targets_store
+  )
+}
+
+if (inherits(descriptives_table, "flextable") &&
+    !requireNamespace("flextable", quietly = TRUE)) {
+  stop("The flextable package is required to render the descriptives table.")
+}
+```
+
+The table summarises the baseline characteristics of every eligible study arm, including the four Greek studies retained for sensitivity analysis. Scroll horizontally to view all columns on smaller screens.
+
+::: {.table-responsive}
+```{r}
+if (inherits(descriptives_table, "flextable")) {
+  descriptives_table
+} else {
+  knitr::kable(
+    descriptives_table,
+    format = "html",
+    table.attr = "class=\"table table-striped table-hover table-sm\""
+  )
+}
+```
+:::
+
+<style>
+.table-responsive {
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 0.75rem;
+}
+
+.table-responsive .flextable-shadow-host {
+  display: block;
+  min-width: max-content;
+}
+</style>

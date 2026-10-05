@@ -632,11 +632,27 @@ convert_descriptives_table_to_docx <- function(
 
 convert_descriptives_table_to_html <- function(
     table,
+    source = file.path("supplementary", "descriptives_table.qmd"),
     path = file.path("docs", "descriptives_table.html")) {
   path <- ensure_parent_directory(path)
 
-  save_as_html(table, path = path,
-               title = "Descriptive characteristics of arms and participants for included studies")
+  table_file <- tempfile(fileext = ".rds")
+  on.exit(unlink(table_file), add = TRUE)
+  saveRDS(table, table_file)
+
+  quarto::quarto_render(
+    input = source,
+    output_format = "html",
+    output_file = basename(path),
+    execute_dir = here::here(),
+    execute_params = list(table_file = table_file),
+    quiet = FALSE
+  )
+
+  if (!file.exists(path)) {
+    stop("Could not publish the descriptive characteristics table.", call. = FALSE)
+  }
+
   path
 }
 
